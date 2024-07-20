@@ -4,12 +4,15 @@ TaskPro
 ├── src/
 │ ├── assets/
 │ ├── components/
+| | ├── Auth/
+| | | ├── LoginForm.jsx
+| | ├ ├── RegisterForm.jsx
 │ │ ├── Board/
 │ │ ├── Card/
 │ │ ├── Column/
-│ │ ├── Auth/
 │ │ └── User/
 │ ├── contexts/
+│ │ ├── AuthContext.jsx
 │ ├── hooks/
 │ ├── pages/
 │ │ ├── Home/

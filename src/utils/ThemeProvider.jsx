@@ -16,8 +16,6 @@ const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    // const savedTheme = localStorage.getItem("theme") || "light";
-    // setTheme(savedTheme);
     fetchTheme();
   }, []);
 
@@ -35,9 +33,6 @@ const ThemeProvider = ({ children }) => {
   const handleChangeTheme = async (newTheme) => {
     setTheme(newTheme);
 
-    // localStorage.setItem("theme", newTheme);
-
-    // Salvăm setările de temă în API
     try {
       await axios.post("/api/user/theme", { theme: newTheme });
     } catch (error) {
