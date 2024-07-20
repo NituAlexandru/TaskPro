@@ -1,0 +1,47 @@
+export const lightTheme = {
+  body: "#fdfdfd",
+  text: "#161616",
+  background: "#FFF",
+  buttonBackground: "#bedbb0",
+  buttonText: "#161616",
+  buttonBackgroundHover: "#9dc888",
+  buttonBackgroundActive: "#9dc888",
+  buttonBackgroundFocus: "#9dc888",
+  inputBackground: "#FFF",
+  inputText: "#161616",
+  inputBoxShadow: "0 4px 16px 0 rgba(22, 22, 22, 0.08)",
+  headerBackground: "#161616",
+  headerText: "#161616",
+};
+
+export const darkTheme = {
+  body: "#333",
+  text: "#fff",
+  background: "#333",
+  buttonBackground: "#bedbb0",
+  buttonText: "#161616",
+  buttonBackgroundHover: "#9dc888",
+  buttonBackgroundActive: "#9dc888",
+  buttonBackgroundFocus: "#9dc888",
+  inputBackground: "#1f1f1f",
+  inputText: "#fff",
+  inputBoxShadow: "0 4px 16px 0 rgba(22, 22, 22, 0.08)",
+  headerBackground: "#333",
+  headerText: "#fff",
+};
+
+export const violetTheme = {
+  body: "#d6d8ff",
+  text: "#161616",
+  background: "#282c34",
+  buttonBackground: "#5255bc",
+  buttonText: "#FFF",
+  buttonBackgroundHover: "#7b7ede",
+  buttonBackgroundActive: "#7b7ede",
+  buttonBackgroundFocus: "#7b7ede",
+  inputBackground: "#4527a0",
+  inputText: "#FFF",
+  inputBoxShadow: "0 4px 16px 0 rgba(22, 22, 22, 0.08)",
+  headerBackground: "#282c34",
+  headerText: "#fff",
+};

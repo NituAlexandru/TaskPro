@@ -1,17 +1,13 @@
-import { useState } from "react";
+import SomeComponent from "./src/components/SomeComponent";
+import ThemeProvider from "./src/utils/ThemeProvider";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div></div>
       <h1>TaskPro</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
+      <ThemeProvider>
+        <SomeComponent />
+      </ThemeProvider>
     </>
   );
 }
