@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const StyledComponent = styled.div`
-  background: ${({ theme }) => theme.background};
+  background: ${({ theme }) => theme.elementBackgroundColor};
   color: ${({ theme }) => theme.text};
   padding: 20px;
   border-radius: 8px;

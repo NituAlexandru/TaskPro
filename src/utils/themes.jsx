@@ -1,7 +1,8 @@
 export const lightTheme = {
-  body: "#fdfdfd",
+  body: "#f6f6f7",
   text: "#161616",
-  background: "#FFF",
+  elementBackgroundColor: "#fff",
+  background: "#f6f6f7",
   buttonBackground: "#bedbb0",
   buttonText: "#161616",
   buttonBackgroundHover: "#9dc888",
@@ -17,6 +18,7 @@ export const lightTheme = {
 export const darkTheme = {
   body: "#333",
   text: "#fff",
+  elementBackgroundColor: "#121212",
   background: "#333",
   buttonBackground: "#bedbb0",
   buttonText: "#161616",
@@ -33,6 +35,7 @@ export const darkTheme = {
 export const violetTheme = {
   body: "#d6d8ff",
   text: "#161616",
+  elementBackgroundColor: "#fff",
   background: "#282c34",
   buttonBackground: "#5255bc",
   buttonText: "#FFF",
