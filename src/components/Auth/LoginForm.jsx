@@ -33,7 +33,6 @@ const FormContainer = styled.div`
       cursor: pointer;
       }
     }
-  }
 
   input {
     border: 1px solid #bedbb0;

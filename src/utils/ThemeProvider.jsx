@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { lightTheme, darkTheme, violetTheme } from "./themes";
 import GlobalStyles from "./GlobalStyles";
 import ThemeSwitcher from "../components/ThemeSwitcher";
+import { AuthContext } from "../contexts/AuthContext";
 
 const themes = {
   light: lightTheme,
@@ -13,30 +14,35 @@ const themes = {
 };
 
 const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
+  const { user, token, getCurrentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    fetchTheme();
-  }, []);
-
-  const fetchTheme = async () => {
-    try {
-      const response = await axios.get("/api/user/theme");
-      const userTheme = response.data.theme || "light";
-
-      setTheme(userTheme);
-    } catch (error) {
-      console.error("Failed to fetch theme:", error);
+    if (token) {
+      console.log('Token found in ThemeProvider:', token);
+      getCurrentUser();
     }
-  };
+  }, [token, getCurrentUser]);
+
+  useEffect(() => {
+    if (user) {
+      console.log('User found in ThemeProvider:', user);
+      setTheme(user.theme || 'dark');
+    }
+  }, [user]);
 
   const handleChangeTheme = async (newTheme) => {
     setTheme(newTheme);
-
     try {
-      await axios.post("/api/user/theme", { theme: newTheme });
+      console.log('Changing theme with token:', token);
+      const response = await axios.post("http://localhost:4500/api/user/theme", { theme: newTheme }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Theme change response:', response.data);
     } catch (error) {
-      console.error("Failed to save theme:", error);
+      console.error("Failed to update theme:", error);
     }
   };
 
