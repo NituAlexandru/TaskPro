@@ -128,7 +128,7 @@ const LoginForm = ({ onSuccess }) => {
         />
         <button type="submit">Log In Now</button>
         <GoogleButton href={`http://localhost:4500/api/auth/google`}>
-          Register with Google
+          Login with Google
         </GoogleButton>
       </form>
     </FormContainer>
