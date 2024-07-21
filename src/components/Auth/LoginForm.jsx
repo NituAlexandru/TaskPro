@@ -9,7 +9,13 @@ const FormContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to bottom, #ffffff, #d7f3d7);
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 9%,
+    rgba(246, 246, 246, 1) 22%,
+    rgba(184, 218, 168, 1) 81%
+  );
 
   form {
     background-color: #151515;
@@ -31,6 +37,20 @@ const FormContainer = styled.div`
       letter-spacing: -0.02em;
       color: rgba(255, 255, 255, 0.3);
       cursor: pointer;
+
+      @media (max-width: 500px) {
+        width: auto;
+      }
+    }
+
+    @media (max-width: 500px) {
+      width: 80%;
+      padding: 1rem;
+    }
+
+    @media (max-width: 320px) {
+      width: 98%;
+      padding: 1rem;
     }
   }
 
@@ -44,6 +64,11 @@ const FormContainer = styled.div`
     opacity: 0.4;
     padding: 0.5rem;
     color: #fff;
+
+    @media (max-width: 500px) {
+      width: auto;
+      padding: 1rem;
+    }
   }
 
   button {
@@ -63,6 +88,11 @@ const FormContainer = styled.div`
     &:hover {
       background: #9dc888;
     }
+
+    @media (max-width: 500px) {
+      width: 100%;
+      padding: 1rem;
+    }
   }
 
   h2 {
@@ -74,7 +104,9 @@ const FormContainer = styled.div`
 `;
 
 const GoogleButton = styled.a`
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #4285f4;
   color: white;
   text-align: center;
@@ -83,9 +115,19 @@ const GoogleButton = styled.a`
   text-decoration: none;
   width: 344px;
   height: 49px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  text-align: center;
 
   &:hover {
     background-color: #357ae8;
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+    padding: 1rem;
   }
 `;
 

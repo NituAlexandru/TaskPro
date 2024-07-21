@@ -44,6 +44,10 @@ const StyledLink = styled(Link)`
   &:hover {
     background-color: #333;
   }
+
+  @media (max-width: 500px) {
+    width: 80%;
+  }
 `;
 
 const SimpleLink = styled(Link)`
@@ -67,6 +71,10 @@ const Paragraph = styled.p`
   text-align: center;
   color: #161616;
   margin-bottom: 30px;
+
+  @media (max-width: 500px) {
+    width: 80%;
+  }
 `;
 
 const StartPage = () => {
