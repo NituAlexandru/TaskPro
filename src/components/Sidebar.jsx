@@ -1,5 +1,5 @@
 import styled from "styled-components";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
@@ -134,7 +134,13 @@ const IconButton = styled.button`
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+  
   return (
     <SidebarContainer $isOpen={isOpen}>
       <ToggleButton $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
@@ -179,7 +185,7 @@ const Sidebar = () => {
           </li>
         </ul>
 
-        <button onClick={logout}>Log out</button>
+        <button onClick={handleLogout}>Log out</button>
       </SidebarContent>
     </SidebarContainer>
   );
