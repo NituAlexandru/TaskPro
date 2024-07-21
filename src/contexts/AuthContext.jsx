@@ -39,13 +39,13 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setUser(null);
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     console.log("Logged out");
-  };
+  }, []);
 
   const getCurrentUser = useCallback(async () => {
     if (!token) {
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       setUser(data.user);
       console.log("Fetched user:", data.user);
     } catch (error) {
-      console.error('Error fetching user:', error);
+      console.error("Error fetching user:", error);
       if (error.response && error.response.status === 401) {
         logout();
       }
@@ -66,7 +66,9 @@ export const AuthProvider = ({ children }) => {
   }, [token, logout]);
 
   return (
-    <AuthContext.Provider value={{ user, token, registerUser, loginUser, logout, getCurrentUser }}>
+    <AuthContext.Provider
+      value={{ user, token, registerUser, loginUser, logout, getCurrentUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -75,4 +77,3 @@ export const AuthProvider = ({ children }) => {
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
-

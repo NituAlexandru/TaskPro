@@ -18,7 +18,6 @@ export const fetchCurrentUser = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  
+
   return response.data;
-  
 };

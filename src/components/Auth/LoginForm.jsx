@@ -18,7 +18,7 @@ const FormContainer = styled.div`
     gap: 1rem;
     border-radius: 8px;
     width: 424px;
-    height: 332px;
+    height: auto;
     padding: 2rem;
     box-shadow: 0 4px 16px 0 rgba(22, 22, 22, 0.08);
 
@@ -31,8 +31,8 @@ const FormContainer = styled.div`
       letter-spacing: -0.02em;
       color: rgba(255, 255, 255, 0.3);
       cursor: pointer;
-      }
     }
+  }
 
   input {
     border: 1px solid #bedbb0;
@@ -70,6 +70,22 @@ const FormContainer = styled.div`
     font-size: 18px;
     letter-spacing: -0.02em;
     color: #fff;
+  }
+`;
+
+const GoogleButton = styled.a`
+  display: block;
+  background-color: #4285f4;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 8px;
+  text-decoration: none;
+  width: 344px;
+  height: 49px;
+
+  &:hover {
+    background-color: #357ae8;
   }
 `;
 
@@ -111,6 +127,9 @@ const LoginForm = ({ onSuccess }) => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Log In Now</button>
+        <GoogleButton href={`http://localhost:4500/api/auth/google`}>
+          Register with Google
+        </GoogleButton>
       </form>
     </FormContainer>
   );
