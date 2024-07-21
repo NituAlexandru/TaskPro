@@ -1,40 +1,49 @@
-import React, { useContext } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
+import Board from "../components/Board/Board";
+import styled from "styled-components";
+import { ThemeProvider } from "../utils/ThemeProvider";
+import { useState } from "react";
 
-const HomeContainer = styled.div`
-  padding: 20px;
+const HomePageContainer = styled.div`
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
 `;
 
-const LogoutButton = styled.button`
-  padding: 10px 20px;
-  margin-top: 20px;
-  background-color: #f00;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
+const MainContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  // margin-left: ${(p) => (p.$isOpen ? "-240px" : "240px")};
+  width: 100%;
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-grow: 1;
 `;
 
 const HomePage = () => {
-  const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(true);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
-    <HomeContainer>
-      <h1>Welcome, {user?.name}</h1>
-      <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-
-      {/* Other components for home page */}
-    </HomeContainer>
+    <ThemeProvider>
+      <HomePageContainer>
+        <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+        <MainContent $isOpen={isOpen}>
+          <Header isOpen={isOpen} />
+          <Content>
+            <Board isOpen={isOpen} />
+          </Content>
+        </MainContent>
+      </HomePageContainer>
+    </ThemeProvider>
   );
 };
 
 export default HomePage;
-

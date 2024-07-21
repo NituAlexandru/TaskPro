@@ -4,7 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import GlobalStyles from "./utils/GlobalStyles";
-import ThemeProvider from "./utils/ThemeProvider";
+import { ThemeProvider } from "./utils/ThemeProvider";
 import { AuthProvider } from "./contexts/AuthContext";
 import AuthCallback from "./components/Auth/AuthCallback.jsx";
 

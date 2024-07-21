@@ -11,12 +11,14 @@ export const lightTheme = {
   inputBackground: "#FFF",
   inputText: "#161616",
   inputBoxShadow: "0 4px 16px 0 rgba(22, 22, 22, 0.08)",
-  headerBackground: "#161616",
+  headerBackground: "#fcfcfc",
   headerText: "#161616",
+  sidebarBtn: "#161616",
+  logo: "../assets/logo-black.png",
 };
 
 export const darkTheme = {
-  body: "#333",
+  body: "#212121",
   text: "#fff",
   elementBackgroundColor: "#121212",
   background: "#333",
@@ -28,8 +30,10 @@ export const darkTheme = {
   inputBackground: "#1f1f1f",
   inputText: "#fff",
   inputBoxShadow: "0 4px 16px 0 rgba(22, 22, 22, 0.08)",
-  headerBackground: "#333",
+  headerBackground: "#161616",
   headerText: "#fff",
+  sidebarBtn: "#fff",
+  logo: "/src/assets/logo-white.png",
 };
 
 export const violetTheme = {
@@ -45,6 +49,8 @@ export const violetTheme = {
   inputBackground: "#4527a0",
   inputText: "#FFF",
   inputBoxShadow: "0 4px 16px 0 rgba(22, 22, 22, 0.08)",
-  headerBackground: "#282c34",
+  headerBackground: "#fff",
   headerText: "#fff",
+  sidebarBtn: "#4527a0",
+  logo: "/src/assets/logo-purple.png",
 };
