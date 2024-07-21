@@ -8,6 +8,11 @@ const BoardContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
 `;
 
 const BoardParagraph = styled.p`
