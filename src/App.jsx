@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import GlobalStyles from "./utils/GlobalStyles";
 import ThemeProvider from "./utils/ThemeProvider";
 import { AuthProvider } from "./contexts/AuthContext";
+import AuthCallback from "./components/Auth/AuthCallback.jsx";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<StartPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
           <Route
             path="/home"
             element={
