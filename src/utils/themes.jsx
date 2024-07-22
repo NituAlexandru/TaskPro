@@ -15,6 +15,9 @@ export const lightTheme = {
   headerText: "#161616",
   sidebarBtn: "#161616",
   logo: "../assets/logo-black.png",
+  addColumnBackground: "#fff",
+  addColumnBtnBackground: "#161616",
+  addColumnBtnColor: "#fff",
 };
 
 export const darkTheme = {
@@ -34,6 +37,9 @@ export const darkTheme = {
   headerText: "#fff",
   sidebarBtn: "#fff",
   logo: "/src/assets/logo-white.png",
+  addColumnBackground: "#121212",
+  addColumnBtnBackground: "#fff",
+  addColumnBtnColor: "#000",
 };
 
 export const violetTheme = {
@@ -53,4 +59,7 @@ export const violetTheme = {
   headerText: "#fff",
   sidebarBtn: "#4527a0",
   logo: "/src/assets/logo-purple.png",
+  addColumnBackground: "#fff",
+  addColumnBtnBackground: "#5255bc",
+  addColumnBtnColor: "#fff",
 };

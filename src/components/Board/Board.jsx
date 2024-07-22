@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import AddColumnButton from "./AddColumnBtn";
 
 const BoardContainer = styled.div`
   flex-grow: 1;
@@ -33,6 +34,7 @@ const BoardParagraph = styled.p`
 const Board = () => {
   return (
     <BoardContainer>
+      <AddColumnButton></AddColumnButton>
       <BoardParagraph>
         Before starting your project, it is essential to create a board to
         visualize and track all the necessary tasks and milestones. This board
