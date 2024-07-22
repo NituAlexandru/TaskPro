@@ -7,31 +7,32 @@ import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.elementBackgroundColor};
-  color: ${({ theme }) => theme.text};
+  background-color: ${({ theme }) => theme.sidebarBackgroundColor};
+  color: ${({ theme }) => theme.sidebarTextColor};
   height: 100vh;
   max-width: 260px;
   position: relative;
   width: ${({ $isOpen }) => ($isOpen ? "250px" : "0")};
   transition: width 0.5s ease-in-out;
+  justify-content: space-between;
 `;
 
 const ToggleButton = styled.button`
   background: none;
   border: none;
-  color: ${({ theme }) => theme.sidebarBtn};
+  color: ${({ theme }) => theme.toggleBtn};
   cursor: pointer;
   position: absolute;
   top: 70px;
   right: -20px;
   transition: transform 0.3s ease;
-  background-color: ${({ theme }) => theme.elementBackgroundColor};
+  background-color: ${({ theme }) => theme.sidebarBackgroundColor};
   width: 40px;
   height: 40px;
 
   &:hover,
   &:focus {
-    background-color: ${({ theme }) => theme.elementBackgroundColor};
+    background-color: ${({ theme }) => theme.sidebarBackgroundColor};
     color: ${({ theme }) => theme.sidebarBtn};
     outline: none;
     transform: none;
@@ -43,65 +44,86 @@ const SidebarContent = styled.div`
   flex-direction: column;
   gap: 20px;
   height: auto;
-  margin-top: 30px;
+  margin-top: 0;
   padding: 20px;
+  padding-top: 0;
   opacity: ${({ $isOpen }) => ($isOpen ? "1" : "0")};
   visibility: ${({ $isOpen }) => ($isOpen ? "visible" : "hidden")};
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-
-  h3,
-  input {
-    margin: 0;
-  }
 `;
 
-const LogoSidebar = styled.div`
+const LogoContainer = styled.div`
   display: flex;
   gap: 10px;
   margin-top: 10px;
   align-items: center;
   justify-content: flex-start;
-  margin-left: 20px;
 
   img {
     width: 32px;
     height: 32px;
   }
-
-  h1 {
-    font-family: "Poppins", sans-serif;
-    font-weight: 600;
-    font-size: 16px;
-    letter-spacing: -0.04em;
-    color: #fff;
-  }
 `;
-const NewBoard = styled.div`
+const MainTitle = styled.h1`
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.04em;
+  color: ${({ theme }) => theme.logoText};
+`;
+
+const NewBoardContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
 
   p {
     margin: 0;
   }
 `;
-const List = styled.ul`
+
+const BoardList = styled.ul`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 20px;
   list-style: none;
   padding: 0;
   margin: 0;
-`;
-const ListItem = styled.li`
-  display: flex;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
 
-  p,
-  img {
-    margin: 0;
-    padding: 0;
+  &::-webkit-scrollbar {
+    width: 10px;
   }
+
+  &::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.scrollbarTrack};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.scrollbarThumb};
+    border-radius: 8px;
+    border: 2px solid ${({ theme }) => theme.scrollbarTrack};
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => theme.scrollbarThumbHover};
+  }
+`;
+
+const BoardListItem = styled.li`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const BoardListItemContainer = styled.div`
+  display: flex;
 `;
 
 const IconButton = styled.button`
@@ -118,17 +140,104 @@ const IconButton = styled.button`
     width: 14px;
     height: 14px;
   }
+`;
 
-  &.edit-button:hover img,
-  &.delete-button:hover img {
-    background-color: black;
-    color: black;
-  }
+const HelpList = styled.ul`
+  list-style: none;
+  border-radius: 8px;
+  width: 212px;
+  height: 272px;
+  padding: 10px;
+  margin: 0;
+  background-color: ${({ theme }) => theme.helpListBackground};
+`;
 
-  img {
-    margin: 0;
-    padding: 0;
+const HelpListItem = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+  width: 100%;
+`;
+
+const SidebarHeading = styled.h3`
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: -0.02em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+  color: ${({ theme }) => theme.sidebarHeading};
+`;
+
+const Paragraph = styled.p`
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.sidebarTextColor};
+  margin: 0;
+`;
+const HelpParagraph = styled.p`
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.sidebarTextColor};
+`;
+
+const AddBoardBtn = styled.button`
+  border-radius: 6px;
+  width: 40px;
+  height: 36px;
+  border: none;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.addBoardBtn};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Image = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+const LogOutBtn = styled.button`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background: none;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: ${({ theme }) => theme.sidebarTextColor};
+  gap: 10px;
+  stroke: #fff;
+  margin: 0 15px;
+  margin-bottom: 15px;
+  padding: 10px 0;
+
+  &:hover,
+  &:focus {
+    background-color: transparent;
+    outline: none;
+    text-decoration: underline;
   }
+`;
+const FlowerImage = styled.img`
+  width: 54px;
+  height: 78px;
+`;
+
+const ImageEditDelete = styled.img`
+  width: 16px;
+  height: 16px;
+  color: red;
+`;
+
+const LogOutImg = styled.img`
+ stroke="#fff";
 `;
 
 const Sidebar = () => {
@@ -138,55 +247,163 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
   };
-  
+
   return (
     <SidebarContainer $isOpen={isOpen}>
       <ToggleButton $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <FiArrowLeft /> : <FiArrowRight />}
       </ToggleButton>
       <SidebarContent $isOpen={isOpen}>
-        <LogoSidebar>
-          <img src="/src/assets/logo-white.png" alt="Task Pro Logo" />
-          <h1>Task Pro</h1>
-        </LogoSidebar>
-        <h3>My boards</h3>
-        <NewBoard>
-          <p>Create a new board</p>
-          <button>+</button>
-        </NewBoard>
-        <List>
-          <ListItem>
-            <img src="" alt="img" />
-            <p>Project office</p>
-            <IconButton className="edit-button">
-              <img src="/src/assets/utils/pencil.png" alt="Edit" />
-            </IconButton>
-            <IconButton className="delete-button">
-              <img src="/src/assets/utils/trash.png" alt="Delete" />
-            </IconButton>
-          </ListItem>
-        </List>
+        <LogoContainer>
+          <Image src="/src/assets/logo-white.png" alt="Task Pro Logo" />
+          <MainTitle>Task Pro</MainTitle>
+        </LogoContainer>
+        <SidebarHeading>My boards</SidebarHeading>
+        <NewBoardContainer>
+          <Paragraph>
+            Create a <br /> new board
+          </Paragraph>
+          <AddBoardBtn>+</AddBoardBtn>
+        </NewBoardContainer>
 
-        <ul>
-          <li>
-            <img src="/src/assets/utils/flower.png" alt="happy flower" />
-          </li>
-          <li>
-            <p>
+        <BoardList>
+          <BoardListItem>
+            <BoardListItemContainer>
+              <Image src="" alt="img" />
+              <Paragraph>Project office</Paragraph>
+            </BoardListItemContainer>
+            <BoardListItemContainer>
+              <IconButton className="edit-button">
+                <ImageEditDelete
+                  src="/src/assets/utils/pencil.png"
+                  alt="Edit"
+                />
+              </IconButton>
+              <IconButton className="delete-button">
+                <ImageEditDelete
+                  src="/src/assets/utils/trash.png"
+                  alt="Delete"
+                />
+              </IconButton>
+            </BoardListItemContainer>
+          </BoardListItem>
+
+          <BoardListItem>
+            <BoardListItemContainer>
+              <Image src="" alt="img" />
+              <Paragraph>Project office</Paragraph>
+            </BoardListItemContainer>
+            <BoardListItemContainer>
+              <IconButton className="edit-button">
+                <Image src="/src/assets/utils/pencil.png" alt="Edit" />
+              </IconButton>
+              <IconButton className="delete-button">
+                <Image src="/src/assets/utils/trash.png" alt="Delete" />
+              </IconButton>
+            </BoardListItemContainer>
+          </BoardListItem>
+
+          {/* TEST - de sters */}
+
+          <BoardListItem>
+            <BoardListItemContainer>
+              <Image src="" alt="img" />
+              <Paragraph>Project office</Paragraph>
+            </BoardListItemContainer>
+            <BoardListItemContainer>
+              <IconButton className="edit-button">
+                <Image src="/src/assets/utils/pencil.png" alt="Edit" />
+              </IconButton>
+              <IconButton className="delete-button">
+                <Image src="/src/assets/utils/trash.png" alt="Delete" />
+              </IconButton>
+            </BoardListItemContainer>
+          </BoardListItem>
+          <BoardListItem>
+            <BoardListItemContainer>
+              <Image src="" alt="img" />
+              <Paragraph>Project office</Paragraph>
+            </BoardListItemContainer>
+            <BoardListItemContainer>
+              <IconButton className="edit-button">
+                <Image src="/src/assets/utils/pencil.png" alt="Edit" />
+              </IconButton>
+              <IconButton className="delete-button">
+                <Image src="/src/assets/utils/trash.png" alt="Delete" />
+              </IconButton>
+            </BoardListItemContainer>
+          </BoardListItem>
+          <BoardListItem>
+            <BoardListItemContainer>
+              <Image src="" alt="img" />
+              <Paragraph>Project office</Paragraph>
+            </BoardListItemContainer>
+            <BoardListItemContainer>
+              <IconButton className="edit-button">
+                <Image src="/src/assets/utils/pencil.png" alt="Edit" />
+              </IconButton>
+              <IconButton className="delete-button">
+                <Image src="/src/assets/utils/trash.png" alt="Delete" />
+              </IconButton>
+            </BoardListItemContainer>
+          </BoardListItem>
+          <BoardListItem>
+            <BoardListItemContainer>
+              <Image src="" alt="img" />
+              <Paragraph>Project office</Paragraph>
+            </BoardListItemContainer>
+            <BoardListItemContainer>
+              <IconButton className="edit-button">
+                <Image src="/src/assets/utils/pencil.png" alt="Edit" />
+              </IconButton>
+              <IconButton className="delete-button">
+                <Image src="/src/assets/utils/trash.png" alt="Delete" />
+              </IconButton>
+            </BoardListItemContainer>
+          </BoardListItem>
+          <BoardListItem>
+            <BoardListItemContainer>
+              <Image src="" alt="img" />
+              <Paragraph>Project office</Paragraph>
+            </BoardListItemContainer>
+            <BoardListItemContainer>
+              <IconButton className="edit-button">
+                <Image src="/src/assets/utils/pencil.png" alt="Edit" />
+              </IconButton>
+              <IconButton className="delete-button">
+                <Image src="/src/assets/utils/trash.png" alt="Delete" />
+              </IconButton>
+            </BoardListItemContainer>
+          </BoardListItem>
+
+          {/* TEST - de sters */}
+        </BoardList>
+
+        <HelpList>
+          <HelpListItem>
+            <FlowerImage
+              src="/src/assets/utils/flower.png"
+              alt="happy flower"
+            />
+          </HelpListItem>
+          <HelpListItem>
+            <HelpParagraph>
               If you need help with <strong>TaskPro</strong>, check out our
               support resources or reach out to our customer support team.
-            </p>
-          </li>
-          <li>
-            <img src="/src/assets/utils/help-circle.png" alt="help" />
+            </HelpParagraph>
+          </HelpListItem>
+          <HelpListItem>
+            <Image src="/src/assets/utils/help-circle.png" alt="help" />
             <span>Need help?</span>
-          </li>
-        </ul>
-
-        <button onClick={handleLogout}>Log out</button>
+          </HelpListItem>
+        </HelpList>
       </SidebarContent>
+      <LogOutBtn onClick={handleLogout}>
+        <LogOutImg src="/src/assets/icons/login.svg" alt="" />
+        <span> Log out</span>
+      </LogOutBtn>
     </SidebarContainer>
   );
 };

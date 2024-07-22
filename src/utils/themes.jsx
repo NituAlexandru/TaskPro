@@ -18,6 +18,16 @@ export const lightTheme = {
   addColumnBackground: "#fff",
   addColumnBtnBackground: "#161616",
   addColumnBtnColor: "#fff",
+  sidebarBackgroundColor: "#fcfcfc",
+  sidebarTextColor: "#161616",
+  toggleBtn: "#161616",
+  addBoardBtn: "#bedbb0",
+  helpListBackground: "#f6f6f7",
+  logoText: "#161616",
+  sidebarHeading: "#717070",
+  scrollbarThumb: "#f6f6f7",
+  scrollbarTrack: "#9dc888",
+  scrollbarThumbHover: "rgba(22, 22, 22, 0.2);",
 };
 
 export const darkTheme = {
@@ -40,6 +50,16 @@ export const darkTheme = {
   addColumnBackground: "#121212",
   addColumnBtnBackground: "#fff",
   addColumnBtnColor: "#000",
+  sidebarBackgroundColor: "#121212",
+  sidebarTextColor: "#fff",
+  toggleBtn: "#fff",
+  addBoardBtn: "#bedbb0",
+  helpListBackground: "#1f1f1f",
+  logoText: "#fff",
+  sidebarHeading: "rgba(255, 255, 255, 0.5);",
+  scrollbarThumb: "#888",
+  scrollbarTrack: "#1f1f1f",
+  scrollbarThumbHover: "#555",
 };
 
 export const violetTheme = {
@@ -62,4 +82,14 @@ export const violetTheme = {
   addColumnBackground: "#fff",
   addColumnBtnBackground: "#5255bc",
   addColumnBtnColor: "#fff",
+  sidebarBackgroundColor: "#5255bc",
+  sidebarTextColor: "#fff",
+  toggleBtn: "#FFF",
+  addBoardBtn: "#b8bcfd",
+  helpListBackground: "rgba(236, 237, 253, 0.4)",
+  logoText: "#fff",
+  sidebarHeading: "rgba(255, 255, 255, 0.5);",
+  scrollbarThumb: "rgba(236, 237, 253, 0.4)",
+  scrollbarTrack: "rgba(236, 237, 253, 0.4)",
+  scrollbarThumbHover: "#5255bc",
 };
