@@ -139,6 +139,7 @@ const IconButton = styled.button`
   &.delete-button img {
     width: 14px;
     height: 14px;
+    background-color: ${({ theme }) => theme.sidebarBackgroundColor};
   }
 `;
 
@@ -234,6 +235,7 @@ const ImageEditDelete = styled.img`
   width: 16px;
   height: 16px;
   color: red;
+  fill: red;
 `;
 
 const LogOutImg = styled.img`
@@ -277,13 +279,13 @@ const Sidebar = () => {
             <BoardListItemContainer>
               <IconButton className="edit-button">
                 <ImageEditDelete
-                  src="/src/assets/utils/pencil.png"
+                  src="/src/assets/utils/pencil.svg"
                   alt="Edit"
                 />
               </IconButton>
               <IconButton className="delete-button">
                 <ImageEditDelete
-                  src="/src/assets/utils/trash.png"
+                  src="/src/assets/utils/trash.svg"
                   alt="Delete"
                 />
               </IconButton>
@@ -297,10 +299,16 @@ const Sidebar = () => {
             </BoardListItemContainer>
             <BoardListItemContainer>
               <IconButton className="edit-button">
-                <Image src="/src/assets/utils/pencil.png" alt="Edit" />
+                <ImageEditDelete
+                  src="/src/assets/utils/pencil.svg"
+                  alt="Edit"
+                />
               </IconButton>
               <IconButton className="delete-button">
-                <Image src="/src/assets/utils/trash.png" alt="Delete" />
+                <ImageEditDelete
+                  src="/src/assets/utils/trash.svg"
+                  alt="Delete"
+                />
               </IconButton>
             </BoardListItemContainer>
           </BoardListItem>
