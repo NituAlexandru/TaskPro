@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import Card from "./TaskCard";
+import AddColumnButton from "./AddColumnBtn";
 
 const BoardContainer = styled.div`
   flex-grow: 1;
@@ -8,6 +10,7 @@ const BoardContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 
   img {
     height: 30px;
@@ -33,6 +36,8 @@ const BoardParagraph = styled.p`
 const Board = () => {
   return (
     <BoardContainer>
+      <AddColumnButton></AddColumnButton>
+      <Card></Card>
       <BoardParagraph>
         Before starting your project, it is essential to create a board to
         visualize and track all the necessary tasks and milestones. This board

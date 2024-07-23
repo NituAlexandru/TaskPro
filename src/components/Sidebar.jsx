@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+// import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 const SidebarContainer = styled.div`
   display: flex;
@@ -303,6 +304,8 @@ const Sidebar = () => {
                   src="/src/assets/utils/pencil.svg"
                   alt="Edit"
                 />
+                {/* <FiEdit />
+                <FiTrash2 /> */}
               </IconButton>
               <IconButton className="delete-button">
                 <ImageEditDelete
