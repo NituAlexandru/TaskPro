@@ -1,5 +1,5 @@
 import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/Sidebar/Sidebar";
 import Board from "../components/Board/Board";
 import styled from "styled-components";
 import { ThemeProvider } from "../utils/ThemeProvider";
