@@ -9,6 +9,16 @@ const ButtonContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.addColumnBtnHoverBackground};
+  }
+
+  &:focus {
+    outline: none;
+  }
+
   @media (max-width: 500px) {
     width: 100%;
   }
@@ -25,16 +35,7 @@ const IconButton = styled.button`
   border-radius: 6px;
   margin: 0;
   padding: 0;
-  cursor: pointer;
   color: ${({ theme }) => theme.addColumnBtnColor};
-
-  &:hover {
-    background: ${({ theme }) => theme.addColumnBtnBackground};
-  }
-
-  &:focus {
-    outline: none;
-  }
 `;
 
 const IconImage = styled.span`
