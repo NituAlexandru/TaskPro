@@ -20,12 +20,16 @@ const UserInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+`;
 
-  img {
-    border-radius: 8px;
-    width: 32px;
-    height: 32px;
-  }
+const UserAvatar = styled.img`
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+`;
+
+const UserName = styled.span`
+  color: ${({ theme }) => theme.headerText};
 `;
 
 const Header = () => {
@@ -36,8 +40,8 @@ const Header = () => {
     <HeaderContainer>
       <ThemeSwitcher theme={theme} handleChangeTheme={handleChangeTheme} />
       <UserInfo>
-        <span>{user?.name}</span>
-        <img src={user?.avatarURL} alt={`${user?.name}'s avatar`} />
+        <UserName>{user?.name}</UserName>
+        <UserAvatar src={user?.avatarURL} alt={`${user?.name}'s avatar`} />
       </UserInfo>
     </HeaderContainer>
   );

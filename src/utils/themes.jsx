@@ -96,7 +96,7 @@ export const violetTheme = {
   inputText: "#FFF",
   inputBoxShadow: "0 4px 16px 0 rgba(22, 22, 22, 0.08)",
   headerBackground: "#fff",
-  headerText: "#fff",
+  headerText: "#161616",
   sidebarBtn: "#4527a0",
   logo: "/src/assets/logo-purple.png",
   sidebarBackgroundColor: "#5255bc",
