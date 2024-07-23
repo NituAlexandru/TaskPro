@@ -32,6 +32,11 @@ export const darkTheme = {
   cardTextColor: "#fff",
   cardTextSecondaryColor: "rgba(255, 255, 255, 0.5);",
   cardBtnColor: "rgba(255, 255, 255, 0.5);",
+  addCardButtonBackground: "#bedbb0",
+  addCardButtonHoverBackground: "#9dc888",
+  addCardButtonIconBackground: "#161616",
+  addCardButtonText: "#161616",
+  addCardButtonIcon: "#fff",
 };
 
 export const lightTheme = {
@@ -68,6 +73,11 @@ export const lightTheme = {
   cardTextColor: "#161616",
   cardTextSecondaryColor: "rgba(22, 22, 22, 0.7);",
   cardBtnColor: "rgba(22, 22, 22, 0.5);",
+  addCardButtonBackground: "#bedbb0",
+  addCardButtonHoverBackground: "#9dc888",
+  addCardButtonIconBackground: "#161616",
+  addCardButtonText: "#161616",
+  addCardButtonIcon: "#fff",
 };
 
 export const violetTheme = {
@@ -104,4 +114,9 @@ export const violetTheme = {
   cardTextColor: "#161616",
   cardTextSecondaryColor: "rgba(22, 22, 22, 0.7);",
   cardBtnColor: "rgba(22, 22, 22, 0.5);",
+  addCardButtonBackground: "#5255bc",
+  addCardButtonHoverBackground: "#7b7ede",
+  addCardButtonIconBackground: "#fff",
+  addCardButtonText: "#fff",
+  addCardButtonIcon: "#161616",
 };
