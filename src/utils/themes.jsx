@@ -38,6 +38,7 @@ export const darkTheme = {
   addCardButtonIconBackground: "#161616",
   addCardButtonText: "#161616",
   addCardButtonIcon: "#fff",
+  modalBackgroundColor: "#151515",
 };
 
 export const lightTheme = {
@@ -80,6 +81,7 @@ export const lightTheme = {
   addCardButtonIconBackground: "#161616",
   addCardButtonText: "#161616",
   addCardButtonIcon: "#fff",
+  modalBackgroundColor: "#fcfcfc",
 };
 
 export const violetTheme = {
@@ -122,4 +124,5 @@ export const violetTheme = {
   addCardButtonIconBackground: "#fff",
   addCardButtonText: "#fff",
   addCardButtonIcon: "#161616",
+  modalBackgroundColor: "#fcfcfc",
 };

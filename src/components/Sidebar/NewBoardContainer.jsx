@@ -1,5 +1,7 @@
-// NewBoardContainer.jsx
 import styled from "styled-components";
+import Modal from "../Portal/Modal";
+import NewBoardModal from "../Portal/NewBoardModal";
+import { useState } from "react";
 
 const NewBoardContainerWrapper = styled.div`
   display: flex;
@@ -30,13 +32,33 @@ const AddBoardBtn = styled.button`
   align-items: center;
 `;
 
-const NewBoardContainer = () => (
-  <NewBoardContainerWrapper>
-    <Paragraph>
-      Create a <br /> new board
-    </Paragraph>
-    <AddBoardBtn>+</AddBoardBtn>
-  </NewBoardContainerWrapper>
-);
+const NewBoardContainer = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  return (
+    <>
+      <NewBoardContainerWrapper>
+        <Paragraph>
+          Create a <br /> new board
+        </Paragraph>
+        <AddBoardBtn onClick={openModal}>+</AddBoardBtn>
+      </NewBoardContainerWrapper>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        background="#fff"
+        width="350px"
+        height="500px"
+        border="1px solid rgba(190, 219, 176, 0.5)"
+        border-radius="8px"
+      >
+        <NewBoardModal closeModal={closeModal} />
+      </Modal>
+    </>
+  );
+};
 
 export default NewBoardContainer;
