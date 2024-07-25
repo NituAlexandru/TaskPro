@@ -12,7 +12,7 @@ export const login = async (userData) => {
   return response.data;
 };
 export const fetchCurrentUser = async (token) => {
-  console.log("Token in fetchCurrentUser:", token);
+  // console.log("Token in fetchCurrentUser:", token);
   const response = await axios.get(`${BASE_URL}/user/current`, {
     headers: {
       Authorization: `Bearer ${token}`,

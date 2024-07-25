@@ -20,7 +20,7 @@ const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      console.log("Token found in ThemeProvider:", token);
+      // console.log("Token found in ThemeProvider:", token);
       getCurrentUser();
     }
   }, [token, getCurrentUser]);
@@ -31,6 +31,10 @@ const ThemeProvider = ({ children }) => {
       setTheme(user.theme || "dark");
     }
   }, [user]);
+
+  useEffect(() => {
+    console.log("Current theme in ThemeProvider:", theme);
+  }, [theme]);
 
   const handleChangeTheme = async (newTheme) => {
     setTheme(newTheme);

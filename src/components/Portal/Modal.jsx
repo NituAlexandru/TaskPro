@@ -10,20 +10,20 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: ${({ background }) => background || "rgba(0, 0, 0, 0.5)"};
+  background: ${({ $background }) => $background || "rgba(0, 0, 0, 0.5)"};
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const ModalContent = styled.div`
-  background: ${({ modalBackgroundColor }) => modalBackgroundColor};
+  background-color: ${({ $modalBackgroundColor }) => $modalBackgroundColor};
   padding: 20px;
-  border-radius: ${({ borderRadius }) => borderRadius || "8px"};
-  max-width: ${({ maxWidth }) => maxWidth || "500px"};
-  width: ${({ width }) => width || "100%"};
-  height: ${({ height }) => height || "auto"};
-  border: ${({ border }) => border || "none"};
+  border-radius: ${({ $borderRadius }) => $borderRadius || "8px"};
+  max-width: ${({ $maxWidth }) => $maxWidth || "500px"};
+  width: ${({ $width }) => $width || "100%"};
+  height: ${({ $height }) => $height || "auto"};
+  border: ${({ $border }) => $border || "none"};
 `;
 
 const Modal = ({
@@ -39,21 +39,29 @@ const Modal = ({
 }) => {
   const { theme } = useContext(ThemeContext);
 
-  console.log(theme.modalBackgroundColor);
+  console.log("Current theme in Modal:", theme);
+  console.log("Props passed to ModalContent:", {
+    width,
+    maxWidth,
+    height,
+    border,
+    borderRadius,
+    modalBackgroundColor: modalBackgroundColor || theme.modalBackgroundColor,
+  });
 
   if (!isOpen) return null;
 
   return (
     <Portal>
-      <ModalOverlay onClick={onClose} background="rgba(0, 0, 0, 0.5)">
+      <ModalOverlay onClick={onClose} $background="rgba(0, 0, 0, 0.5)">
         <ModalContent
           onClick={(e) => e.stopPropagation()}
-          width={width}
-          maxWidth={maxWidth}
-          height={height}
-          border={border}
-          borderRadius={borderRadius}
-          modalBackgroundColor={
+          $width={width}
+          $maxWidth={maxWidth}
+          $height={height}
+          $border={border}
+          $borderRadius={borderRadius}
+          $modalBackgroundColor={
             modalBackgroundColor || theme.modalBackgroundColor
           }
         >

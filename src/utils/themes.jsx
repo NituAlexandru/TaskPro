@@ -39,6 +39,11 @@ export const darkTheme = {
   addCardButtonText: "#161616",
   addCardButtonIcon: "#fff",
   modalBackgroundColor: "#151515",
+  modalTextColor: "#fff",
+  modalCreateBtnBackgroundColor: "#bedbb0",
+  modalCreateBtnColor: "#161616",
+  modalCreateBtnAddBackgroundColor: "#161616",
+  modalCreateBtnAddColor: "#fff",
 };
 
 export const lightTheme = {
@@ -82,6 +87,11 @@ export const lightTheme = {
   addCardButtonText: "#161616",
   addCardButtonIcon: "#fff",
   modalBackgroundColor: "#fcfcfc",
+  modalTextColor: "#161616",
+  modalCreateBtnBackgroundColor: "#bedbb0",
+  modalCreateBtnColor: "#161616",
+  modalCreateBtnAddBackgroundColor: "#161616",
+  modalCreateBtnAddColor: "#fff",
 };
 
 export const violetTheme = {
@@ -125,4 +135,9 @@ export const violetTheme = {
   addCardButtonText: "#fff",
   addCardButtonIcon: "#161616",
   modalBackgroundColor: "#fcfcfc",
+  modalTextColor: "#161616",
+  modalCreateBtnBackgroundColor: "#5255bc",
+  modalCreateBtnColor: "#fff",
+  modalCreateBtnAddBackgroundColor: "#fff",
+  modalCreateBtnAddColor: "#161616",
 };
