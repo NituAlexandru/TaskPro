@@ -37,14 +37,14 @@ const Title = styled.h2`
   font-weight: 500;
   font-size: 18px;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: ${({ theme }) => theme.modalTextColor};
   margin: 0;
 `;
 
 const CloseButton = styled.button`
   border: none;
   background: none;
-  color: #ffffff;
+  color: ${({ theme }) => theme.modalTextColor};
   font-size: 24px;
   cursor: pointer;
   padding: 0;
@@ -132,8 +132,8 @@ const CreateButton = styled.button`
   margin-top: 20px;
   border-radius: 6px;
   border: none;
-  background-color: #a5d6a7;
-  color: #161616;
+  background-color: ${({ theme }) => theme.modalCreateBtnBackgroundColor};
+  color: ${({ theme }) => theme.modalCreateBtnColor};
   font-family: "Poppins", sans-serif;
   font-size: 14px;
   display: flex;
@@ -147,8 +147,8 @@ const CreateButton = styled.button`
 const CreateButtonAdd = styled.span`
   width: 28px;
   height: 28px;
-  background: #161616;
-  color: #fff;
+  background-color: ${({ theme }) => theme.modalCreateBtnAddBackgroundColor};
+  color: ${({ theme }) => theme.modalCreateBtnAddColor};
   border-radius: 6px;
   display: flex;
   justify-content: center;
