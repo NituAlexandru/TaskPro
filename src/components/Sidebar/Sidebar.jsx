@@ -137,11 +137,11 @@ const Sidebar = () => {
         <NewBoardContainer />
         <BoardList />
         <HelpList />
+        <LogOutBtn onClick={handleLogout}>
+          <LogOutImg src="/src/assets/icons/login.svg" alt="" />
+          <span> Log out</span>
+        </LogOutBtn>
       </SidebarContent>
-      <LogOutBtn onClick={handleLogout}>
-        <LogOutImg src="/src/assets/icons/login.svg" alt="" />
-        <span> Log out</span>
-      </LogOutBtn>
     </SidebarContainer>
   );
 };

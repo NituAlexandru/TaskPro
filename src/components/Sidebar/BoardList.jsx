@@ -1,5 +1,9 @@
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
+import Modal from "../Portal/Modal"; // Importă componenta Modal
+import EditBoardModal from "../Portal/EditBoardModal"; // Importă componenta NewBoardModal
+import { ThemeContext } from "../../utils/ThemeProvider";
 
 const BoardListWrapper = styled.ul`
   display: flex;
@@ -77,24 +81,46 @@ const IconButton = styled.button`
   }
 `;
 
-const BoardList = () => (
-  <BoardListWrapper>
-    {Array.from({ length: 8 }).map((_, index) => (
-      <BoardListItem key={index}>
-        <BoardListItemContainer>
-          <Paragraph>Project office</Paragraph>
-        </BoardListItemContainer>
-        <BoardListItemContainer>
-          <IconButton className="edit-button">
-            <FiEdit />
-          </IconButton>
-          <IconButton className="delete-button">
-            <FiTrash2 />
-          </IconButton>
-        </BoardListItemContainer>
-      </BoardListItem>
-    ))}
-  </BoardListWrapper>
-);
+const BoardList = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const { theme } = useContext(ThemeContext);
+
+  return (
+    <>
+      <BoardListWrapper>
+        {Array.from({ length: 8 }).map((_, index) => (
+          <BoardListItem key={index}>
+            <BoardListItemContainer>
+              <Paragraph>Project office</Paragraph>
+            </BoardListItemContainer>
+            <BoardListItemContainer>
+              <IconButton className="edit-button" onClick={openModal}>
+                <FiEdit />
+              </IconButton>
+              <IconButton className="delete-button">
+                <FiTrash2 />
+              </IconButton>
+            </BoardListItemContainer>
+          </BoardListItem>
+        ))}
+      </BoardListWrapper>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        width="350px"
+        height="500px"
+        border="1px solid rgba(190, 219, 176, 0.5)"
+        borderRadius="8px"
+        modalBackgroundColor={theme.backgroundColor}
+      >
+        <EditBoardModal closeModal={closeModal} />
+      </Modal>
+    </>
+  );
+};
 
 export default BoardList;

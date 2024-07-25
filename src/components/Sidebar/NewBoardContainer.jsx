@@ -36,6 +36,7 @@ const AddBoardBtn = styled.button`
 const NewBoardContainer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { theme } = useContext(ThemeContext);
+  console.log(theme);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);

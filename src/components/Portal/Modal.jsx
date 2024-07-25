@@ -20,7 +20,6 @@ const ModalContent = styled.div`
   background-color: ${({ $modalBackgroundColor }) => $modalBackgroundColor};
   padding: 20px;
   border-radius: ${({ $borderRadius }) => $borderRadius || "8px"};
-  max-width: ${({ $maxWidth }) => $maxWidth || "500px"};
   width: ${({ $width }) => $width || "100%"};
   height: ${({ $height }) => $height || "auto"};
   border: ${({ $border }) => $border || "none"};
@@ -31,7 +30,7 @@ const Modal = ({
   isOpen,
   onClose,
   width,
-  maxWidth,
+
   height,
   border,
   borderRadius,
@@ -42,11 +41,10 @@ const Modal = ({
   console.log("Current theme in Modal:", theme);
   console.log("Props passed to ModalContent:", {
     width,
-    maxWidth,
     height,
     border,
     borderRadius,
-    modalBackgroundColor: modalBackgroundColor || theme.modalBackgroundColor,
+    modalBackgroundColor: modalBackgroundColor,
   });
 
   if (!isOpen) return null;
@@ -57,13 +55,10 @@ const Modal = ({
         <ModalContent
           onClick={(e) => e.stopPropagation()}
           $width={width}
-          $maxWidth={maxWidth}
           $height={height}
           $border={border}
           $borderRadius={borderRadius}
-          $modalBackgroundColor={
-            modalBackgroundColor || theme.modalBackgroundColor
-          }
+          $modalBackgroundColor={modalBackgroundColor}
         >
           {children}
         </ModalContent>
