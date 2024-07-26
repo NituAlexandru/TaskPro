@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import styled, { ThemeContext } from 'styled-components';
-import Portal from './Portal';
+import { useContext } from "react";
+import PropTypes from "prop-types";
+import styled, { ThemeContext } from "styled-components";
+import Portal from "./Portal";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -9,7 +9,7 @@ const ModalOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: ${({ $background }) => $background || 'rgba(0, 0, 0, 0.5)'};
+  background: ${({ $background }) => $background || "rgba(0, 0, 0, 0.5)"};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,10 +19,10 @@ const ModalContent = styled.div`
   background-color: ${({ theme }) => theme.modalBackgroundColor};
   color: ${({ theme }) => theme.modalTextColor};
   padding: 20px;
-  border-radius: ${({ $borderRadius }) => $borderRadius || '8px'};
-  width: ${({ $width }) => $width || '100%'};
-  height: ${({ $height }) => $height || 'auto'};
-  border: ${({ $border }) => $border || 'none'};
+  border-radius: ${({ $borderRadius }) => $borderRadius || "8px"};
+  width: ${({ $width }) => $width || "100%"};
+  height: ${({ $height }) => $height || "auto"};
+  border: ${({ $border }) => $border || "none"};
 `;
 
 const Modal = ({
@@ -36,7 +36,7 @@ const Modal = ({
 }) => {
   const theme = useContext(ThemeContext);
 
-  console.log('Current theme in Modal:', theme);
+  console.log("Current theme in Modal:", theme);
 
   if (!isOpen) return null;
 

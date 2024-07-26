@@ -64,7 +64,7 @@ const Input = styled.input`
   width: 100%;
   height: 49px;
   box-shadow: 0 4px 16px 0 rgba(22, 22, 22, 0.08);
-  background: #1f1f1f;
+  background-color: ${({ theme }) => theme.modalBackgroundColor};
   opacity: 0.4;
   margin: 0;
 `;

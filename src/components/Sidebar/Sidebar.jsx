@@ -97,8 +97,6 @@ const LogOutBtn = styled.button`
   color: ${({ theme }) => theme.sidebarTextColor};
   gap: 10px;
   stroke: #fff;
-  margin: 0 15px;
-  margin-bottom: 15px;
   padding: 10px 0;
 
   &:hover,
