@@ -11,25 +11,21 @@ import AuthCallback from "./components/Auth/AuthCallback.jsx";
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<StartPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/auth/callback" element={<AuthCallback />} />
-          <Route
-            path="/home"
-            element={
-              <ThemeProvider>
-                <GlobalStyles />
-                <HomePage />
-              </ThemeProvider>
-            }
-          />
-        </Routes>
-      </Router>
+      <ThemeProvider>
+        <GlobalStyles />
+        <Router>
+          <Routes>
+            <Route path="/" element={<StartPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/home" element={<HomePage />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </AuthProvider>
   );
 }
 
 export default App;
+
