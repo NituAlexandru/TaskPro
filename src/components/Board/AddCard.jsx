@@ -1,4 +1,7 @@
+import { useState } from "react";
 import styled from "styled-components";
+import Modal from "../Portal/Modal";
+import AddCardForm from "../Portal/AddCardModal";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -52,11 +55,30 @@ const AddParagraph = styled.p`
 `;
 
 const AddCardButton = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
-    <ButtonContainer>
-      <IconButton>+</IconButton>
-      <AddParagraph>Add another card</AddParagraph>
-    </ButtonContainer>
+    <>
+      <ButtonContainer onClick={openModal}>
+        <IconButton>+</IconButton>
+        <AddParagraph>Add another card</AddParagraph>
+      </ButtonContainer>
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          width="350px"
+          height="522px"
+          border="1px solid rgba(190, 219, 176, 0.5)"
+          borderRadius="8px"
+        >
+          <AddCardForm closeModal={closeModal} />
+        </Modal>
+      )}
+    </>
   );
 };
 
