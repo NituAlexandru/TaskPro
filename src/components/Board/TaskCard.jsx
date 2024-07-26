@@ -1,5 +1,7 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { FiEdit, FiTrash2, FiArrowRightCircle } from "react-icons/fi";
+import EditCardForm from "../../components/Portal/EditCardModal";
 
 const CardContainer = styled.div`
   background-color: ${({ theme }) => theme.cardBackgroundColor};
@@ -118,39 +120,75 @@ const Actions = styled.div`
   }
 `;
 
-const Card = () => {
-  return (
-    <CardContainer>
-      <CardPriorityColor></CardPriorityColor>
-      <CardContentConteiner>
-        <CardTitle>The Watch Spot Design</CardTitle>
-        <CardDescription>
-          Create a visually stunning and eye-catching watch dial design that
-          embodies our brand&apos;s...
-        </CardDescription>
-        <CardFooter>
-          <Priority>
-            <PriorityType>
-              <PriorityItem>Priority</PriorityItem>
-              <PriorityColor>
-                <PriorityColorOne></PriorityColorOne>
-                <PriorityColorTwo>Medium</PriorityColorTwo>
-              </PriorityColor>
-            </PriorityType>
-            <PriorityType>
-              <PriorityItem>Deadline</PriorityItem>
-              <PriorityDate>12/05/2023</PriorityDate>
-            </PriorityType>
-          </Priority>
+const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
 
-          <Actions>
-            <FiArrowRightCircle />
-            <FiEdit />
-            <FiTrash2 />
-          </Actions>
-        </CardFooter>
-      </CardContentConteiner>
-    </CardContainer>
+const ModalContent = styled.div`
+  background-color: ${({ theme }) => theme.modalBackgroundColor};
+  padding: 20px;
+  border-radius: 8px;
+`;
+
+const Card = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <CardContainer>
+        <CardPriorityColor></CardPriorityColor>
+        <CardContentConteiner>
+          <CardTitle>The Watch Spot Design</CardTitle>
+          <CardDescription>
+            Create a visually stunning and eye-catching watch dial design that
+            embodies our brand&apos;s...
+          </CardDescription>
+          <CardFooter>
+            <Priority>
+              <PriorityType>
+                <PriorityItem>Priority</PriorityItem>
+                <PriorityColor>
+                  <PriorityColorOne></PriorityColorOne>
+                  <PriorityColorTwo>Medium</PriorityColorTwo>
+                </PriorityColor>
+              </PriorityType>
+              <PriorityType>
+                <PriorityItem>Deadline</PriorityItem>
+                <PriorityDate>12/05/2023</PriorityDate>
+              </PriorityType>
+            </Priority>
+            <Actions>
+              <FiArrowRightCircle />
+              <FiEdit onClick={openModal} />
+              <FiTrash2 />
+            </Actions>
+          </CardFooter>
+        </CardContentConteiner>
+      </CardContainer>
+      {isModalOpen && (
+        <ModalWrapper>
+          <ModalContent>
+            <EditCardForm closeModal={closeModal} />
+          </ModalContent>
+        </ModalWrapper>
+      )}
+    </>
   );
 };
 
