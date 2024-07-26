@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FiEdit, FiTrash2, FiArrowRightCircle } from "react-icons/fi";
 import EditCardForm from "../../components/Portal/EditCardModal";
+import { AuthContext } from "../../contexts/AuthContext";
+import CardService from "../../service/cardService";
 
 const CardContainer = styled.div`
   background-color: ${({ theme }) => theme.cardBackgroundColor};
@@ -138,8 +141,10 @@ const ModalContent = styled.div`
   border-radius: 8px;
 `;
 
-const Card = () => {
+const Card = ({ cardId, title, description, priority, deadline, onDelete }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { token } = useContext(AuthContext);
+  const cardService = new CardService(token);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -149,34 +154,40 @@ const Card = () => {
     setIsModalOpen(false);
   };
 
+  const handleDelete = async () => {
+    try {
+      await cardService.deleteCard(cardId);
+      onDelete(cardId); // Notify parent component about the deletion
+    } catch (error) {
+      console.error('Error deleting card:', error);
+    }
+  };
+
   return (
     <>
       <CardContainer>
         <CardPriorityColor></CardPriorityColor>
         <CardContentConteiner>
-          <CardTitle>The Watch Spot Design</CardTitle>
-          <CardDescription>
-            Create a visually stunning and eye-catching watch dial design that
-            embodies our brand&apos;s...
-          </CardDescription>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
           <CardFooter>
             <Priority>
               <PriorityType>
                 <PriorityItem>Priority</PriorityItem>
                 <PriorityColor>
                   <PriorityColorOne></PriorityColorOne>
-                  <PriorityColorTwo>Medium</PriorityColorTwo>
+                  <PriorityColorTwo>{priority}</PriorityColorTwo>
                 </PriorityColor>
               </PriorityType>
               <PriorityType>
                 <PriorityItem>Deadline</PriorityItem>
-                <PriorityDate>12/05/2023</PriorityDate>
+                <PriorityDate>{deadline}</PriorityDate>
               </PriorityType>
             </Priority>
             <Actions>
               <FiArrowRightCircle />
               <FiEdit onClick={openModal} />
-              <FiTrash2 />
+              <FiTrash2 onClick={handleDelete} />
             </Actions>
           </CardFooter>
         </CardContentConteiner>
@@ -184,7 +195,7 @@ const Card = () => {
       {isModalOpen && (
         <ModalWrapper>
           <ModalContent>
-            <EditCardForm closeModal={closeModal} />
+            <EditCardForm closeModal={closeModal} cardId={cardId} />
           </ModalContent>
         </ModalWrapper>
       )}
@@ -192,4 +203,14 @@ const Card = () => {
   );
 };
 
+Card.propTypes = {
+  cardId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  priority: PropTypes.string.isRequired,
+  deadline: PropTypes.string.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
+
 export default Card;
+

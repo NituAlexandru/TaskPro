@@ -7,6 +7,12 @@ import CustomCalendar from "../../utils/CustomCalendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCaretDown, FaPlus } from "react-icons/fa"; // Import the FaPlus icon
 
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -20,7 +26,15 @@ const Title = styled.h2`
   color: ${({ theme }) => theme.modalTextColor};
   margin: 0;
 `;
-
+const CloseButton = styled.button`
+  border: none;
+  background: none;
+  color: ${({ theme }) => theme.modalTextColor};
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+`;
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
@@ -166,7 +180,10 @@ const EditCardForm = ({ closeModal }) => {
 
   return (
     <FormWrapper>
+      <ModalHeader>
       <Title>Edit card</Title>
+      <CloseButton onClick={closeModal}>&times;</CloseButton>
+      </ModalHeader>
       <Formik
         initialValues={{
           title: "",

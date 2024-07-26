@@ -1,29 +1,7 @@
+import { useState } from "react";
 import styled from "styled-components";
-
-const ButtonContainer = styled.div`
-  border-radius: 8px;
-  width: 334px;
-  height: 56px;
-  background: ${({ theme }) => theme.addColumnBackground};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-
-  &:hover {
-    background: ${({ theme }) => theme.addColumnBtnHoverBackground};
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  @media (max-width: 500px) {
-    width: 100%;
-  }
-`;
-
+import Modal from "../Portal/Modal";
+import AddColumnModal from "../Portal/AddColumnModal";
 const IconButton = styled.button`
   display: flex;
   align-items: center;
@@ -33,32 +11,76 @@ const IconButton = styled.button`
   background: ${({ theme }) => theme.addColumnBtnBackground};
   border: none;
   border-radius: 6px;
-  margin: 0;
+  margin: 0 15px;
   padding: 0;
-  color: ${({ theme }) => theme.addColumnBtnColor};
-`;
+  cursor: pointer;
+  color: ${({ theme }) => theme.addColumnBackground};
 
-const IconImage = styled.span`
-  width: 14px;
-  height: 14px;
+  &:focus {
+    outline: none;
+  }
 `;
-
 const AddParagraph = styled.p`
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 14px;
   letter-spacing: -0.02em;
   color: ${({ theme }) => theme.addColumnBtnBackground};
+  margin: 0;
+`;
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.addColumnBtnHoverBackground};
+  border-radius: 8px;
+  width: 334px;
+  height: 56px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.addColumnBtnBackground};
+
+    ${IconButton} {
+      background: ${({ theme }) => theme.addColumnBackground};
+      color: ${({ theme }) => theme.addColumnBtnBackground};
+    }
+
+    ${AddParagraph} {
+      color: ${({ theme }) => theme.addColumnBtnColor};
+    }
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const AddColumnButton = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
-    <ButtonContainer>
-      <IconButton>
-        <IconImage>+</IconImage>
-      </IconButton>
-      <AddParagraph>Add another column</AddParagraph>
-    </ButtonContainer>
+    <>
+      <ButtonContainer onClick={openModal}>
+        <IconButton>+</IconButton>
+        <AddParagraph>Add another column</AddParagraph>
+      </ButtonContainer>
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          width="350px"
+          height="221px"
+          border="1px solid rgba(190, 219, 176, 0.5)"
+          borderRadius="8px"
+        >
+          <AddColumnModal closeModal={closeModal} />
+        </Modal>
+      )}
+    </>
   );
 };
 

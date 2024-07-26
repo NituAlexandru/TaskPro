@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import loadingIcon from "../../assets/icons/loading.svg";
@@ -25,6 +25,9 @@ import rockyCoast from "../../assets/portal-img/RockyCoast.webp";
 import sailboat from "../../assets/portal-img/Sailboat.webp";
 import turquoiseBay from "../../assets/portal-img/TurquoiseBay.webp";
 import starryMountains from "../../assets/portal-img/StarryMountains.webp";
+import { AuthContext } from "../../contexts/AuthContext";
+import BoardService from "../../service/boardService";
+import { getCollaboratorIdByName } from "../../service/collaboratorService";
 
 const ModalHeader = styled.div`
   display: flex;
@@ -67,6 +70,7 @@ const Input = styled.input`
   background-color: ${({ theme }) => theme.modalBackgroundColor};
   opacity: 0.4;
   margin: 0;
+  padding: 10px;
 `;
 
 const Section = styled.div``;
@@ -90,8 +94,8 @@ const Icon = styled.div`
   opacity: 0.8;
 
   img {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     stroke: #fff;
     transition: all 250ms ease-in-out;
     border: ${({ selected }) => (selected ? "2px solid #fff" : "none")};
@@ -156,38 +160,96 @@ const CreateButtonAdd = styled.span`
 `;
 
 const icons = [
-  loadingIcon,
-  colorsIcon,
-  containerIcon,
-  hexagonIcon,
-  lightningIcon,
-  projectIcon,
-  puzzlePieceIcon,
-  starIcon,
+  { name: "loadingIcon", src: loadingIcon },
+  { name: "colorsIcon", src: colorsIcon },
+  { name: "containerIcon", src: containerIcon },
+  { name: "hexagonIcon", src: hexagonIcon },
+  { name: "lightningIcon", src: lightningIcon },
+  { name: "projectIcon", src: projectIcon },
+  { name: "puzzlePieceIcon", src: puzzlePieceIcon },
+  { name: "starIcon", src: starIcon },
 ];
 
 const backgrounds = [
-  block,
-  abstractSpheres,
-  balloonFestival,
-  cherryBlossomTree,
-  cloudySky,
-  crescentMoon,
-  desertArch,
-  hotAirBalloon,
-  milkyWayCamp,
-  moonEclipse,
-  palmLeaves,
-  pinkFlowers,
-  rockyCoast,
-  sailboat,
-  turquoiseBay,
-  starryMountains,
+  { name: "block", src: block },
+  { name: "abstractSpheres", src: abstractSpheres },
+  { name: "balloonFestival", src: balloonFestival },
+  { name: "cherryBlossomTree", src: cherryBlossomTree },
+  { name: "cloudySky", src: cloudySky },
+  { name: "crescentMoon", src: crescentMoon },
+  { name: "desertArch", src: desertArch },
+  { name: "hotAirBalloon", src: hotAirBalloon },
+  { name: "milkyWayCamp", src: milkyWayCamp },
+  { name: "moonEclipse", src: moonEclipse },
+  { name: "palmLeaves", src: palmLeaves },
+  { name: "pinkFlowers", src: pinkFlowers },
+  { name: "rockyCoast", src: rockyCoast },
+  { name: "sailboat", src: sailboat },
+  { name: "turquoiseBay", src: turquoiseBay },
+  { name: "starryMountains", src: starryMountains },
 ];
 
-const NewBoardModal = ({ closeModal }) => {
+const EditBoardModal = ({ closeModal, boardId }) => {
+  const [title, setTitle] = useState('');
+  const [collaborator, setCollaborator] = useState('');
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [selectedBackground, setSelectedBackground] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { token } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchBoard = async () => {
+      const boardService = new BoardService(token);
+      setLoading(true);
+      try {
+        const board = await boardService.getBoard(boardId);
+        setTitle(board.titleBoard);
+        setSelectedIcon(board.icon);
+        setSelectedBackground(board.background);
+      } catch (error) {
+        console.error('Error fetching board:', error);
+        setError('Failed to fetch board data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBoard();
+  }, [boardId, token]);
+
+  const handleSubmit = async () => {
+    if (!title || selectedIcon === null || selectedBackground === null) {
+      setError('Please fill all fields');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    try {
+      const boardService = new BoardService(token);
+      const updatedBoard = {
+        titleBoard: title,
+        background: selectedBackground,
+        icon: selectedIcon,
+      };
+
+      // If a collaborator is added, fetch the collaborator ID
+      if (collaborator) {
+        const id = await getCollaboratorIdByName(collaborator);
+        updatedBoard.collaborators = [id]; // Replace with logic to add to existing collaborators if needed
+      }
+
+      const response = await boardService.updateBoard(boardId, updatedBoard);
+      console.log('Board updated:', response);
+      closeModal();
+    } catch (error) {
+      console.error('Error updating board:', error);
+      setError('Failed to update board');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -196,18 +258,27 @@ const NewBoardModal = ({ closeModal }) => {
         <CloseButton onClick={closeModal}>&times;</CloseButton>
       </ModalHeader>
       <ModalBody>
-        <Input placeholder="Title" />
-        <Input placeholder="Invite Collaborator" />
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <Input
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <Input
+          placeholder="Invite Collaborator"
+          value={collaborator}
+          onChange={(e) => setCollaborator(e.target.value)}
+        />
         <Section>
           <Title as="h3">Icons</Title>
           <Icons>
-            {icons.map((icon, index) => (
+            {icons.map((icon) => (
               <Icon
-                key={index}
-                selected={selectedIcon === index}
-                onClick={() => setSelectedIcon(index)}
+                key={icon.name}
+                selected={selectedIcon === icon.name}
+                onClick={() => setSelectedIcon(icon.name)}
               >
-                <img src={icon} alt={`icon-${index}`} />
+                <img src={icon.src} alt={icon.name} />
               </Icon>
             ))}
           </Icons>
@@ -215,26 +286,31 @@ const NewBoardModal = ({ closeModal }) => {
         <Section>
           <Title as="h3">Background</Title>
           <Backgrounds>
-            {backgrounds.map((src, index) => (
+            {backgrounds.map(({ name, src }) => (
               <Background
-                key={index}
+                key={name}
                 src={src}
-                selected={selectedBackground === index}
-                onClick={() => setSelectedBackground(index)}
+                selected={selectedBackground === name}
+                onClick={() => setSelectedBackground(name)}
               />
             ))}
           </Backgrounds>
         </Section>
-        <CreateButton>
-          <CreateButtonAdd>+</CreateButtonAdd> Edit
+        <CreateButton onClick={handleSubmit} disabled={loading}>
+          {loading ? <img src={loadingIcon} alt="loading" /> : (
+            <>
+              <CreateButtonAdd>+</CreateButtonAdd> Edit
+            </>
+          )}
         </CreateButton>
       </ModalBody>
     </div>
   );
 };
 
-NewBoardModal.propTypes = {
+EditBoardModal.propTypes = {
   closeModal: PropTypes.func.isRequired,
+  boardId: PropTypes.string.isRequired,
 };
 
-export default NewBoardModal;
+export default EditBoardModal;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import loadingIcon from "../../assets/icons/loading.svg";
@@ -25,6 +25,9 @@ import rockyCoast from "../../assets/portal-img/RockyCoast.webp";
 import sailboat from "../../assets/portal-img/Sailboat.webp";
 import turquoiseBay from "../../assets/portal-img/TurquoiseBay.webp";
 import starryMountains from "../../assets/portal-img/StarryMountains.webp";
+import { AuthContext } from "../../contexts/AuthContext";
+import BoardService from "../../service/boardService";
+import { getCollaboratorIdByName } from "../../service/collaboratorService";
 
 const ModalHeader = styled.div`
   display: flex;
@@ -67,6 +70,7 @@ const Input = styled.input`
   background-color: ${({ theme }) => theme.modalBackgroundColor};
   opacity: 0.4;
   margin: 0;
+  padding: 10px;
 `;
 
 const Section = styled.div``;
@@ -156,38 +160,78 @@ const CreateButtonAdd = styled.span`
 `;
 
 const icons = [
-  loadingIcon,
-  colorsIcon,
-  containerIcon,
-  hexagonIcon,
-  lightningIcon,
-  projectIcon,
-  puzzlePieceIcon,
-  starIcon,
+  { name: "loadingIcon", src: loadingIcon },
+  { name: "colorsIcon", src: colorsIcon },
+  { name: "containerIcon", src: containerIcon },
+  { name: "hexagonIcon", src: hexagonIcon },
+  { name: "lightningIcon", src: lightningIcon },
+  { name: "projectIcon", src: projectIcon },
+  { name: "puzzlePieceIcon", src: puzzlePieceIcon },
+  { name: "starIcon", src: starIcon },
 ];
 
 const backgrounds = [
-  block,
-  abstractSpheres,
-  balloonFestival,
-  cherryBlossomTree,
-  cloudySky,
-  crescentMoon,
-  desertArch,
-  hotAirBalloon,
-  milkyWayCamp,
-  moonEclipse,
-  palmLeaves,
-  pinkFlowers,
-  rockyCoast,
-  sailboat,
-  turquoiseBay,
-  starryMountains,
+  { name: "block", url: block },
+  { name: "abstractSpheres", url: abstractSpheres },
+  { name: "balloonFestival", url: balloonFestival },
+  { name: "cherryBlossomTree", url: cherryBlossomTree },
+  { name: "cloudySky", url: cloudySky },
+  { name: "crescentMoon", url: crescentMoon },
+  { name: "desertArch", url: desertArch },
+  { name: "hotAirBalloon", url: hotAirBalloon },
+  { name: "milkyWayCamp", url: milkyWayCamp },
+  { name: "moonEclipse", url: moonEclipse },
+  { name: "palmLeaves", url: palmLeaves },
+  { name: "pinkFlowers", url: pinkFlowers },
+  { name: "rockyCoast", url: rockyCoast },
+  { name: "sailboat", url: sailboat },
+  { name: "turquoiseBay", url: turquoiseBay },
+  { name: "starryMountains", url: starryMountains },
 ];
 
 const NewBoardModal = ({ closeModal }) => {
+  const [title, setTitle] = useState('');
+  const [collaborator, setCollaborator] = useState('');
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [selectedBackground, setSelectedBackground] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { token } = useContext(AuthContext);
+  const boardService = new BoardService(token);
+
+  const handleSubmit = async () => {
+    if (!title || selectedIcon === null || selectedBackground === null) {
+      setError('Please fill all fields');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    try {
+      // Fetch collaborator IDs
+      let collaboratorIds = [];
+      if (collaborator) {
+        const id = await getCollaboratorIdByName(collaborator);
+        collaboratorIds = [id];
+      }
+
+      const boardData = {
+        titleBoard: title,
+        background: selectedBackground, // Use background name
+        icon: selectedIcon, // Use icon name
+        collaborators: collaboratorIds,
+      };
+
+      const response = await boardService.createBoard(boardData);
+      console.log('Board created:', response);
+      closeModal();
+    } catch (error) {
+      console.error('Error creating board:', error);
+      setError('Failed to create board');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -196,18 +240,27 @@ const NewBoardModal = ({ closeModal }) => {
         <CloseButton onClick={closeModal}>&times;</CloseButton>
       </ModalHeader>
       <ModalBody>
-        <Input placeholder="Title" />
-        <Input placeholder="Invite Collaborator" />
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <Input
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <Input
+          placeholder="Invite Collaborator"
+          value={collaborator}
+          onChange={(e) => setCollaborator(e.target.value)}
+        />
         <Section>
           <Title as="h3">Icons</Title>
           <Icons>
             {icons.map((icon, index) => (
               <Icon
                 key={index}
-                selected={selectedIcon === index}
-                onClick={() => setSelectedIcon(index)}
+                selected={selectedIcon === icon.name}
+                onClick={() => setSelectedIcon(icon.name)}
               >
-                <img src={icon} alt={`icon-${index}`} />
+                <img src={icon.src} alt={`icon-${index}`} />
               </Icon>
             ))}
           </Icons>
@@ -215,18 +268,22 @@ const NewBoardModal = ({ closeModal }) => {
         <Section>
           <Title as="h3">Background</Title>
           <Backgrounds>
-            {backgrounds.map((src, index) => (
+            {backgrounds.map(({ name, url }, index) => (
               <Background
                 key={index}
-                src={src}
-                selected={selectedBackground === index}
-                onClick={() => setSelectedBackground(index)}
+                src={url}
+                selected={selectedBackground === name}
+                onClick={() => setSelectedBackground(name)}
               />
             ))}
           </Backgrounds>
         </Section>
-        <CreateButton>
-          <CreateButtonAdd>+</CreateButtonAdd> Create
+        <CreateButton onClick={handleSubmit} disabled={loading}>
+          {loading ? <img src={loadingIcon} alt="loading" /> : (
+            <>
+              <CreateButtonAdd>+</CreateButtonAdd> Create
+            </>
+          )}
         </CreateButton>
       </ModalBody>
     </div>

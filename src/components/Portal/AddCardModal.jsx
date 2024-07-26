@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled from "styled-components";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import CustomCalendar from "../../utils/CustomCalendar";
 import "react-calendar/dist/Calendar.css";
-import { FaCaretDown } from "react-icons/fa";
+import { FaCaretDown, FaPlus } from "react-icons/fa";
+import { AuthContext } from "../../contexts/AuthContext";
+import CardService from "../../service/cardService";
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 const FormWrapper = styled.div`
   display: flex;
@@ -20,7 +28,15 @@ const Title = styled.h2`
   color: ${({ theme }) => theme.modalTextColor};
   margin: 0;
 `;
-
+const CloseButton = styled.button`
+  border: none;
+  background: none;
+  color: ${({ theme }) => theme.modalTextColor};
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+`;
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
@@ -129,6 +145,9 @@ const SubmitButton = styled.button`
   font-weight: 500;
   font-size: 14px;
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: ${({ theme }) =>
@@ -136,36 +155,59 @@ const SubmitButton = styled.button`
   }
 `;
 
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: ${({ theme }) => theme.addCardButtonIconBackground};
+  color: ${({ theme }) => theme.addCardButtonIcon};
+  border-radius: 6px;
+  margin-right: 10px;
+`;
+
 const validationSchema = Yup.object({
   title: Yup.string().required("Title is required"),
   description: Yup.string().required("Description is required"),
 });
 
-const AddCardForm = ({ closeModal }) => {
+const AddCardForm = ({ closeModal, columnId = "default-column-id" }) => {
   const [labelColor, setLabelColor] = useState("pink");
   const [deadline, setDeadline] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const labelColors = ["#8fa1d0", "#e09cb5", "#bedbb0", "#797b78"];
+  const { token } = useContext(AuthContext);
+  const cardService = new CardService(token);
 
   const toggleCalendar = () => setIsCalendarOpen(!isCalendarOpen);
 
   return (
     <FormWrapper>
-      <Title>Add card</Title>
+      <ModalHeader>
+        <Title>Add card</Title>
+        <CloseButton onClick={closeModal}>&times;</CloseButton>
+      </ModalHeader>
       <Formik
         initialValues={{
           title: "",
           description: "",
         }}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          console.log({
-            ...values,
-            labelColor,
-            deadline,
-          });
-          setSubmitting(false);
-          closeModal();
+        onSubmit={async (values, { setSubmitting }) => {
+          try {
+            const newCard = {
+              ...values,
+              labelColor,
+              deadline,
+            };
+            await cardService.addCard(columnId, newCard);
+            closeModal();
+          } catch (error) {
+            console.error('Error adding card:', error);
+          } finally {
+            setSubmitting(false);
+          }
         }}
       >
         {({ isSubmitting }) => (
@@ -212,6 +254,9 @@ const AddCardForm = ({ closeModal }) => {
               )}
             </DatePickerWrapper>
             <SubmitButton type="submit" disabled={isSubmitting}>
+              <IconWrapper>
+                <FaPlus />
+              </IconWrapper>
               Add
             </SubmitButton>
           </StyledForm>
@@ -223,6 +268,7 @@ const AddCardForm = ({ closeModal }) => {
 
 AddCardForm.propTypes = {
   closeModal: PropTypes.func.isRequired,
+  columnId: PropTypes.string,
 };
 
 export default AddCardForm;
