@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Modal from "../Portal/Modal";
 import AddColumnModal from "../Portal/AddColumnModal";
+
 const IconButton = styled.button`
   display: flex;
   align-items: center;
@@ -32,22 +33,23 @@ const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.addColumnBtnHoverBackground};
+  background-color: ${({ theme }) => theme.addColumnBackground};
   border-radius: 8px;
   width: 334px;
   height: 56px;
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.addColumnBtnBackground};
+    background-color: ${({ theme }) => theme.addColumnBtnHoverBackground};
+    color: ${({ theme }) => theme.addColumnBtnBackground};
 
     ${IconButton} {
-      background: ${({ theme }) => theme.addColumnBackground};
-      color: ${({ theme }) => theme.addColumnBtnBackground};
+      background: ${({ theme }) => theme.addColumnBtnBackground};
+      color: ${({ theme }) => theme.addColumnBtnColor};
     }
 
     ${AddParagraph} {
-      color: ${({ theme }) => theme.addColumnBtnColor};
+      color: ${({ theme }) => theme.addColumnBtnBackground};
     }
   }
 

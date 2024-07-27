@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { FaCaretDown, FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 
 const FormWrapper = styled.div`
   display: flex;
@@ -63,8 +63,7 @@ const SubmitButton = styled.button`
   justify-content: center;
 
   &:hover {
-    background-color: ${({ theme }) =>
-      theme.modalCreateBtnHoverBackgroundColor};
+    background-color: ${({ theme }) => theme.addColumnBtnHoverBackground};
   }
 `;
 
@@ -91,25 +90,24 @@ const AddColumnModal = ({ closeModal, addColumn }) => {
   };
 
   return (
- 
-      <FormWrapper>
-        <ModalHeader>
-          <Title>Add Column</Title>
-          <CloseButton onClick={closeModal}>&times;</CloseButton>
-        </ModalHeader>
-        <Input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter column title"
-        />
-        <SubmitButton onClick={handleAddColumn}>
-              <IconWrapper>
-                <FaPlus />
-              </IconWrapper>
-              Add
-            </SubmitButton>
-      </FormWrapper>
+    <FormWrapper>
+      <ModalHeader>
+        <Title>Add Column</Title>
+        <CloseButton onClick={closeModal}>&times;</CloseButton>
+      </ModalHeader>
+      <Input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Enter column title"
+      />
+      <SubmitButton onClick={handleAddColumn}>
+        <IconWrapper>
+          <FaPlus />
+        </IconWrapper>
+        Add
+      </SubmitButton>
+    </FormWrapper>
   );
 };
 
