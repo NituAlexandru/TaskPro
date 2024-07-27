@@ -45,6 +45,7 @@ export const darkTheme = {
   modalCreateBtnAddBackgroundColor: "#161616",
   modalCreateBtnAddColor: "#fff",
   filterShowAllBtn: "rgba(255, 255, 255, 0.5);",
+  errorColor: "red",
 };
 
 export const lightTheme = {
@@ -94,6 +95,7 @@ export const lightTheme = {
   modalCreateBtnAddBackgroundColor: "#161616",
   modalCreateBtnAddColor: "#fff",
   filterShowAllBtn: "rgba(0, 0, 0, 0.5);",
+  errorColor: "red",
 };
 
 export const violetTheme = {
@@ -143,4 +145,5 @@ export const violetTheme = {
   modalCreateBtnAddBackgroundColor: "#fff",
   modalCreateBtnAddColor: "#161616",
   filterShowAllBtn: "rgba(0, 0, 0, 0.5);",
+  errorColor: "red",
 };
