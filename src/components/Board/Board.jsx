@@ -7,6 +7,7 @@ import ColumnService from "../../service/columnService";
 import AddCardButton from "./AddCard";
 import FilterModal from "../Portal/FilterModal";
 import { FiFilter } from "react-icons/fi";
+import Card from "./TaskCard";
 
 const BoardContainer = styled.div`
   flex-grow: 1;
@@ -107,7 +108,7 @@ const Board = ({ boardId }) => {
   return (
     <BoardContainer>
       <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
-      <ColumnsContainer>
+      {/* <ColumnsContainer>
         {columns.map((column) => (
           <Column
             key={column._id}
@@ -116,7 +117,8 @@ const Board = ({ boardId }) => {
             columnId={column._id}
           />
         ))}
-      </ColumnsContainer>
+      </ColumnsContainer> */}
+      <Card></Card>
       <AddCardButton />
       {/* <BoardParagraph>
         Before starting your project, it is essential to create a board to

@@ -1,8 +1,9 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FiEdit, FiTrash2, FiArrowRightCircle } from "react-icons/fi";
 import EditCardForm from "../../components/Portal/EditCardModal";
+import StatusModal from "../../components/Portal/CardStatusModal";
 import { AuthContext } from "../../contexts/AuthContext";
 import CardService from "../../service/cardService";
 
@@ -142,16 +143,32 @@ const ModalContent = styled.div`
 `;
 
 const Card = ({ cardId, title, description, priority, deadline, onDelete }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState("In progress");
   const { token } = useContext(AuthContext);
   const cardService = new CardService(token);
+  const statusButtonRef = useRef(null);
 
   const openModal = () => {
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsEditModalOpen(false);
+  };
+
+  const openStatusModal = () => {
+    setIsStatusModalOpen(true);
+  };
+
+  const closeStatusModal = () => {
+    setIsStatusModalOpen(false);
+  };
+
+  const handleStatusChange = (status) => {
+    setCurrentStatus(status);
+    setIsStatusModalOpen(false);
   };
 
   const handleDelete = async () => {
@@ -159,7 +176,7 @@ const Card = ({ cardId, title, description, priority, deadline, onDelete }) => {
       await cardService.deleteCard(cardId);
       onDelete(cardId); // Notify parent component about the deletion
     } catch (error) {
-      console.error('Error deleting card:', error);
+      console.error("Error deleting card:", error);
     }
   };
 
@@ -185,19 +202,31 @@ const Card = ({ cardId, title, description, priority, deadline, onDelete }) => {
               </PriorityType>
             </Priority>
             <Actions>
-              <FiArrowRightCircle />
+              <FiArrowRightCircle
+                ref={statusButtonRef}
+                onClick={openStatusModal}
+              />
               <FiEdit onClick={openModal} />
               <FiTrash2 onClick={handleDelete} />
             </Actions>
           </CardFooter>
         </CardContentConteiner>
       </CardContainer>
-      {isModalOpen && (
+      {isEditModalOpen && (
         <ModalWrapper>
           <ModalContent>
             <EditCardForm closeModal={closeModal} cardId={cardId} />
           </ModalContent>
         </ModalWrapper>
+      )}
+      {isStatusModalOpen && (
+        <StatusModal
+          isOpen={isStatusModalOpen}
+          onClose={closeStatusModal}
+          onStatusChange={handleStatusChange}
+          currentStatus={currentStatus}
+          buttonRef={statusButtonRef}
+        />
       )}
     </>
   );
@@ -213,4 +242,3 @@ Card.propTypes = {
 };
 
 export default Card;
-
