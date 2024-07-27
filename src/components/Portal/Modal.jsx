@@ -16,6 +16,10 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
+  position: absolute;
+  top: ${({ $top }) => $top || "50%"};
+  left: ${({ $left }) => $left || "50%"};
+  transform: ${({ $transform }) => $transform || "translate(-50%, -50%)"};
   background-color: ${({ theme }) => theme.modalBackgroundColor};
   color: ${({ theme }) => theme.modalTextColor};
   padding: 20px;
@@ -33,6 +37,9 @@ const Modal = ({
   height,
   border,
   borderRadius,
+  top,
+  left,
+  transform,
 }) => {
   const theme = useContext(ThemeContext);
 
@@ -49,6 +56,9 @@ const Modal = ({
           $height={height}
           $border={border}
           $borderRadius={borderRadius}
+          $top={top}
+          $left={left}
+          $transform={transform}
         >
           {children}
         </ModalContent>
@@ -65,6 +75,9 @@ Modal.propTypes = {
   height: PropTypes.string,
   border: PropTypes.string,
   borderRadius: PropTypes.string,
+  top: PropTypes.string,
+  left: PropTypes.string,
+  transform: PropTypes.string,
 };
 
 export default Modal;

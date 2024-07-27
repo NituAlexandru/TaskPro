@@ -182,7 +182,7 @@ const AddCardForm = ({ closeModal, columnId = "default-column-id" }) => {
   const [labelColor, setLabelColor] = useState("pink");
   const [deadline, setDeadline] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const labelColors = ["#8fa1d0", "#e09cb5", "#bedbb0", "#797b78"];
+  const labelColors = ["#797b78", "#8fa1d0", "#e09cb5", "#bedbb0"];
   const { token } = useContext(AuthContext);
   const cardService = new CardService(token);
 
