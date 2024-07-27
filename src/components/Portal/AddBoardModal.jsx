@@ -189,14 +189,15 @@ const backgrounds = [
   { name: "starryMountains", url: starryMountains },
 ];
 
-const NewBoardModal = ({ closeModal, createBoard, fetchBoards }) => {
+const NewBoardModal = ({ closeModal }) => {
   const [title, setTitle] = useState('');
   const [collaborator, setCollaborator] = useState('');
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [selectedBackground, setSelectedBackground] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { token } = useContext(AuthContext);
+  const { createBoard, fetchBoards } = useBoards();
+  const { user } = useContext(AuthContext); // Assuming user context provides the current user
 
   const handleSubmit = async () => {
     if (!title || selectedIcon === null || selectedBackground === null) {
@@ -215,14 +216,16 @@ const NewBoardModal = ({ closeModal, createBoard, fetchBoards }) => {
       }
 
       const boardData = {
+        owner: user._id, // Ensure the user ID is included
         titleBoard: title,
         background: selectedBackground, // Use background name
         icon: selectedIcon, // Use icon name
-        collaborators: collaboratorIds,
+        collaborators: collaboratorIds
       };
 
-      createBoard(boardData);
-      fetchBoards(); // Refresh the board list
+      const newBoard = await createBoard(boardData);
+      console.log('New Board Created:', newBoard); // Log the new board to see its format
+      await fetchBoards(); // Refresh the board list
       closeModal();
     } catch (error) {
       console.error('Error creating board:', error);
@@ -291,8 +294,6 @@ const NewBoardModal = ({ closeModal, createBoard, fetchBoards }) => {
 
 NewBoardModal.propTypes = {
   closeModal: PropTypes.func.isRequired,
-  createBoard: PropTypes.func.isRequired,
-  fetchBoards: PropTypes.func.isRequired,
 };
 
 export default NewBoardModal;

@@ -111,7 +111,7 @@ const IconButton = styled.button`
 const BoardList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBoardId, setSelectedBoardId] = useState(null);
-  const { boards, fetchBoards, deleteBoard, error } = useBoards();
+  const { boards, fetchBoards, deleteBoard, setBoardId, error } = useBoards();
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
@@ -129,12 +129,25 @@ const BoardList = () => {
     fetchBoards();
   };
 
+  const handleBoardClick = (boardId) => {
+    setBoardId(boardId);
+  };
+
+  const handleDeleteBoard = async (boardId) => {
+    try {
+      await deleteBoard(boardId);
+      fetchBoards(); // Refresh the board list after deletion
+    } catch (error) {
+      console.error('Error deleting board:', error.response?.data || error.message);
+    }
+  };
+
   return (
     <>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <BoardListWrapper>
         {boards.map((board) => (
-          <BoardListItem key={board._id}>
+          <BoardListItem key={board._id} onClick={() => handleBoardClick(board._id)}>
             <BoardListItemContainer>
               <IconImage src={iconsMap[board.icon]} alt={`${board.titleBoard} icon`} />
               <Paragraph>{board.titleBoard}</Paragraph>
@@ -143,7 +156,7 @@ const BoardList = () => {
               <IconButton className="edit-button" onClick={() => openModal(board._id)}>
                 <FiEdit />
               </IconButton>
-              <IconButton className="delete-button" onClick={() => deleteBoard(board._id)}>
+              <IconButton className="delete-button" onClick={() => handleDeleteBoard(board._id)}>
                 <FiTrash2 />
               </IconButton>
             </BoardListItemContainer>
