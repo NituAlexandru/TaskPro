@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import Modal from "../Portal/Modal";
-import NewBoardModal from "../Portal/NewBoardModal";
+import NewBoardModal from "../Portal/AddBoardModal";
 import { useState, useContext } from "react";
 import { ThemeContext } from "../../utils/ThemeProvider";
+import { useBoards } from '../../contexts/BoardContext';
 
 const NewBoardContainerWrapper = styled.div`
   display: flex;
@@ -36,6 +37,7 @@ const AddBoardBtn = styled.button`
 const NewBoardContainer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { theme } = useContext(ThemeContext);
+  const { createBoard, fetchBoards } = useBoards();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -57,7 +59,7 @@ const NewBoardContainer = () => {
         borderRadius="8px"
         background={theme.modalBackgroundColor}
       >
-        <NewBoardModal closeModal={closeModal} />
+        <NewBoardModal closeModal={closeModal} createBoard={createBoard} fetchBoards={fetchBoards} />
       </Modal>
     </>
   );

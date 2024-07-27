@@ -6,6 +6,7 @@ import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import NewBoardContainer from "./NewBoardContainer";
 import BoardList from "./BoardList";
 import HelpList from "./HelpList";
+import { BoardProvider } from "../../contexts/BoardContext";
 
 const SidebarContainer = styled.div`
   display: flex;
@@ -132,8 +133,10 @@ const Sidebar = () => {
           <MainTitle>Task Pro</MainTitle>
         </LogoContainer>
         <SidebarHeading>My boards</SidebarHeading>
+        <BoardProvider>
         <NewBoardContainer />
         <BoardList />
+        </BoardProvider>
         <HelpList />
         <LogOutBtn onClick={handleLogout}>
           <LogOutImg src="/src/assets/icons/login.svg" alt="" />
