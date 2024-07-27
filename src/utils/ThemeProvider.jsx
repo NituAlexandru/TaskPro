@@ -20,26 +20,23 @@ const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      // console.log("Token found in ThemeProvider:", token);
+
       getCurrentUser();
     }
   }, [token, getCurrentUser]);
 
   useEffect(() => {
     if (user) {
-      console.log("User found in ThemeProvider:", user);
       setTheme(user.theme || "dark");
     }
   }, [user]);
 
   useEffect(() => {
-    console.log("Current theme in ThemeProvider:", theme);
   }, [theme]);
 
   const handleChangeTheme = async (newTheme) => {
     setTheme(newTheme);
     try {
-      console.log("Changing theme with token:", token);
       const response = await axios.post(
         "http://localhost:4500/api/user/theme",
         { theme: newTheme },
@@ -49,7 +46,7 @@ const ThemeProvider = ({ children }) => {
           },
         }
       );
-      console.log("Theme change response:", response.data);
+
     } catch (error) {
       console.error("Failed to update theme:", error);
     }

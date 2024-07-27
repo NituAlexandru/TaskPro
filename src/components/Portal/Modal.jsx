@@ -43,8 +43,6 @@ const Modal = ({
 }) => {
   const theme = useContext(ThemeContext);
 
-  console.log("Current theme in Modal:", theme);
-
   if (!isOpen) return null;
 
   return (

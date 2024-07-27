@@ -14,8 +14,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    console.log("Stored user:", storedUser);
-    console.log("Stored token:", token);
     if (storedUser && token) {
       setUser(storedUser);
     }
@@ -29,8 +27,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", data.token);
     localStorage.setItem("refreshToken", data.refreshToken);
     localStorage.setItem("sessionId", data.sid);
-    console.log("Registered user:", data.user);
-    console.log("Stored token after registration:", data.token);
     return data;
   };
 
@@ -41,7 +37,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = (userData, token, refreshToken, sessionId) => {
-    console.log("Logging in user:", userData);
     setUser(userData);
     setToken(token);
     localStorage.setItem("user", JSON.stringify(userData));
@@ -57,7 +52,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("sessionId");
-    console.log("Logged out");
   }, []);
 
   const getCurrentUser = useCallback(async () => {
@@ -66,10 +60,8 @@ export const AuthProvider = ({ children }) => {
       return;
     }
     try {
-      // console.log("Token in getCurrentUser:", token);
       const data = await fetchCurrentUser(token);
       setUser(data.user);
-      console.log("Fetched user:", data.user);
     } catch (error) {
       console.error("Error fetching user:", error);
       if (error.response && error.response.status === 401) {
