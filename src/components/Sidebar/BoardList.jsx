@@ -115,8 +115,11 @@ const BoardList = ({ setSelectedBoardId }) => {
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
-    const fetchAndLogBoards = async () => {
-      await fetchBoards();
+    fetchBoards();
+  }, []);
+
+  useEffect(() => {
+    if (boards.length > 0) {
       console.log('Boards:', boards);
       console.table(boards); // Log boards as a table for better visibility
       boards.forEach(board => {
@@ -127,10 +130,10 @@ const BoardList = ({ setSelectedBoardId }) => {
         console.log(`Collaborators: ${board.collaborators}`);
         console.log('----------------------');
       });
-    };
-
-    fetchAndLogBoards();
-  }, []);
+    } else {
+      console.log('No boards found.');
+    }
+  }, [boards]);
 
   const openModal = (boardId) => {
     setSelectedBoardIdState(boardId);
