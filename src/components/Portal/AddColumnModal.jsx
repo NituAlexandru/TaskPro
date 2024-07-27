@@ -31,6 +31,12 @@ const CloseButton = styled.button`
   cursor: pointer;
   padding: 0;
   margin: 0;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    background: ${({ theme }) => theme.modalBackgroundColor};
+    transform: scale(1.2);
+  }
 `;
 
 const Input = styled.input`
@@ -63,7 +69,7 @@ const SubmitButton = styled.button`
   justify-content: center;
 
   &:hover {
-    background-color: ${({ theme }) => theme.addColumnBtnHoverBackground};
+    background-color: ${({ theme }) => theme.buttonBackgroundHover};
   }
 `;
 

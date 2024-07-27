@@ -18,7 +18,7 @@ const ModalHeader = styled.div`
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
 `;
 
 const Title = styled.h2`
@@ -36,11 +36,17 @@ const CloseButton = styled.button`
   cursor: pointer;
   padding: 0;
   margin: 0;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    background: ${({ theme }) => theme.modalBackgroundColor};
+    transform: scale(1.2);
+  }
 `;
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 `;
 
 const InputWrapper = styled.div`
@@ -204,7 +210,7 @@ const AddCardForm = ({ closeModal, columnId = "default-column-id" }) => {
             await cardService.addCard(columnId, newCard);
             closeModal();
           } catch (error) {
-            console.error('Error adding card:', error);
+            console.error("Error adding card:", error);
           } finally {
             setSubmitting(false);
           }

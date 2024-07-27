@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 const CalendarWrapper = styled.div`
   .react-calendar {
     background-color: ${({ theme }) => theme.modalBackgroundColor};
-    border: 1px solid ${({ theme }) => theme.inputBackground}; /* Sau altă culoare adecvată */
+    border: 1px solid ${({ theme }) => theme.inputBackground};
     border-radius: 8px;
     width: 233px;
     height: 254px;
@@ -90,10 +90,9 @@ const CalendarWrapper = styled.div`
   .react-calendar__tile {
     background-color: ${({ theme }) => theme.modalBackgroundColor};
     color: ${({ theme }) => theme.modalTextColor};
-    border-radius: 50%;
-    margin: 0;
+
     height: 27px;
-    width: 27px;
+    width: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -101,11 +100,8 @@ const CalendarWrapper = styled.div`
     transition: background-color 0.2s, color 0.2s;
   }
 
-  .react-calendar__tile--active {
-    background-color: ${({ theme }) => theme.modalCreateBtnAddBackgroundColor};
-    color: ${({ theme }) => theme.modalCreateBtnAddColor};
-  }
-
+  .react-calendar__tile--active,
+  .react-calendar__tile--now,
   .react-calendar__tile:enabled:hover,
   .react-calendar__tile:enabled:focus {
     background-color: ${({ theme }) => theme.modalCreateBtnBackgroundColor};
@@ -113,9 +109,8 @@ const CalendarWrapper = styled.div`
   }
 
   .react-calendar__tile--now {
-    background: ${({ theme }) => theme.modalCreateBtnAddBackgroundColor};
-    border-radius: 50%;
-    color: ${({ theme }) => theme.modalCreateBtnAddColor};
+    background-color: ${({ theme }) => theme.modalCreateBtnBackgroundColor};
+    color: ${({ theme }) => theme.modalCreateBtnColor};
   }
 
   .react-calendar__tile--active:enabled:focus {
