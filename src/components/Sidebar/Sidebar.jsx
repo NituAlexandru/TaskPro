@@ -6,7 +6,6 @@ import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import NewBoardContainer from "./NewBoardContainer";
 import BoardList from "./BoardList";
 import HelpList from "./HelpList";
-import { BoardProvider } from "../../contexts/BoardContext";
 
 const SidebarContainer = styled.div`
   display: flex;
@@ -115,6 +114,7 @@ const LogOutImg = styled.img`
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const { logout } = useContext(AuthContext);
+  const [selectedBoardId, setSelectedBoardId] = useState(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -133,10 +133,8 @@ const Sidebar = () => {
           <MainTitle>Task Pro</MainTitle>
         </LogoContainer>
         <SidebarHeading>My boards</SidebarHeading>
-        <BoardProvider>
         <NewBoardContainer />
-        <BoardList />
-        </BoardProvider>
+        <BoardList setSelectedBoardId={setSelectedBoardId}/>
         <HelpList />
         <LogOutBtn onClick={handleLogout}>
           <LogOutImg src="/src/assets/icons/login.svg" alt="" />

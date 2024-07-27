@@ -3,11 +3,10 @@ import styled from "styled-components";
 import Column from "./Column";
 import AddColumnButton from "./AddColumnBtn";
 import { AuthContext } from "../../contexts/AuthContext";
-import ColumnService from "../../service/columnService";
-import AddCardButton from "./AddCard";
+import { useBoards } from "../../contexts/BoardContext";
+import { useColumns } from "../../contexts/ColumnContext";
 import FilterModal from "../Portal/FilterModal";
 import { FiFilter } from "react-icons/fi";
-import Card from "./TaskCard";
 
 const BoardContainer = styled.div`
   flex-grow: 1;
@@ -16,11 +15,6 @@ const BoardContainer = styled.div`
   color: ${({ theme }) => theme.text};
   display: flex;
   flex-direction: column;
-
-  img {
-    height: 30px;
-    width: 30px;
-  }
 `;
 
 const ColumnsContainer = styled.div`
@@ -28,6 +22,7 @@ const ColumnsContainer = styled.div`
   gap: 20px;
   overflow-x: auto;
 `;
+
 const FilterButton = styled.button`
   background: none;
   border: none;
@@ -52,63 +47,46 @@ const FilterButton = styled.button`
   }
 `;
 
-// const BoardParagraph = styled.p`
-//   font-family: "Poppins", sans-serif;
-//   font-weight: 400;
-//   font-size: 14px;
-//   line-height: 1.28571;
-//   letter-spacing: -0.02em;
-//   text-align: center;
-//   color: ${({ theme }) => theme.text};
-//   width: 486px;
-
-//   @media (max-width: 600px) {
-//     width: 100%;
-//     padding: 1rem;
-//   }
-// `;
-
-const Board = ({ boardId }) => {
+const Board = () => {
   const [columns, setColumns] = useState([]);
   const { token } = useContext(AuthContext);
-  const columnService = new ColumnService(token);
+  const { boardId, getBoard } = useBoards();
+  const { fetchColumnsForBoard, addColumn } = useColumns();
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  // const [filter, setFilter] = useState(null);
   const filterButtonRef = useRef(null);
 
   useEffect(() => {
-    const fetchColumns = async () => {
+    const fetchBoardDetails = async () => {
       try {
-        const data = await columnService.getColumnsForBoard(boardId);
-        setColumns(data);
+        const board = await getBoard(boardId);
+        setColumns(board.columns);
       } catch (error) {
-        console.error("Error fetching columns:", error);
+        console.error("Error fetching board details:", error);
       }
     };
 
-    fetchColumns();
-  }, [token, boardId]);
+    if (boardId) {
+      fetchBoardDetails();
+    }
+  }, [token, boardId, getBoard]);
 
-  const handleColumnAdded = (newColumn) => {
-    setColumns((prevColumns) => [...prevColumns, newColumn]);
+  const handleColumnAdded = async (title) => {
+    try {
+      const newColumn = await addColumn(boardId, { titleColumn: title });
+      setColumns((prevColumns) => [...prevColumns, newColumn]);
+    } catch (error) {
+      console.error("Error adding column:", error);
+    }
   };
 
   const handleFilterChange = (filter) => {
-    // setFilter(filter);
     setIsFilterModalOpen(false);
   };
 
-  // const filteredColumns = columns.map((column) => ({
-  //   ...column,
-  //   cards: filter
-  //     ? column.cards.filter((card) => card.priority === filter)
-  //     : column.cards,
-  // }));
-
   return (
     <BoardContainer>
-      <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
-      {/* <ColumnsContainer>
+      <AddColumnButton onColumnAdded={handleColumnAdded} />
+      <ColumnsContainer>
         {columns.map((column) => (
           <Column
             key={column._id}
@@ -117,15 +95,7 @@ const Board = ({ boardId }) => {
             columnId={column._id}
           />
         ))}
-      </ColumnsContainer> */}
-      <Card></Card>
-      <AddCardButton />
-      {/* <BoardParagraph>
-        Before starting your project, it is essential to create a board to
-        visualize and track all the necessary tasks and milestones. This board
-        serves as a powerful tool to organize the workflow and ensure effective
-        collaboration among team members.
-      </BoardParagraph> */}
+      </ColumnsContainer>
       <FilterButton
         ref={filterButtonRef}
         onClick={() => setIsFilterModalOpen(true)}

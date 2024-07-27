@@ -3,6 +3,8 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import Board from "../components/Board/Board";
 import styled from "styled-components";
 import { ThemeProvider } from "../utils/ThemeProvider";
+import { BoardProvider } from '../contexts/BoardContext';
+import { ColumnProvider } from '../contexts/ColumnContext';
 import { useState } from "react";
 
 const HomePageContainer = styled.div`
@@ -15,7 +17,6 @@ const MainContent = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  // margin-left: ${(p) => (p.$isOpen ? "-240px" : "240px")};
   width: 100%;
 `;
 
@@ -26,6 +27,7 @@ const Content = styled.div`
 
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(true);
+  const [selectedBoardId, setSelectedBoardId] = useState(null);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -33,15 +35,19 @@ const HomePage = () => {
 
   return (
     <ThemeProvider>
-      <HomePageContainer>
-        <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <MainContent $isOpen={isOpen}>
-          <Header isOpen={isOpen} />
-          <Content>
-            <Board isOpen={isOpen} />
-          </Content>
-        </MainContent>
-      </HomePageContainer>
+      <BoardProvider>
+        <ColumnProvider>
+          <HomePageContainer>
+            <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} setSelectedBoardId={setSelectedBoardId}/>
+            <MainContent $isOpen={isOpen}>
+              <Header isOpen={isOpen} />
+              <Content>
+                <Board isOpen={isOpen} boardId={selectedBoardId}/>
+              </Content>
+            </MainContent>
+          </HomePageContainer>
+        </ColumnProvider>
+      </BoardProvider>
     </ThemeProvider>
   );
 };

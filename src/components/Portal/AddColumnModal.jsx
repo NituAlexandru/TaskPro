@@ -2,6 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { FaPlus } from "react-icons/fa";
+import { useColumns } from '../../contexts/ColumnContext';
+import { useBoards } from '../../contexts/BoardContext';
 
 const FormWrapper = styled.div`
   display: flex;
@@ -85,13 +87,19 @@ const IconWrapper = styled.div`
   margin-right: 10px;
 `;
 
-const AddColumnModal = ({ closeModal, addColumn }) => {
+const AddColumnModal = ({ closeModal }) => {
   const [title, setTitle] = useState("");
+  const { addColumn } = useColumns();
+  const { boardId } = useBoards();
 
-  const handleAddColumn = () => {
+  const handleAddColumn = async () => {
     if (title.trim()) {
-      addColumn(title);
-      closeModal();
+      try {
+        await addColumn(boardId, { titleColumn: title });
+        closeModal();
+      } catch (error) {
+        console.error('Error adding column:', error);
+      }
     }
   };
 
@@ -119,7 +127,8 @@ const AddColumnModal = ({ closeModal, addColumn }) => {
 
 AddColumnModal.propTypes = {
   closeModal: PropTypes.func.isRequired,
-  addColumn: PropTypes.func.isRequired,
 };
 
 export default AddColumnModal;
+
+

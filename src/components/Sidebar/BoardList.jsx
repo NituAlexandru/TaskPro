@@ -108,29 +108,43 @@ const IconButton = styled.button`
   }
 `;
 
-const BoardList = () => {
+const BoardList = ({ setSelectedBoardId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedBoardId, setSelectedBoardId] = useState(null);
-  const { boards, fetchBoards, deleteBoard, setBoardId, error } = useBoards();
+  const [selectedBoardId, setSelectedBoardIdState] = useState(null);
+  const { boards, fetchBoards, deleteBoard, error } = useBoards();
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
-    fetchBoards();
+    const fetchAndLogBoards = async () => {
+      await fetchBoards();
+      console.log('Boards:', boards);
+      console.table(boards); // Log boards as a table for better visibility
+      boards.forEach(board => {
+        console.log(`Board ID: ${board._id}`);
+        console.log(`Title: ${board.titleBoard}`);
+        console.log(`Icon: ${board.icon}`);
+        console.log(`Background: ${board.background}`);
+        console.log(`Collaborators: ${board.collaborators}`);
+        console.log('----------------------');
+      });
+    };
+
+    fetchAndLogBoards();
   }, []);
 
   const openModal = (boardId) => {
-    setSelectedBoardId(boardId);
+    setSelectedBoardIdState(boardId);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setSelectedBoardId(null);
+    setSelectedBoardIdState(null);
     setIsModalOpen(false);
     fetchBoards();
   };
 
   const handleBoardClick = (boardId) => {
-    setBoardId(boardId);
+    setSelectedBoardId(boardId);
   };
 
   const handleDeleteBoard = async (boardId) => {
