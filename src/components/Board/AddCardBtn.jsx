@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Modal from "../Portal/Modal";
-import AddCardForm from "../Portal/AddCardModal";
+import AddCardForm from "../Portal/addCard/AddCardModal";
 import { useCards } from "../../contexts/CardContext";
 
 const ButtonContainer = styled.div`

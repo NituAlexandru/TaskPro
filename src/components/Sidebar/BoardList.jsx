@@ -115,13 +115,9 @@ const BoardList = ({ setSelectedBoardId }) => {
   const { boards, fetchBoards, deleteBoard, error } = useBoards();
   const { theme } = useContext(ThemeContext);
 
-  const fetchBoardsCallback = useCallback(() => {
-    fetchBoards();
-  }, [fetchBoards]);
-
   useEffect(() => {
-    fetchBoardsCallback();
-  }, [fetchBoardsCallback]);
+    fetchBoards();
+  }, []); // Empty dependency array ensures this runs only once
 
   const openModal = (boardId) => {
     setSelectedBoardIdState(boardId);

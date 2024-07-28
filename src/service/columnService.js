@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-const BASE_URL = "http://localhost:4500/api";
+const BASE_URL = 'http://localhost:4500/api/boards';
 
 class ColumnService {
   constructor(token) {
@@ -8,7 +8,7 @@ class ColumnService {
   }
 
   addColumn = async (boardId, columnData) => {
-    const response = await axios.post(`${BASE_URL}/boards/${boardId}/columns`, columnData, {
+    const response = await axios.post(`${BASE_URL}/${boardId}/columns`, columnData, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
@@ -16,18 +16,17 @@ class ColumnService {
     return response.data;
   };
 
-  updateColumn = async (columnId, columnData) => {
-    const response = await axios.put(`${BASE_URL}/columns/${columnId}`, columnData, {
+  updateColumn = async (boardId, columnId, columnData) => {
+    const response = await axios.put(`${BASE_URL}/${boardId}/columns/${columnId}`, columnData, {
       headers: {
         Authorization: `Bearer ${this.token}`,
-        'Content-Type': 'application/json',
       },
     });
     return response.data;
   };
 
-  deleteColumn = async (columnId) => {
-    const response = await axios.delete(`${BASE_URL}/columns/${columnId}`, {
+  deleteColumn = async (boardId, columnId) => {
+    const response = await axios.delete(`${BASE_URL}/${boardId}/columns/${columnId}`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
@@ -36,7 +35,7 @@ class ColumnService {
   };
 
   getColumnsForBoard = async (boardId) => {
-    const response = await axios.get(`${BASE_URL}/boards/${boardId}/columns`, {
+    const response = await axios.get(`${BASE_URL}/${boardId}/columns`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },

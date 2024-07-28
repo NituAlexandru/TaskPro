@@ -33,9 +33,9 @@ export const ColumnProvider = ({ children }) => {
     }
   };
 
-  const updateColumn = async (columnId, columnData) => {
+  const updateColumn = async (boardId, columnId, columnData) => {
     try {
-      const updatedColumn = await columnService.updateColumn(columnId, columnData);
+      const updatedColumn = await columnService.updateColumn(boardId, columnId, columnData);
       setColumns((prevColumns) =>
         prevColumns.map((column) =>
           column._id === columnId ? updatedColumn : column
@@ -49,9 +49,9 @@ export const ColumnProvider = ({ children }) => {
     }
   };
 
-  const deleteColumn = async (columnId) => {
+  const deleteColumn = async (boardId, columnId) => {
     try {
-      await columnService.deleteColumn(columnId);
+      await columnService.deleteColumn(boardId, columnId);
       setColumns((prevColumns) => prevColumns.filter((column) => column._id !== columnId));
     } catch (error) {
       console.error('Error deleting column:', error.response?.data || error.message);

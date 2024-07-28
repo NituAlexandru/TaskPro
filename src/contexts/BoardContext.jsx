@@ -49,7 +49,7 @@ export const BoardProvider = ({ children }) => {
       const updatedBoard = await boardService.updateBoard(boardId, boardData);
       setBoards((prevBoards) =>
         prevBoards.map((board) =>
-          board.id === boardId ? updatedBoard : board
+          board._id === boardId ? updatedBoard : board
         )
       );
     } catch (error) {
@@ -61,7 +61,7 @@ export const BoardProvider = ({ children }) => {
   const deleteBoard = async (boardId) => {
     try {
       await boardService.deleteBoard(boardId);
-      setBoards((prevBoards) => prevBoards.filter((board) => board.id !== boardId));
+      setBoards((prevBoards) => prevBoards.filter((board) => board._id !== boardId));
     } catch (error) {
       console.error('Error deleting board:', error.response?.data || error.message);
       setError('Failed to delete board. Please try again later.');

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:4500/api'; // Adjust if needed
+const BASE_URL = 'http://localhost:4500/api/columns';
 
 class CardService {
   constructor(token) {
@@ -8,7 +8,7 @@ class CardService {
   }
 
   addCard = async (columnId, cardData) => {
-    const response = await axios.post(`${BASE_URL}/columns/${columnId}/cards`, cardData, {
+    const response = await axios.post(`${BASE_URL}/${columnId}/cards`, cardData, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
@@ -16,8 +16,8 @@ class CardService {
     return response.data;
   };
 
-  updateCard = async (cardId, cardData) => {
-    const response = await axios.put(`${BASE_URL}/cards/${cardId}`, cardData, {
+  updateCard = async (columnId, cardId, cardData) => {
+    const response = await axios.put(`${BASE_URL}/${columnId}/cards/${cardId}`, cardData, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
@@ -25,8 +25,8 @@ class CardService {
     return response.data;
   };
 
-  deleteCard = async (cardId) => {
-    const response = await axios.delete(`${BASE_URL}/cards/${cardId}`, {
+  deleteCard = async (columnId, cardId) => {
+    const response = await axios.delete(`${BASE_URL}/${columnId}/cards/${cardId}`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
@@ -35,7 +35,7 @@ class CardService {
   };
 
   getCardsForColumn = async (columnId) => {
-    const response = await axios.get(`${BASE_URL}/columns/${columnId}/cards`, {
+    const response = await axios.get(`${BASE_URL}/${columnId}/cards`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },

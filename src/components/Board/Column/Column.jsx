@@ -10,14 +10,20 @@ import { ColumnContainer, ColumnSmallContainer, ColumnTitle, ColumnTitleContaine
 import EditColumnModal from "../../Portal/editColumn/EditColumnModal";
 import Modal from "../../Portal/Modal"; // Ensure the correct path to your Modal component
 
-const Column = ({ title, columnId, filter, boardId }) => {
+const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
   const { fetchCardsForColumn, cards, deleteCard } = useCards();
   const { deleteColumn, updateColumn } = useColumns();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [columnTitle, setColumnTitle] = useState(title);
 
   useEffect(() => {
     fetchCardsForColumn(columnId);
+    console.log(`fetchCardsForColumn called with columnId: ${columnId}`); // Debugging log
   }, [fetchCardsForColumn, columnId]);
+
+  useEffect(() => {
+    console.log(`Column component: columnId: ${columnId}, boardId: ${boardId}`); // Debugging log
+  }, [columnId, boardId]);
 
   const filteredCards = useMemo(() => {
     return filter
@@ -33,15 +39,22 @@ const Column = ({ title, columnId, filter, boardId }) => {
   };
 
   const handleDeleteColumn = async () => {
-    await deleteColumn(columnId);
-    // Assuming fetchColumnsForBoard will be called in parent component to update columns
+    await deleteColumn(boardId, columnId);
+    fetchColumns(); // Refetch columns after deletion
+  };
+
+  const handleUpdateColumn = async (columnId, updatedData) => {
+    const updatedColumn = await updateColumn(boardId, columnId, updatedData);
+    setColumnTitle(updatedColumn.titleColumn);
+    setIsEditModalOpen(false);
+    fetchColumns(); // Refetch columns after update
   };
 
   return (
     <ColumnContainer>
       <ColumnSmallContainer>
         <ColumnTitleContainer>
-          <ColumnTitle>{title}</ColumnTitle>
+          <ColumnTitle>{columnTitle}</ColumnTitle>
           <TitleButtonContainer>
             <FiEdit onClick={() => setIsEditModalOpen(true)} />
             <FiTrash2 onClick={handleDeleteColumn} />
@@ -74,8 +87,8 @@ const Column = ({ title, columnId, filter, boardId }) => {
         >
           <EditColumnModal
             closeModal={() => setIsEditModalOpen(false)}
-            updateColumn={updateColumn} // Pass the updateColumn function
-            initialTitle={title}
+            updateColumn={handleUpdateColumn} // Pass the updateColumn function
+            initialTitle={columnTitle}
             columnId={columnId} // Pass the columnId to the modal
           />
         </Modal>
@@ -88,8 +101,7 @@ Column.propTypes = {
   title: PropTypes.string.isRequired,
   columnId: PropTypes.string.isRequired,
   filter: PropTypes.string,
-  boardId: PropTypes.string.isRequired,
+  boardId: PropTypes.string.isRequired, // Ensure boardId is passed and required
 };
 
 export default Column;
-

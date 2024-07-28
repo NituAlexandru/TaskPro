@@ -2,7 +2,7 @@ import { useState, useContext, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FiEdit, FiTrash2, FiArrowRightCircle } from "react-icons/fi";
-import EditCardForm from "../../components/Portal/EditCardModal";
+import EditCardForm from "../../components/Portal/editCard/EditCardModal";
 import StatusModal from "../../components/Portal/CardStatusModal";
 import { AuthContext } from "../../contexts/AuthContext";
 import CardService from "../../service/cardService";

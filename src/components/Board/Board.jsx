@@ -133,7 +133,7 @@ const Board = ({ boardId }) => {
       <BoardHeader>
         <AddTitleFilterContainer>
           <h2>Project title</h2>
-          <Collaborators></Collaborators>
+          <Collaborators />
         </AddTitleFilterContainer>
 
         <FilterButton
@@ -159,6 +159,8 @@ const Board = ({ boardId }) => {
             cards={column.cards}
             columnId={column._id}
             filter={filter}
+            boardId={boardId} // Pass the boardId to Column component
+            fetchColumns={fetchColumns} // Pass the fetchColumns function to Column component
           />
         ))}
         <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
