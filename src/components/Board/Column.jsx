@@ -10,8 +10,17 @@ const ColumnContainer = styled.div`
   background-color: ${({ theme }) => theme.columnBackground};
   border-radius: 8px;
   padding: 0;
-  width: 334px;
+  width: 350px;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const ColumnSmallContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 `;
 
 const ColumnTitleContainer = styled.div`
@@ -25,6 +34,7 @@ const ColumnTitleContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  margin-bottom: 20px;
 `;
 
 const ColumnTitle = styled.h2`
@@ -41,10 +51,15 @@ const TitleButtonContainer = styled.div`
     stroke: rgba(255, 255, 255, 0.5);
   }
 `;
+
 const CardsList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  height: 500px;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
 `;
 
 const Column = ({ title, columnId }) => {
@@ -65,26 +80,29 @@ const Column = ({ title, columnId }) => {
 
   return (
     <ColumnContainer>
-      <ColumnTitleContainer>
-        <ColumnTitle>{title}</ColumnTitle>
-        <TitleButtonContainer>
-          <FiEdit />
-          <FiTrash2 />
-        </TitleButtonContainer>
-      </ColumnTitleContainer>
-      <CardsList>
-        {filteredCards.map((card) => (
-          <Card
-            key={card._id}
-            cardId={card._id}
-            title={card.title}
-            description={card.description}
-            priority={card.priority}
-            deadline={card.deadline}
-            onDelete={handleDeleteCard}
-          />
-        ))}
-      </CardsList>
+      <ColumnSmallContainer>
+        <ColumnTitleContainer>
+          <ColumnTitle>{title}</ColumnTitle>
+          <TitleButtonContainer>
+            <FiEdit />
+            <FiTrash2 />
+          </TitleButtonContainer>
+        </ColumnTitleContainer>
+        <CardsList>
+          {filteredCards.map((card) => (
+            <Card
+              key={card._id}
+              cardId={card._id}
+              title={card.title}
+              description={card.description}
+              priority={card.priority}
+              deadline={card.deadline}
+              onDelete={handleDeleteCard}
+            />
+          ))}
+        </CardsList>
+      </ColumnSmallContainer>
+
       <AddCardButton columnId={columnId} />
     </ColumnContainer>
   );

@@ -14,6 +14,7 @@ const ButtonContainer = styled.div`
   width: 334px;
   height: 56px;
   cursor: pointer;
+  margin-top: 20px;
 
   &:hover {
     background-color: ${({ theme }) => theme.addCardButtonHoverBackground};

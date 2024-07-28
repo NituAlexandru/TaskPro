@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
@@ -115,9 +115,13 @@ const BoardList = ({ setSelectedBoardId }) => {
   const { boards, fetchBoards, deleteBoard, error } = useBoards();
   const { theme } = useContext(ThemeContext);
 
-  useEffect(() => {
+  const fetchBoardsCallback = useCallback(() => {
     fetchBoards();
   }, [fetchBoards]);
+
+  useEffect(() => {
+    fetchBoardsCallback();
+  }, [fetchBoardsCallback]);
 
   const openModal = (boardId) => {
     setSelectedBoardIdState(boardId);

@@ -1,4 +1,11 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Column from "./Column";
@@ -15,6 +22,8 @@ const BoardContainer = styled.div`
   color: ${({ theme }) => theme.text};
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 
   img {
     height: 30px;
@@ -31,6 +40,7 @@ const ColumnsContainer = styled.div`
   display: flex;
   gap: 20px;
   overflow-x: auto;
+  height: 100%;
 `;
 
 const FilterButton = styled.button`
@@ -60,25 +70,25 @@ const FilterButton = styled.button`
 const Board = ({ boardId }) => {
   const [columns, setColumns] = useState([]);
   const { token } = useContext(AuthContext);
-  const columnService = new ColumnService(token);
+  const columnService = useMemo(() => new ColumnService(token), [token]);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const filterButtonRef = useRef(null);
 
-  useEffect(() => {
-    const fetchColumns = async () => {
-      try {
-        const data = await columnService.getColumnsForBoard(boardId);
-        setColumns(data);
-      } catch (error) {
-        console.error("Error fetching columns:", error);
-      }
-    };
+  const fetchColumns = useCallback(async () => {
+    try {
+      const data = await columnService.getColumnsForBoard(boardId);
+      setColumns(data);
+    } catch (error) {
+      console.error("Error fetching columns:", error);
+    }
+  }, [boardId, columnService]);
 
+  useEffect(() => {
     if (boardId) {
       console.log("Board ID in Board component:", boardId); // Log the board ID received
       fetchColumns();
     }
-  }, [token, boardId, columnService]);
+  }, [fetchColumns, boardId]);
 
   const handleColumnAdded = (newColumn) => {
     setColumns((prevColumns) => [...prevColumns, newColumn]);

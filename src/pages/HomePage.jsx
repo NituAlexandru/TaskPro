@@ -45,11 +45,19 @@ const HomePage = () => {
         <ColumnProvider>
           <CardProvider>
             <HomePageContainer>
-              <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} setSelectedBoardId={handleBoardSelect} />
+              <Sidebar
+                isOpen={isOpen}
+                toggleSidebar={toggleSidebar}
+                setSelectedBoardId={handleBoardSelect}
+              />
               <MainContent $isOpen={isOpen}>
                 <Header isOpen={isOpen} />
                 <Content>
-                  {selectedBoardId ? <Board boardId={selectedBoardId} /> : <p>Please select a board</p>}
+                  {selectedBoardId ? (
+                    <Board boardId={selectedBoardId} />
+                  ) : (
+                    <p>Please select a board</p>
+                  )}
                 </Content>
               </MainContent>
             </HomePageContainer>

@@ -27,6 +27,7 @@ const CardContentConteiner = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 15px;
+  height: 154px;
   color: ${({ theme }) => theme.cardTextColor};
 `;
 
