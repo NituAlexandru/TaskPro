@@ -8,7 +8,7 @@ import {
 } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import Column from "./Column";
+import Column from "./Column/Column";
 import AddColumnButton from "./AddColumnBtn";
 import { AuthContext } from "../../contexts/AuthContext";
 import ColumnService from "../../service/columnService";

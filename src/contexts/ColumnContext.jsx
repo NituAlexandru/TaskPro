@@ -1,4 +1,3 @@
-// ColumnContext.js
 import React, { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import ColumnService from '../service/columnService';
@@ -34,9 +33,9 @@ export const ColumnProvider = ({ children }) => {
     }
   };
 
-  const updateColumn = async (boardId, columnId, columnData) => {
+  const updateColumn = async (columnId, columnData) => {
     try {
-      const updatedColumn = await columnService.updateColumn(boardId, columnId, columnData);
+      const updatedColumn = await columnService.updateColumn(columnId, columnData);
       setColumns((prevColumns) =>
         prevColumns.map((column) =>
           column._id === columnId ? updatedColumn : column
@@ -50,9 +49,9 @@ export const ColumnProvider = ({ children }) => {
     }
   };
 
-  const deleteColumn = async (boardId, columnId) => {
+  const deleteColumn = async (columnId) => {
     try {
-      await columnService.deleteColumn(boardId, columnId);
+      await columnService.deleteColumn(columnId);
       setColumns((prevColumns) => prevColumns.filter((column) => column._id !== columnId));
     } catch (error) {
       console.error('Error deleting column:', error.response?.data || error.message);

@@ -16,16 +16,17 @@ class ColumnService {
     return response.data;
   };
 
-  updateColumn = async (columnId, columnData) => { // Update route to reflect the correct endpoint
+  updateColumn = async (columnId, columnData) => {
     const response = await axios.put(`${BASE_URL}/columns/${columnId}`, columnData, {
       headers: {
         Authorization: `Bearer ${this.token}`,
+        'Content-Type': 'application/json',
       },
     });
     return response.data;
   };
 
-  deleteColumn = async (columnId) => { // Update route to reflect the correct endpoint
+  deleteColumn = async (columnId) => {
     const response = await axios.delete(`${BASE_URL}/columns/${columnId}`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
