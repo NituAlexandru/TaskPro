@@ -1,4 +1,3 @@
-// FilterModal.js
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -83,14 +82,36 @@ const ShowAllButton = styled.button`
 const FilterModal = ({ isOpen, onClose, onFilterChange, buttonRef }) => {
   const [position, setPosition] = useState({ top: "50%", left: "50%" });
 
-  useEffect(() => {
+  const updatePosition = () => {
     if (buttonRef && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      let left = rect.left + window.scrollX;
+      let top = rect.bottom + window.scrollY;
+
+      // Adjust left and top to ensure the modal stays within the viewport
+      if (left + 300 > windowWidth) {
+        left = windowWidth - 300 - 20; // 20px padding from right edge
+      }
+      if (top + 200 > windowHeight) {
+        top = windowHeight - 200 - 20; // 20px padding from bottom edge
+      }
+
       setPosition({
-        top: `${rect.bottom}px`,
-        left: `${rect.left}px`,
+        top: `${top}px`,
+        left: `${left}px`,
       });
     }
+  };
+
+  useEffect(() => {
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+    };
   }, [buttonRef]);
 
   const handleFilterChange = (filter) => {

@@ -19,11 +19,13 @@ const MainContent = styled.div`
   flex-direction: column;
   flex-grow: 1;
   width: 100%;
+  overflow: hidden;
 `;
 
 const Content = styled.div`
   display: flex;
   flex-grow: 1;
+  overflow: hidden;
 `;
 
 const HomePage = () => {
