@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import NewBoardContainer from "./NewBoardContainer";
 import BoardList from "./BoardList";
 import HelpList from "./HelpList";
+import PropTypes from "prop-types";
 
 const SidebarContainer = styled.div`
   display: flex;
@@ -122,7 +123,7 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedBoardId }) => {
 
   return (
     <SidebarContainer $isOpen={isOpen}>
-      <ToggleButton $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+      <ToggleButton $isOpen={isOpen} onClick={toggleSidebar}>
         {isOpen ? <FiArrowLeft /> : <FiArrowRight />}
       </ToggleButton>
       <SidebarContent $isOpen={isOpen}>
@@ -141,6 +142,12 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedBoardId }) => {
       </SidebarContent>
     </SidebarContainer>
   );
+};
+
+Sidebar.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  toggleSidebar: PropTypes.func.isRequired,
+  setSelectedBoardId: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

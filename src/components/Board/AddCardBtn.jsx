@@ -1,8 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import Modal from "../Portal/Modal";
 import AddCardForm from "../Portal/AddCardModal";
-import { useCards } from '../../contexts/CardContext';
+import { useCards } from "../../contexts/CardContext";
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -89,5 +90,8 @@ const AddCardButton = ({ columnId }) => {
   );
 };
 
-export default AddCardButton;
+AddCardButton.propTypes = {
+  columnId: PropTypes.string.isRequired,
+};
 
+export default AddCardButton;

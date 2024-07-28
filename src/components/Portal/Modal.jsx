@@ -57,6 +57,7 @@ const Modal = ({
           $top={top}
           $left={left}
           $transform={transform}
+          theme={theme}
         >
           {children}
         </ModalContent>

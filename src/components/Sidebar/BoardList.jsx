@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
-import styled from 'styled-components';
-import { FiEdit, FiTrash2 } from 'react-icons/fi';
-import Modal from '../Portal/Modal';
-import EditBoardModal from '../Portal/EditBoardModal';
-import { ThemeContext } from '../../utils/ThemeProvider';
-import { useBoards } from '../../contexts/BoardContext';
-import loadingIcon from '../../assets/icons/loading.svg';
-import colorsIcon from '../../assets/icons/colors.svg';
-import containerIcon from '../../assets/icons/container.svg';
-import hexagonIcon from '../../assets/icons/hexagon.svg';
-import lightningIcon from '../../assets/icons/lightning.svg';
-import projectIcon from '../../assets/icons/project.svg';
-import puzzlePieceIcon from '../../assets/icons/puzzle-piece.svg';
-import starIcon from '../../assets/icons/star.svg';
+import { useState, useEffect, useContext } from "react";
+import styled from "styled-components";
+import PropTypes from "prop-types";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
+import Modal from "../Portal/Modal";
+import EditBoardModal from "../Portal/EditBoardModal";
+import { ThemeContext } from "../../utils/ThemeProvider";
+import { useBoards } from "../../contexts/BoardContext";
+import loadingIcon from "../../assets/icons/loading.svg";
+import colorsIcon from "../../assets/icons/colors.svg";
+import containerIcon from "../../assets/icons/container.svg";
+import hexagonIcon from "../../assets/icons/hexagon.svg";
+import lightningIcon from "../../assets/icons/lightning.svg";
+import projectIcon from "../../assets/icons/project.svg";
+import puzzlePieceIcon from "../../assets/icons/puzzle-piece.svg";
+import starIcon from "../../assets/icons/star.svg";
 
 const iconsMap = {
   loadingIcon,
@@ -75,7 +76,7 @@ const IconImage = styled.img`
 `;
 
 const Paragraph = styled.p`
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 14px;
   letter-spacing: -0.02em;
@@ -115,22 +116,8 @@ const BoardList = ({ setSelectedBoardId }) => {
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
-    const fetchAndLogBoards = async () => {
-      await fetchBoards();
-      console.log('Boards:', boards);
-      console.table(boards); // Log boards as a table for better visibility
-      boards.forEach(board => {
-        console.log(`Board ID: ${board._id}`);
-        console.log(`Title: ${board.titleBoard}`);
-        console.log(`Icon: ${board.icon}`);
-        console.log(`Background: ${board.background}`);
-        console.log(`Collaborators: ${board.collaborators}`);
-        console.log('----------------------');
-      });
-    };
-
-    fetchAndLogBoards();
-  }, []);
+    fetchBoards();
+  }, [fetchBoards]);
 
   const openModal = (boardId) => {
     setSelectedBoardIdState(boardId);
@@ -153,44 +140,67 @@ const BoardList = ({ setSelectedBoardId }) => {
       await deleteBoard(boardId);
       fetchBoards(); // Refresh the board list after deletion
     } catch (error) {
-      console.error('Error deleting board:', error.response?.data || error.message);
+      console.error(
+        "Error deleting board:",
+        error.response?.data || error.message
+      );
     }
   };
 
   return (
     <>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <BoardListWrapper>
         {boards.map((board) => (
-          <BoardListItem key={board._id} onClick={() => handleBoardClick(board._id)}>
+          <BoardListItem
+            key={board._id}
+            onClick={() => handleBoardClick(board._id)}
+          >
             <BoardListItemContainer>
-              <IconImage src={iconsMap[board.icon]} alt={`${board.titleBoard} icon`} />
+              <IconImage
+                src={iconsMap[board.icon]}
+                alt={`${board.titleBoard} icon`}
+              />
               <Paragraph>{board.titleBoard}</Paragraph>
             </BoardListItemContainer>
             <BoardListItemContainer>
-              <IconButton className="edit-button" onClick={() => openModal(board._id)}>
+              <IconButton
+                className="edit-button"
+                onClick={() => openModal(board._id)}
+              >
                 <FiEdit />
               </IconButton>
-              <IconButton className="delete-button" onClick={() => handleDeleteBoard(board._id)}>
+              <IconButton
+                className="delete-button"
+                onClick={() => handleDeleteBoard(board._id)}
+              >
                 <FiTrash2 />
               </IconButton>
             </BoardListItemContainer>
           </BoardListItem>
         ))}
       </BoardListWrapper>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        width="350px"
-        height="500px"
-        border="1px solid rgba(190, 219, 176, 0.5)"
-        borderRadius="8px"
-        modalBackgroundColor={theme.modalBackgroundColor}
-      >
-        {selectedBoardId && <EditBoardModal closeModal={closeModal} boardId={selectedBoardId} />}
-      </Modal>
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          width="350px"
+          height="500px"
+          border="1px solid rgba(190, 219, 176, 0.5)"
+          borderRadius="8px"
+          modalBackgroundColor={theme.modalBackgroundColor}
+        >
+          {selectedBoardId && (
+            <EditBoardModal closeModal={closeModal} boardId={selectedBoardId} />
+          )}
+        </Modal>
+      )}
     </>
   );
+};
+
+BoardList.propTypes = {
+  setSelectedBoardId: PropTypes.func.isRequired,
 };
 
 export default BoardList;

@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import Card from "./TaskCard";
 import AddCardButton from "./AddCardBtn";
-import { useCards } from '../../contexts/CardContext';
-import { useEffect } from 'react';
+import { useCards } from "../../contexts/CardContext";
+import { useEffect, useMemo } from "react";
 
 const ColumnContainer = styled.div`
   background-color: ${({ theme }) => theme.columnBackground};
@@ -27,25 +28,45 @@ const CardsList = styled.div`
 `;
 
 const Column = ({ title, columnId }) => {
-  const { fetchCardsForColumn, cards } = useCards();
+  const { fetchCardsForColumn, cards, deleteCard } = useCards();
 
   useEffect(() => {
     fetchCardsForColumn(columnId);
-  }, [fetchCardsForColumn, columnId]); // Add dependencies to prevent infinite loop
+  }, [fetchCardsForColumn, columnId]);
+
+  const filteredCards = useMemo(() => {
+    return cards.filter((card) => card.columnId === columnId);
+  }, [cards, columnId]);
+
+  const handleDeleteCard = async (cardId) => {
+    await deleteCard(cardId);
+    fetchCardsForColumn(columnId);
+  };
 
   return (
     <ColumnContainer>
       <ColumnTitle>{title}</ColumnTitle>
       <CardsList>
-        {cards
-          .filter(card => card.columnId === columnId)
-          .map((card) => (
-            <Card key={card._id} {...card} />
-          ))}
+        {filteredCards.map((card) => (
+          <Card
+            key={card._id}
+            cardId={card._id}
+            title={card.title}
+            description={card.description}
+            priority={card.priority}
+            deadline={card.deadline}
+            onDelete={handleDeleteCard}
+          />
+        ))}
       </CardsList>
       <AddCardButton columnId={columnId} />
     </ColumnContainer>
   );
+};
+
+Column.propTypes = {
+  title: PropTypes.string.isRequired,
+  columnId: PropTypes.string.isRequired,
 };
 
 export default Column;

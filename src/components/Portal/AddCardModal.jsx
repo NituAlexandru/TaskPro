@@ -215,6 +215,7 @@ const AddCardForm = ({ closeModal, columnId }) => {
               deadline,
               columnId, // Include the columnId in the new card data
             };
+             console.log("New Card Data: ", newCard);
             await addCard(columnId, newCard);
             closeModal();
           } catch (error) {
