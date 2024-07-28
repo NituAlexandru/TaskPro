@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:4500/api';
+const BASE_URL = 'http://localhost:4500/api'; // Adjust if needed
 
 class CardService {
   constructor(token) {
@@ -27,6 +27,15 @@ class CardService {
 
   deleteCard = async (cardId) => {
     const response = await axios.delete(`${BASE_URL}/cards/${cardId}`, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+    return response.data;
+  };
+
+  getCardsForColumn = async (columnId) => {
+    const response = await axios.get(`${BASE_URL}/columns/${columnId}/cards`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },

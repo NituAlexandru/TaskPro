@@ -12,9 +12,17 @@ export const CardProvider = ({ children }) => {
   const cardService = new CardService(token);
 
   const fetchCardsForColumn = async (columnId) => {
+    console.log(`fetchCardsForColumn called with columnId: ${columnId}`);
     try {
       const data = await cardService.getCardsForColumn(columnId);
-      setCards(data);
+      console.log(`Fetched cards:`, data);
+      setCards(prevCards => {
+        if (JSON.stringify(prevCards) !== JSON.stringify(data)) {
+          console.log(`Updating state with new cards for columnId: ${columnId}`);
+          return data;
+        }
+        return prevCards;
+      });
     } catch (error) {
       console.error('Error fetching cards:', error.response?.data || error.message);
       setError('Failed to fetch cards. Please try again later.');
@@ -33,42 +41,13 @@ export const CardProvider = ({ children }) => {
     }
   };
 
-  const updateCard = async (cardId, cardData) => {
-    try {
-      const updatedCard = await cardService.updateCard(cardId, cardData);
-      setCards((prevCards) =>
-        prevCards.map((card) => (card._id === cardId ? updatedCard : card))
-      );
-      return updatedCard;
-    } catch (error) {
-      console.error('Error updating card:', error.response?.data || error.message);
-      setError('Failed to update card. Please try again later.');
-      throw error;
-    }
-  };
-
-  const deleteCard = async (cardId) => {
-    try {
-      await cardService.deleteCard(cardId);
-      setCards((prevCards) => prevCards.filter((card) => card._id !== cardId));
-    } catch (error) {
-      console.error('Error deleting card:', error.response?.data || error.message);
-      setError('Failed to delete card. Please try again later.');
-      throw error;
-    }
-  };
-
   return (
-    <CardContext.Provider
-      value={{
-        cards,
-        error,
-        fetchCardsForColumn,
-        addCard,
-        updateCard,
-        deleteCard,
-      }}
-    >
+    <CardContext.Provider value={{
+      cards,
+      error,
+      fetchCardsForColumn,
+      addCard
+    }}>
       {children}
     </CardContext.Provider>
   );

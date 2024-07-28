@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Modal from "../Portal/Modal";
 import AddCardForm from "../Portal/AddCardModal";
+import { useCards } from '../../contexts/CardContext';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -54,14 +55,17 @@ const AddParagraph = styled.p`
   margin: 0;
 `;
 
-const AddCardButton = ({ columnId, onCardAdded }) => {
+const AddCardButton = ({ columnId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { fetchCardsForColumn } = useCards();
 
-  const openModal = () => {
-    console.log("Opening AddCardForm modal for columnId:", columnId);
-    setIsModalOpen(true);
-  };
+  const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const handleCardAdded = async () => {
+    await fetchCardsForColumn(columnId);
+    closeModal();
+  };
 
   return (
     <>
@@ -78,7 +82,7 @@ const AddCardButton = ({ columnId, onCardAdded }) => {
           border="1px solid rgba(190, 219, 176, 0.5)"
           borderRadius="8px"
         >
-          <AddCardForm columnId={columnId} onCardAdded={onCardAdded} closeModal={closeModal} />
+          <AddCardForm closeModal={handleCardAdded} columnId={columnId} />
         </Modal>
       )}
     </>
@@ -86,3 +90,4 @@ const AddCardButton = ({ columnId, onCardAdded }) => {
 };
 
 export default AddCardButton;
+

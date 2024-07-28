@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import Card from "./TaskCard";
 import AddCardButton from "./AddCardBtn";
+import { useCards } from '../../contexts/CardContext';
+import { useEffect } from 'react';
 
 const ColumnContainer = styled.div`
   background-color: ${({ theme }) => theme.columnBackground};
@@ -24,23 +26,24 @@ const CardsList = styled.div`
   gap: 10px;
 `;
 
-const Column = ({ title, cards, columnId }) => {
-  const handleCardAdded = (newCard) => {
-    console.log("New Card Added to Column:", newCard); // Log the new card added
-    // Update the state or props to reflect the new card addition
-  };
+const Column = ({ title, columnId }) => {
+  const { fetchCardsForColumn, cards } = useCards();
 
-  console.log("Rendering Column:", columnId); // Log the column ID being rendered
+  useEffect(() => {
+    fetchCardsForColumn(columnId);
+  }, [fetchCardsForColumn, columnId]); // Add dependencies to prevent infinite loop
 
   return (
     <ColumnContainer>
       <ColumnTitle>{title}</ColumnTitle>
       <CardsList>
-        {cards.map((card) => (
-          <Card key={card.id} {...card} />
-        ))}
+        {cards
+          .filter(card => card.columnId === columnId)
+          .map((card) => (
+            <Card key={card._id} {...card} />
+          ))}
       </CardsList>
-      <AddCardButton columnId={columnId} onCardAdded={handleCardAdded} />
+      <AddCardButton columnId={columnId} />
     </ColumnContainer>
   );
 };

@@ -7,7 +7,7 @@ import CustomCalendar from "../../utils/CustomCalendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCaretDown, FaPlus } from "react-icons/fa";
 import { AuthContext } from "../../contexts/AuthContext";
-import CardService from "../../service/cardService";
+import { useCards } from '../../contexts/CardContext';
 
 const ModalHeader = styled.div`
   display: flex;
@@ -176,21 +176,24 @@ const IconWrapper = styled.div`
 `;
 
 const validationSchema = Yup.object({
-  title: Yup.string().required("Title is required"),
+  titleCard: Yup.string().required("Title is required"),
   description: Yup.string().required("Description is required"),
 });
 
-const AddCardForm = ({ closeModal, columnId, onCardAdded }) => {
-  const [labelColor, setLabelColor] = useState("pink");
+const AddCardForm = ({ closeModal, columnId }) => {
+  const [priority, setPriority] = useState("without priority");
   const [deadline, setDeadline] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const labelColors = ["#797b78", "#8fa1d0", "#e09cb5", "#bedbb0"];
+  const priorityMapping = {
+    "#797b78": "without priority",
+    "#8fa1d0": "low",
+    "#e09cb5": "medium",
+    "#bedbb0": "high",
+  };
   const { token } = useContext(AuthContext);
-  const cardService = new CardService(token);
-
+  const { addCard } = useCards();
   const toggleCalendar = () => setIsCalendarOpen(!isCalendarOpen);
-
-  console.log("Column ID in AddCardForm:", columnId); // Log the column ID received
 
   return (
     <FormWrapper>
@@ -200,7 +203,7 @@ const AddCardForm = ({ closeModal, columnId, onCardAdded }) => {
       </ModalHeader>
       <Formik
         initialValues={{
-          title: "",
+          titleCard: "",
           description: "",
         }}
         validationSchema={validationSchema}
@@ -208,12 +211,11 @@ const AddCardForm = ({ closeModal, columnId, onCardAdded }) => {
           try {
             const newCard = {
               ...values,
-              labelColor,
+              priority: priorityMapping[priority], // Map color to priority
               deadline,
+              columnId, // Include the columnId in the new card data
             };
-            const addedCard = await cardService.addCard(columnId, newCard);
-            console.log("Added Card:", addedCard); // Log the added card
-            onCardAdded(addedCard);
+            await addCard(columnId, newCard);
             closeModal();
           } catch (error) {
             console.error("Error adding card:", error);
@@ -225,8 +227,8 @@ const AddCardForm = ({ closeModal, columnId, onCardAdded }) => {
         {({ isSubmitting }) => (
           <StyledForm>
             <InputWrapper>
-              <Input type="text" name="title" placeholder="Title" />
-              <ErrorMessage name="title" component={ErrorMessageStyled} />
+              <Input type="text" name="titleCard" placeholder="Title" />
+              <ErrorMessage name="titleCard" component={ErrorMessageStyled} />
             </InputWrapper>
             <TextareaWrapper>
               <Textarea
@@ -236,14 +238,14 @@ const AddCardForm = ({ closeModal, columnId, onCardAdded }) => {
               />
               <ErrorMessage name="description" component={ErrorMessageStyled} />
             </TextareaWrapper>
-            <Label>Label color</Label>
+            <Label>Priority</Label>
             <LabelColorContainer>
               {labelColors.map((color) => (
                 <ColorOption
                   key={color}
                   color={color}
-                  selected={labelColor === color}
-                  onClick={() => setLabelColor(color)}
+                  selected={priority === color}
+                  onClick={() => setPriority(color)}
                 />
               ))}
             </LabelColorContainer>
@@ -281,7 +283,6 @@ const AddCardForm = ({ closeModal, columnId, onCardAdded }) => {
 AddCardForm.propTypes = {
   closeModal: PropTypes.func.isRequired,
   columnId: PropTypes.string.isRequired,
-  onCardAdded: PropTypes.func.isRequired,
 };
 
 export default AddCardForm;
