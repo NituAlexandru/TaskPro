@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import Card from "../TaskCard";
+import Card from "..//Card/TaskCard";
 import AddCardButton from "../AddCardBtn";
 import { useCards } from "../../../contexts/CardContext";
 import { useColumns } from "../../../contexts/ColumnContext";
@@ -40,14 +40,14 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
 
   const handleDeleteColumn = async () => {
     await deleteColumn(boardId, columnId);
-    fetchColumns(); // Refetch columns after deletion
+    fetchColumns();
   };
 
   const handleUpdateColumn = async (columnId, updatedData) => {
     const updatedColumn = await updateColumn(boardId, columnId, updatedData);
     setColumnTitle(updatedColumn.titleColumn);
     setIsEditModalOpen(false);
-    fetchColumns(); // Refetch columns after update
+    fetchColumns();
   };
 
   return (
@@ -65,12 +65,14 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
             <Card
               key={card._id}
               cardId={card._id}
-              title={card.titleCard}
+              titleCard={card.titleCard}
               description={card.description}
               priority={card.priority}
               deadline={card.deadline}
               priorityColor={card.priorityColor}
               onDelete={handleDeleteCard}
+              fetchCardsForColumn={fetchCardsForColumn}
+              columnId={columnId}
             />
           ))}
         </CardsList>
@@ -101,7 +103,8 @@ Column.propTypes = {
   title: PropTypes.string.isRequired,
   columnId: PropTypes.string.isRequired,
   filter: PropTypes.string,
-  boardId: PropTypes.string.isRequired, // Ensure boardId is passed and required
+  boardId: PropTypes.string.isRequired,
+  fetchColumns: PropTypes.func.isRequired,
 };
 
 export default Column;

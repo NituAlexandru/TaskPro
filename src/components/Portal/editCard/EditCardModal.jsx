@@ -5,16 +5,35 @@ import PropTypes from "prop-types";
 import CustomCalendar from "../../../utils/CustomCalendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCaretDown, FaPlus } from "react-icons/fa";
-import { ModalHeader, FormWrapper, Title, CloseButton,StyledForm, InputWrapper, Input, IconWrapper,TextareaWrapper, Textarea, ErrorMessageStyled, LabelColorContainer, Label, ColorOption, DatePickerWrapper, CalendarToggle, CalendarPopup, SubmitButton } from "./EditCardModal.styled";
+import {
+  ModalHeader,
+  FormWrapper,
+  Title,
+  CloseButton,
+  StyledForm,
+  InputWrapper,
+  Input,
+  IconWrapper,
+  TextareaWrapper,
+  Textarea,
+  ErrorMessageStyled,
+  LabelColorContainer,
+  Label,
+  ColorOption,
+  DatePickerWrapper,
+  CalendarToggle,
+  CalendarPopup,
+  SubmitButton,
+} from "./EditCardModal.styled";
 
 const validationSchema = Yup.object({
-  title: Yup.string().required("Title is required"),
+  titleCard: Yup.string().required("Title is required"),
   description: Yup.string().required("Description is required"),
 });
 
-const EditCardForm = ({ closeModal }) => {
-  const [labelColor, setLabelColor] = useState("pink");
-  const [deadline, setDeadline] = useState(new Date());
+const EditCardForm = ({ closeModal, initialValues, onSubmit }) => {
+  const [labelColor, setLabelColor] = useState(initialValues.priorityColor || "pink");
+  const [deadline, setDeadline] = useState(new Date(initialValues.deadline));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const labelColors = ["#8fa1d0", "#e09cb5", "#bedbb0", "#797b78"];
 
@@ -23,30 +42,27 @@ const EditCardForm = ({ closeModal }) => {
   return (
     <FormWrapper>
       <ModalHeader>
-      <Title>Edit card</Title>
-      <CloseButton onClick={closeModal}>&times;</CloseButton>
+        <Title>Edit card</Title>
+        <CloseButton onClick={closeModal}>&times;</CloseButton>
       </ModalHeader>
       <Formik
-        initialValues={{
-          title: "",
-          description: "",
-        }}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
-          console.log({
+          const updatedValues = {
             ...values,
-            labelColor,
+            priorityColor: labelColor,
             deadline,
-          });
+          };
+          onSubmit(updatedValues);
           setSubmitting(false);
-          closeModal();
         }}
       >
         {({ isSubmitting }) => (
           <StyledForm>
             <InputWrapper>
-              <Input type="text" name="title" placeholder="Title" />
-              <ErrorMessage name="title" component={ErrorMessageStyled} />
+              <Input type="text" name="titleCard" placeholder="Title" />
+              <ErrorMessage name="titleCard" component={ErrorMessageStyled} />
             </InputWrapper>
             <TextareaWrapper>
               <Textarea
@@ -100,6 +116,15 @@ const EditCardForm = ({ closeModal }) => {
 
 EditCardForm.propTypes = {
   closeModal: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape({
+    titleCard: PropTypes.string,
+    description: PropTypes.string,
+    priority: PropTypes.string,
+    deadline: PropTypes.instanceOf(Date),
+    priorityColor: PropTypes.string,
+  }).isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default EditCardForm;
+
