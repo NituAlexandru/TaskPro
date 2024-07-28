@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FiEdit, FiTrash2, FiArrowRightCircle } from "react-icons/fi";
@@ -160,6 +160,7 @@ const Card = ({
   const [currentStatus, setCurrentStatus] = useState("In progress");
   const { token } = useContext(AuthContext);
   const cardService = new CardService(token);
+  const statusButtonRef = useRef(null);
 
   const openModal = () => {
     setIsEditModalOpen(true);
@@ -215,7 +216,10 @@ const Card = ({
               </PriorityType>
             </Priority>
             <Actions>
-              <FiArrowRightCircle onClick={openStatusModal} />
+              <FiArrowRightCircle
+                ref={statusButtonRef}
+                onClick={openStatusModal}
+              />
               <FiEdit onClick={openModal} />
               <FiTrash2 onClick={handleDelete} />
             </Actions>
@@ -235,6 +239,7 @@ const Card = ({
           onClose={closeStatusModal}
           onStatusChange={handleStatusChange}
           currentStatus={currentStatus}
+          buttonRef={statusButtonRef}
         />
       )}
     </>

@@ -1,7 +1,7 @@
-import PropTypes from "prop-types";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { FiArrowRightCircle } from "react-icons/fi";
-import { useEffect, useState } from "react";
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -22,10 +22,10 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: absolute;
-  top: ${({ top }) => top}px;
-  left: ${({ left }) => left}px;
-  transform: translate(0, 0);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const StatusOption = styled.div`
@@ -52,16 +52,23 @@ const StatusModal = ({
 }) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
 
-  useEffect(() => {
+  const updatePosition = useCallback(() => {
     if (buttonRef && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      console.log("Button rect:", rect); // Debug log
       setPosition({
-        top: rect.bottom + window.scrollY, // Adjust for scrolling
-        left: rect.left + window.scrollX, // Adjust for scrolling
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
       });
     }
   }, [buttonRef]);
+
+  useEffect(() => {
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [updatePosition]);
 
   if (!isOpen) return null;
 

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import CustomCalendar from "../../utils/CustomCalendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCaretDown, FaPlus } from "react-icons/fa";
-import { AuthContext } from "../../contexts/AuthContext";
+// import { AuthContext } from "../../contexts/AuthContext";
 import { useCards } from "../../contexts/CardContext";
 
 const ModalHeader = styled.div`
@@ -191,7 +191,7 @@ const AddCardForm = ({ closeModal, columnId }) => {
     "#e09cb5": "medium",
     "#bedbb0": "high",
   };
-  const { token } = useContext(AuthContext);
+  // const { token } = useContext(AuthContext);
   const { addCard } = useCards();
   const toggleCalendar = () => setIsCalendarOpen(!isCalendarOpen);
 
