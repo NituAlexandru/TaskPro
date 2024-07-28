@@ -28,6 +28,7 @@ const CardContentConteiner = styled.div`
   justify-content: space-between;
   padding: 15px;
   height: 154px;
+  width: 100%;
   color: ${({ theme }) => theme.cardTextColor};
 `;
 

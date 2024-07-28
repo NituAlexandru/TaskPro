@@ -10,11 +10,12 @@ const ColumnContainer = styled.div`
   background-color: ${({ theme }) => theme.columnBackground};
   border-radius: 8px;
   padding: 0;
-  width: 350px;
+  width: 347px;
   margin: 0;
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-bottom: 10px;
 `;
 
 const ColumnSmallContainer = styled.div`
@@ -60,6 +61,27 @@ const CardsList = styled.div`
   flex-grow: 1;
   overflow-y: auto;
   padding-right: 10px;
+  overflow-x: hidden;
+
+  /* Scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #2d2d2d; /* adjust according to your theme */
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #555555; /* adjust according to your theme */
+    border-radius: 10px;
+    border: 2px solid #2d2d2d; /* adjust according to your theme */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #777777; /* adjust according to your theme */
+  }
 `;
 
 const Column = ({ title, columnId }) => {
