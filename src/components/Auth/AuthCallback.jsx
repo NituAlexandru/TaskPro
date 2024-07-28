@@ -14,14 +14,9 @@ const AuthCallback = () => {
     const refreshToken = params.get("refreshToken");
     const sid = params.get("sid");
 
-    console.log("Received token:", token);
-    console.log("Received refreshToken:", refreshToken);
-    console.log("Received sessionId:", sid);
-
     if (token && refreshToken && sid) {
       fetchCurrentUser(token)
         .then((fetchedUser) => {
-          console.log("Fetched user:", fetchedUser);
           login(fetchedUser, token, refreshToken, sid);
           navigate("/home");
         })

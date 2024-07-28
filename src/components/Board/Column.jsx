@@ -115,7 +115,7 @@ const Column = ({ title, columnId }) => {
             <Card
               key={card._id}
               cardId={card._id}
-              title={card.title}
+              title={card.titleCard}
               description={card.description}
               priority={card.priority}
               deadline={card.deadline}

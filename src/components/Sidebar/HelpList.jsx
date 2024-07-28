@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Modal from "../Portal/Modal";
-import HelpForm from "../Portal/HelpModal";
+import HelpForm from "../Portal/helpModal/HelpModal";
 import { useState } from "react";
 
 const HelpListWrapper = styled.ul`
