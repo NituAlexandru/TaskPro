@@ -1,12 +1,12 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import styled from "styled-components";
 import Column from "./Column";
 import AddColumnButton from "./AddColumnBtn";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useBoards } from "../../contexts/BoardContext";
-import { useColumns } from "../../contexts/ColumnContext";
+import ColumnService from "../../service/columnService";
 import FilterModal from "../Portal/FilterModal";
 import { FiFilter } from "react-icons/fi";
+import Card from "./TaskCard";
 
 const BoardContainer = styled.div`
   flex-grow: 1;
@@ -15,6 +15,11 @@ const BoardContainer = styled.div`
   color: ${({ theme }) => theme.text};
   display: flex;
   flex-direction: column;
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
 `;
 
 const ColumnsContainer = styled.div`
@@ -22,7 +27,6 @@ const ColumnsContainer = styled.div`
   gap: 20px;
   overflow-x: auto;
 `;
-
 const FilterButton = styled.button`
   background: none;
   border: none;
@@ -47,36 +51,31 @@ const FilterButton = styled.button`
   }
 `;
 
-const Board = () => {
+const Board = ({ boardId }) => {
   const [columns, setColumns] = useState([]);
   const { token } = useContext(AuthContext);
-  const { boardId, getBoard } = useBoards();
-  const { fetchColumnsForBoard, addColumn } = useColumns();
+  const columnService = new ColumnService(token);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const filterButtonRef = useRef(null);
 
   useEffect(() => {
-    const fetchBoardDetails = async () => {
+    const fetchColumns = async () => {
       try {
-        const board = await getBoard(boardId);
-        setColumns(board.columns);
+        const data = await columnService.getColumnsForBoard(boardId);
+        setColumns(data);
       } catch (error) {
-        console.error("Error fetching board details:", error);
+        console.error("Error fetching columns:", error);
       }
     };
 
     if (boardId) {
-      fetchBoardDetails();
+      console.log("Board ID in Board component:", boardId); // Log the board ID received
+      fetchColumns();
     }
-  }, [token, boardId, getBoard]);
+  }, [token, boardId]);
 
-  const handleColumnAdded = async (title) => {
-    try {
-      const newColumn = await addColumn(boardId, { titleColumn: title });
-      setColumns((prevColumns) => [...prevColumns, newColumn]);
-    } catch (error) {
-      console.error("Error adding column:", error);
-    }
+  const handleColumnAdded = (newColumn) => {
+    setColumns((prevColumns) => [...prevColumns, newColumn]);
   };
 
   const handleFilterChange = (filter) => {
@@ -85,7 +84,7 @@ const Board = () => {
 
   return (
     <BoardContainer>
-      <AddColumnButton onColumnAdded={handleColumnAdded} />
+      <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
       <ColumnsContainer>
         {columns.map((column) => (
           <Column

@@ -3,9 +3,9 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import Board from "../components/Board/Board";
 import styled from "styled-components";
 import { ThemeProvider } from "../utils/ThemeProvider";
-import { BoardProvider } from '../contexts/BoardContext';
-import { ColumnProvider } from '../contexts/ColumnContext';
 import { useState } from "react";
+import { BoardProvider } from "../contexts/BoardContext";
+import { ColumnProvider } from "../contexts/ColumnContext";
 
 const HomePageContainer = styled.div`
   display: flex;
@@ -33,16 +33,21 @@ const HomePage = () => {
     setIsOpen(!isOpen);
   };
 
+  const handleBoardSelect = (boardId) => {
+    console.log("Selected Board ID:", boardId); // Log the selected board ID
+    setSelectedBoardId(boardId);
+  };
+
   return (
     <ThemeProvider>
       <BoardProvider>
         <ColumnProvider>
           <HomePageContainer>
-            <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} setSelectedBoardId={setSelectedBoardId}/>
+            <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} setSelectedBoardId={handleBoardSelect} />
             <MainContent $isOpen={isOpen}>
               <Header isOpen={isOpen} />
               <Content>
-                <Board isOpen={isOpen} boardId={selectedBoardId}/>
+                {selectedBoardId ? <Board boardId={selectedBoardId} /> : <p>Please select a board</p>}
               </Content>
             </MainContent>
           </HomePageContainer>

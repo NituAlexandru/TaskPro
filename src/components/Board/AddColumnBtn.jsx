@@ -1,8 +1,7 @@
-import { useState, useContext } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "../Portal/Modal";
 import AddColumnModal from "../Portal/AddColumnModal";
-import { useBoards } from "../../contexts/BoardContext";
 
 const IconButton = styled.button`
   display: flex;
@@ -59,9 +58,8 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const AddColumnButton = () => {
+const AddColumnButton = ({ boardId, onColumnAdded }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { boardId } = useBoards();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -81,7 +79,7 @@ const AddColumnButton = () => {
           border="1px solid rgba(190, 219, 176, 0.5)"
           borderRadius="8px"
         >
-          <AddColumnModal closeModal={closeModal} boardId={boardId} />
+          <AddColumnModal closeModal={closeModal} boardId={boardId} onColumnAdded={onColumnAdded} />
         </Modal>
       )}
     </>

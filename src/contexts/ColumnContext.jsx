@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+// ColumnContext.js
+import React, { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import ColumnService from '../service/columnService';
 import { AuthContext } from './AuthContext';

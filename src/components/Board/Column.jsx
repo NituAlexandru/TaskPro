@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Card from "./TaskCard";
-import AddColumnButton from "./AddColumnBtn";
+import AddCard from "./AddCard";
 
 const ColumnContainer = styled.div`
   background-color: ${({ theme }) => theme.columnBackground};
@@ -33,7 +33,7 @@ const Column = ({ title, cards, columnId }) => {
           <Card key={card.id} {...card} />
         ))}
       </CardsList>
-      <AddColumnButton columnId={columnId} />
+      <AddCard columnId={columnId} />
     </ColumnContainer>
   );
 };

@@ -111,10 +111,8 @@ const LogOutImg = styled.img`
   stroke: #fff;
 `;
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+const Sidebar = ({ isOpen, toggleSidebar, setSelectedBoardId }) => {
   const { logout } = useContext(AuthContext);
-  const [selectedBoardId, setSelectedBoardId] = useState(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -134,7 +132,7 @@ const Sidebar = () => {
         </LogoContainer>
         <SidebarHeading>My boards</SidebarHeading>
         <NewBoardContainer />
-        <BoardList setSelectedBoardId={setSelectedBoardId}/>
+        <BoardList setSelectedBoardId={setSelectedBoardId} />
         <HelpList />
         <LogOutBtn onClick={handleLogout}>
           <LogOutImg src="/src/assets/icons/login.svg" alt="" />
