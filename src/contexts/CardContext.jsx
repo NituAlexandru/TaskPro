@@ -57,6 +57,22 @@ export const CardProvider = ({ children }) => {
       throw error;
     }
   };
+  
+  const deleteCard = async (columnId, cardId) => {
+    try {
+      await cardService.deleteCard(columnId, cardId);
+      setCards((prevCards) =>
+        prevCards.filter((card) => card._id !== cardId)
+      );
+    } catch (error) {
+      console.error(
+        "Error deleting card:",
+        error.response?.data || error.message
+      );
+      setError("Failed to delete card. Please try again later.");
+      throw error;
+    }
+  };
 
   return (
     <CardContext.Provider
@@ -66,6 +82,7 @@ export const CardProvider = ({ children }) => {
         fetchCardsForColumn,
         addCard,
         updateCard,
+        deleteCard
       }}
     >
       {children}

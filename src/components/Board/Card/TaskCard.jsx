@@ -47,8 +47,9 @@ const Card = ({
 
   const handleDelete = async () => {
     try {
-      await cardService.deleteCard(cardId);
+      await cardService.deleteCard(columnId, cardId); // Pass columnId and cardId
       onDelete(cardId);
+      fetchCardsForColumn(columnId); // Fetch cards again after deletion
     } catch (error) {
       console.error("Error deleting card:", error);
     }
@@ -56,7 +57,7 @@ const Card = ({
 
   const handleEditCard = async (values) => {
     try {
-      await cardService.updateCard(columnId, cardId, values);
+      await cardService.updateCard(columnId, cardId, values); // Pass columnId and cardId
       fetchCardsForColumn(columnId); // Fetch cards again after editing
       closeModal();
     } catch (error) {
@@ -137,5 +138,3 @@ Card.propTypes = {
 };
 
 export default Card;
-
-

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import Card from "..//Card/TaskCard";
+import Card from "../Card/TaskCard";
 import AddCardButton from "../AddCardBtn";
 import { useCards } from "../../../contexts/CardContext";
 import { useColumns } from "../../../contexts/ColumnContext";
