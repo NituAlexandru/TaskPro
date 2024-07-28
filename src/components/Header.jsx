@@ -3,7 +3,7 @@ import ThemeSwitcher from "./ThemeSwitcher";
 import { AuthContext } from "../contexts/AuthContext";
 import { ThemeContext } from "../utils/ThemeProvider";
 import { useContext, useState } from "react";
-import ProfileEditForm from "./Portal/UserModal";
+import ProfileEditForm from "./Portal/profileModal/UserModal";
 
 const HeaderContainer = styled.header`
   display: flex;
