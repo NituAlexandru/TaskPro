@@ -28,6 +28,18 @@ const Content = styled.div`
   overflow: hidden;
 `;
 
+const HomeParagraph = styled.p`
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.28571;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: ${({ theme }) => theme.text};
+  margin: auto auto;
+  max-width: 486px;
+`;
+
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [selectedBoardId, setSelectedBoardId] = useState(null);
@@ -58,7 +70,13 @@ const HomePage = () => {
                   {selectedBoardId ? (
                     <Board boardId={selectedBoardId} />
                   ) : (
-                    <p>Please select a board</p>
+                    <HomeParagraph>
+                      Before starting your project, it is essential
+                      <b> to create a board </b> to visualize and track all the
+                      necessary tasks and milestones. This board serves as a
+                      powerful tool to organize the workflow and ensure
+                      effective collaboration among team members.
+                    </HomeParagraph>
                   )}
                 </Content>
               </MainContent>

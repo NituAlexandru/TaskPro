@@ -33,7 +33,7 @@ const CardContentConteiner = styled.div`
 `;
 
 const CardPriorityColor = styled.div`
-  background-color: green;
+  background-color: ${({ color }) => color};
   width: 8px;
   border-radius: 8px 0 0 8px;
 `;
@@ -65,11 +65,13 @@ const CardFooter = styled.div`
 const Priority = styled.ul`
   display: flex;
   align-items: flex-start;
+  justify-content: space-between;
   gap: 20px;
   font-size: 14px;
   list-style: none;
   margin: 0;
   padding: 0;
+  width: 50%;
 `;
 
 const PriorityType = styled.li`
@@ -96,7 +98,7 @@ const PriorityColor = styled.div`
 `;
 
 const PriorityColorOne = styled.div`
-  background-color: red;
+  background-color: ${({ color }) => color};
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -144,7 +146,15 @@ const ModalContent = styled.div`
   border-radius: 8px;
 `;
 
-const Card = ({ cardId, title, description, priority, deadline, onDelete }) => {
+const Card = ({
+  cardId,
+  title,
+  description,
+  priority,
+  deadline,
+  onDelete,
+  priorityColor,
+}) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState("In progress");
@@ -175,16 +185,18 @@ const Card = ({ cardId, title, description, priority, deadline, onDelete }) => {
   const handleDelete = async () => {
     try {
       await cardService.deleteCard(cardId);
-      onDelete(cardId); // Notify parent component about the deletion
+      onDelete(cardId);
     } catch (error) {
       console.error("Error deleting card:", error);
     }
   };
 
+  const formattedDeadline = new Date(deadline).toLocaleDateString();
+
   return (
     <>
       <CardContainer>
-        <CardPriorityColor></CardPriorityColor>
+        <CardPriorityColor color={priorityColor}></CardPriorityColor>
         <CardContentConteiner>
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
@@ -193,13 +205,13 @@ const Card = ({ cardId, title, description, priority, deadline, onDelete }) => {
               <PriorityType>
                 <PriorityItem>Priority</PriorityItem>
                 <PriorityColor>
-                  <PriorityColorOne></PriorityColorOne>
+                  <PriorityColorOne color={priorityColor}></PriorityColorOne>
                   <PriorityColorTwo>{priority}</PriorityColorTwo>
                 </PriorityColor>
               </PriorityType>
               <PriorityType>
                 <PriorityItem>Deadline</PriorityItem>
-                <PriorityDate>{deadline}</PriorityDate>
+                <PriorityDate>{formattedDeadline}</PriorityDate>
               </PriorityType>
             </Priority>
             <Actions>
@@ -236,6 +248,7 @@ Card.propTypes = {
   priority: PropTypes.string.isRequired,
   deadline: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
+  priorityColor: PropTypes.string,
 };
 
 export default Card;

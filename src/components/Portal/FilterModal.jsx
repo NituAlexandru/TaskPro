@@ -138,7 +138,7 @@ const FilterModal = ({ isOpen, onClose, onFilterChange, buttonRef }) => {
       </Label>
       <FilterOption onClick={() => handleFilterChange("#797b78")}>
         <ColorIndicator color="#797b78" />
-        Without priority
+        Without
       </FilterOption>
       <FilterOption onClick={() => handleFilterChange("#8fa1d0")}>
         <ColorIndicator color="#8fa1d0" />

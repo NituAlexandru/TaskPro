@@ -119,6 +119,7 @@ const Column = ({ title, columnId }) => {
               description={card.description}
               priority={card.priority}
               deadline={card.deadline}
+              priorityColor={card.priorityColor}
               onDelete={handleDeleteCard}
             />
           ))}

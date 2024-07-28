@@ -7,7 +7,7 @@ import CustomCalendar from "../../utils/CustomCalendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCaretDown, FaPlus } from "react-icons/fa";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useCards } from '../../contexts/CardContext';
+import { useCards } from "../../contexts/CardContext";
 
 const ModalHeader = styled.div`
   display: flex;
@@ -181,12 +181,12 @@ const validationSchema = Yup.object({
 });
 
 const AddCardForm = ({ closeModal, columnId }) => {
-  const [priority, setPriority] = useState("without priority");
+  const [priority, setPriority] = useState("#797b78");
   const [deadline, setDeadline] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const labelColors = ["#797b78", "#8fa1d0", "#e09cb5", "#bedbb0"];
   const priorityMapping = {
-    "#797b78": "without priority",
+    "#797b78": "without",
     "#8fa1d0": "low",
     "#e09cb5": "medium",
     "#bedbb0": "high",
@@ -211,11 +211,12 @@ const AddCardForm = ({ closeModal, columnId }) => {
           try {
             const newCard = {
               ...values,
-              priority: priorityMapping[priority], // Map color to priority
+              priority: priorityMapping[priority],
               deadline,
-              columnId, // Include the columnId in the new card data
+              priorityColor: priority, // Add priorityColor here
+              columnId,
             };
-             console.log("New Card Data: ", newCard);
+            console.log("New Card Data: ", newCard);
             await addCard(columnId, newCard);
             closeModal();
           } catch (error) {

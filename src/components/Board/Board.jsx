@@ -14,6 +14,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import ColumnService from "../../service/columnService";
 import FilterModal from "../Portal/FilterModal";
 import { FiFilter } from "react-icons/fi";
+import Collaborators from "./Colaborators";
 
 const BoardContainer = styled.div`
   flex-grow: 1;
@@ -31,9 +32,15 @@ const BoardContainer = styled.div`
   }
 `;
 
+const BoardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 const AddTitleFilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  gap: 30px;
+  align-items: center;
 `;
 
 const ColumnsContainer = styled.div`
@@ -121,8 +128,12 @@ const Board = ({ boardId }) => {
 
   return (
     <BoardContainer>
-      <AddTitleFilterContainer>
-        <h2>Project title</h2>
+      <BoardHeader>
+        <AddTitleFilterContainer>
+          <h2>Project title</h2>
+          <Collaborators></Collaborators>
+        </AddTitleFilterContainer>
+
         <FilterButton
           ref={filterButtonRef}
           onClick={() => setIsFilterModalOpen(true)}
@@ -136,7 +147,7 @@ const Board = ({ boardId }) => {
           onFilterChange={handleFilterChange}
           buttonRef={filterButtonRef}
         />
-      </AddTitleFilterContainer>
+      </BoardHeader>
 
       <ColumnsContainer>
         {columns.map((column) => (
