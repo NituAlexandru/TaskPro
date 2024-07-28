@@ -4,23 +4,43 @@ import Card from "./TaskCard";
 import AddCardButton from "./AddCardBtn";
 import { useCards } from "../../contexts/CardContext";
 import { useEffect, useMemo } from "react";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 const ColumnContainer = styled.div`
   background-color: ${({ theme }) => theme.columnBackground};
   border-radius: 8px;
-  padding: 20px;
-  width: 300px;
-  margin: 10px;
+  padding: 0;
+  width: 334px;
+  margin: 0;
+`;
+
+const ColumnTitleContainer = styled.div`
+  color: ${({ theme }) => theme.text};
+  background-color: ${({ theme }) => theme.elementBackgroundColor};
+  margin: 0;
+  border-radius: 8px;
+  width: 334px;
+  height: 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
 `;
 
 const ColumnTitle = styled.h2`
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 18px;
-  color: ${({ theme }) => theme.text};
-  margin: 0 0 10px;
 `;
+const TitleButtonContainer = styled.div`
+  display: flex;
+  gap: 10px;
 
+  svg {
+    cursor: pointer;
+    stroke: rgba(255, 255, 255, 0.5);
+  }
+`;
 const CardsList = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,7 +65,13 @@ const Column = ({ title, columnId }) => {
 
   return (
     <ColumnContainer>
-      <ColumnTitle>{title}</ColumnTitle>
+      <ColumnTitleContainer>
+        <ColumnTitle>{title}</ColumnTitle>
+        <TitleButtonContainer>
+          <FiEdit />
+          <FiTrash2 />
+        </TitleButtonContainer>
+      </ColumnTitleContainer>
       <CardsList>
         {filteredCards.map((card) => (
           <Card

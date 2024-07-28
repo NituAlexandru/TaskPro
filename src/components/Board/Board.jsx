@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import Column from "./Column";
 import AddColumnButton from "./AddColumnBtn";
@@ -19,6 +20,11 @@ const BoardContainer = styled.div`
     height: 30px;
     width: 30px;
   }
+`;
+
+const AddTitleFilterContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const ColumnsContainer = styled.div`
@@ -72,7 +78,7 @@ const Board = ({ boardId }) => {
       console.log("Board ID in Board component:", boardId); // Log the board ID received
       fetchColumns();
     }
-  }, [token, boardId]);
+  }, [token, boardId, columnService]);
 
   const handleColumnAdded = (newColumn) => {
     setColumns((prevColumns) => [...prevColumns, newColumn]);
@@ -84,7 +90,23 @@ const Board = ({ boardId }) => {
 
   return (
     <BoardContainer>
-      <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
+      <AddTitleFilterContainer>
+        <h2>Project title</h2>
+        <FilterButton
+          ref={filterButtonRef}
+          onClick={() => setIsFilterModalOpen(true)}
+        >
+          <FiFilter />
+          Filters
+        </FilterButton>
+        <FilterModal
+          isOpen={isFilterModalOpen}
+          onClose={() => setIsFilterModalOpen(false)}
+          onFilterChange={handleFilterChange}
+          buttonRef={filterButtonRef}
+        />
+      </AddTitleFilterContainer>
+
       <ColumnsContainer>
         {columns.map((column) => (
           <Column
@@ -94,22 +116,14 @@ const Board = ({ boardId }) => {
             columnId={column._id}
           />
         ))}
+        <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
       </ColumnsContainer>
-      <FilterButton
-        ref={filterButtonRef}
-        onClick={() => setIsFilterModalOpen(true)}
-      >
-        <FiFilter />
-        Filters
-      </FilterButton>
-      <FilterModal
-        isOpen={isFilterModalOpen}
-        onClose={() => setIsFilterModalOpen(false)}
-        onFilterChange={handleFilterChange}
-        buttonRef={filterButtonRef}
-      />
     </BoardContainer>
   );
+};
+
+Board.propTypes = {
+  boardId: PropTypes.string.isRequired,
 };
 
 export default Board;

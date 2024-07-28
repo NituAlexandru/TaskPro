@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import Modal from "../Portal/Modal";
 import AddColumnModal from "../Portal/AddColumnModal";
@@ -79,12 +80,20 @@ const AddColumnButton = ({ boardId, onColumnAdded }) => {
           border="1px solid rgba(190, 219, 176, 0.5)"
           borderRadius="8px"
         >
-          <AddColumnModal closeModal={closeModal} boardId={boardId} onColumnAdded={onColumnAdded} />
+          <AddColumnModal
+            closeModal={closeModal}
+            boardId={boardId}
+            onColumnAdded={onColumnAdded}
+          />
         </Modal>
       )}
     </>
   );
 };
 
-export default AddColumnButton;
+AddColumnButton.propTypes = {
+  boardId: PropTypes.string.isRequired,
+  onColumnAdded: PropTypes.func.isRequired,
+};
 
+export default AddColumnButton;
