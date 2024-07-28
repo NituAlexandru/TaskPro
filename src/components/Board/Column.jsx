@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Card from "./TaskCard";
-import AddCard from "./AddCard";
+import AddCardButton from "./AddCardBtn";
 
 const ColumnContainer = styled.div`
   background-color: ${({ theme }) => theme.columnBackground};
@@ -25,6 +25,13 @@ const CardsList = styled.div`
 `;
 
 const Column = ({ title, cards, columnId }) => {
+  const handleCardAdded = (newCard) => {
+    console.log("New Card Added to Column:", newCard); // Log the new card added
+    // Update the state or props to reflect the new card addition
+  };
+
+  console.log("Rendering Column:", columnId); // Log the column ID being rendered
+
   return (
     <ColumnContainer>
       <ColumnTitle>{title}</ColumnTitle>
@@ -33,11 +40,9 @@ const Column = ({ title, cards, columnId }) => {
           <Card key={card.id} {...card} />
         ))}
       </CardsList>
-      <AddCard columnId={columnId} />
+      <AddCardButton columnId={columnId} onCardAdded={handleCardAdded} />
     </ColumnContainer>
   );
 };
 
 export default Column;
-
-  

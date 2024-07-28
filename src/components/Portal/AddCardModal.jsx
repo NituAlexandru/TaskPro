@@ -28,6 +28,7 @@ const Title = styled.h2`
   color: ${({ theme }) => theme.modalTextColor};
   margin: 0;
 `;
+
 const CloseButton = styled.button`
   border: none;
   background: none;
@@ -43,6 +44,7 @@ const CloseButton = styled.button`
     transform: scale(1.2);
   }
 `;
+
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
@@ -178,7 +180,7 @@ const validationSchema = Yup.object({
   description: Yup.string().required("Description is required"),
 });
 
-const AddCardForm = ({ closeModal, columnId = "default-column-id" }) => {
+const AddCardForm = ({ closeModal, columnId, onCardAdded }) => {
   const [labelColor, setLabelColor] = useState("pink");
   const [deadline, setDeadline] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -187,6 +189,8 @@ const AddCardForm = ({ closeModal, columnId = "default-column-id" }) => {
   const cardService = new CardService(token);
 
   const toggleCalendar = () => setIsCalendarOpen(!isCalendarOpen);
+
+  console.log("Column ID in AddCardForm:", columnId); // Log the column ID received
 
   return (
     <FormWrapper>
@@ -207,7 +211,9 @@ const AddCardForm = ({ closeModal, columnId = "default-column-id" }) => {
               labelColor,
               deadline,
             };
-            await cardService.addCard(columnId, newCard);
+            const addedCard = await cardService.addCard(columnId, newCard);
+            console.log("Added Card:", addedCard); // Log the added card
+            onCardAdded(addedCard);
             closeModal();
           } catch (error) {
             console.error("Error adding card:", error);
@@ -274,7 +280,8 @@ const AddCardForm = ({ closeModal, columnId = "default-column-id" }) => {
 
 AddCardForm.propTypes = {
   closeModal: PropTypes.func.isRequired,
-  columnId: PropTypes.string,
+  columnId: PropTypes.string.isRequired,
+  onCardAdded: PropTypes.func.isRequired,
 };
 
 export default AddCardForm;

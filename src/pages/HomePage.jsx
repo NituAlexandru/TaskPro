@@ -6,6 +6,7 @@ import { ThemeProvider } from "../utils/ThemeProvider";
 import { useState } from "react";
 import { BoardProvider } from "../contexts/BoardContext";
 import { ColumnProvider } from "../contexts/ColumnContext";
+import { CardProvider } from "../contexts/CardContext";
 
 const HomePageContainer = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ const HomePage = () => {
   };
 
   const handleBoardSelect = (boardId) => {
-    console.log("Selected Board ID:", boardId); // Log the selected board ID
+    console.log("Selected Board ID:", boardId);
     setSelectedBoardId(boardId);
   };
 
@@ -42,15 +43,17 @@ const HomePage = () => {
     <ThemeProvider>
       <BoardProvider>
         <ColumnProvider>
-          <HomePageContainer>
-            <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} setSelectedBoardId={handleBoardSelect} />
-            <MainContent $isOpen={isOpen}>
-              <Header isOpen={isOpen} />
-              <Content>
-                {selectedBoardId ? <Board boardId={selectedBoardId} /> : <p>Please select a board</p>}
-              </Content>
-            </MainContent>
-          </HomePageContainer>
+          <CardProvider>
+            <HomePageContainer>
+              <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} setSelectedBoardId={handleBoardSelect} />
+              <MainContent $isOpen={isOpen}>
+                <Header isOpen={isOpen} />
+                <Content>
+                  {selectedBoardId ? <Board boardId={selectedBoardId} /> : <p>Please select a board</p>}
+                </Content>
+              </MainContent>
+            </HomePageContainer>
+          </CardProvider>
         </ColumnProvider>
       </BoardProvider>
     </ThemeProvider>

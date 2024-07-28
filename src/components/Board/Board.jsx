@@ -6,7 +6,6 @@ import { AuthContext } from "../../contexts/AuthContext";
 import ColumnService from "../../service/columnService";
 import FilterModal from "../Portal/FilterModal";
 import { FiFilter } from "react-icons/fi";
-import Card from "./TaskCard";
 
 const BoardContainer = styled.div`
   flex-grow: 1;
@@ -27,6 +26,7 @@ const ColumnsContainer = styled.div`
   gap: 20px;
   overflow-x: auto;
 `;
+
 const FilterButton = styled.button`
   background: none;
   border: none;

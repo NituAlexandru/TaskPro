@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:4500/api'; // Adjust if needed
+const BASE_URL = 'http://localhost:4500/api';
 
 class CardService {
   constructor(token) {

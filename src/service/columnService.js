@@ -16,8 +16,8 @@ class ColumnService {
     return response.data;
   };
 
-  updateColumn = async (boardId, columnId, columnData) => {
-    const response = await axios.put(`${BASE_URL}/boards/${boardId}/columns/${columnId}`, columnData, {
+  updateColumn = async (columnId, columnData) => { // Update route to reflect the correct endpoint
+    const response = await axios.put(`${BASE_URL}/columns/${columnId}`, columnData, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
@@ -25,8 +25,8 @@ class ColumnService {
     return response.data;
   };
 
-  deleteColumn = async (boardId, columnId) => {
-    const response = await axios.delete(`${BASE_URL}/boards/${boardId}/columns/${columnId}`, {
+  deleteColumn = async (columnId) => { // Update route to reflect the correct endpoint
+    const response = await axios.delete(`${BASE_URL}/columns/${columnId}`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
