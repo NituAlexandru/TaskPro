@@ -100,6 +100,7 @@ const Board = ({ boardId }) => {
   const { token } = useContext(AuthContext);
   const columnService = useMemo(() => new ColumnService(token), [token]);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [filter, setFilter] = useState(null);
   const filterButtonRef = useRef(null);
 
   const fetchColumns = useCallback(async () => {
@@ -122,7 +123,8 @@ const Board = ({ boardId }) => {
     setColumns((prevColumns) => [...prevColumns, newColumn]);
   };
 
-  const handleFilterChange = (filter) => {
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
     setIsFilterModalOpen(false);
   };
 
@@ -156,6 +158,7 @@ const Board = ({ boardId }) => {
             title={column.titleColumn}
             cards={column.cards}
             columnId={column._id}
+            filter={filter}
           />
         ))}
         <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />

@@ -84,7 +84,7 @@ const CardsList = styled.div`
   }
 `;
 
-const Column = ({ title, columnId }) => {
+const Column = ({ title, columnId, filter }) => {
   const { fetchCardsForColumn, cards, deleteCard } = useCards();
 
   useEffect(() => {
@@ -92,8 +92,12 @@ const Column = ({ title, columnId }) => {
   }, [fetchCardsForColumn, columnId]);
 
   const filteredCards = useMemo(() => {
-    return cards.filter((card) => card.columnId === columnId);
-  }, [cards, columnId]);
+    return filter
+      ? cards.filter(
+          (card) => card.columnId === columnId && card.priorityColor === filter
+        )
+      : cards.filter((card) => card.columnId === columnId);
+  }, [cards, columnId, filter]);
 
   const handleDeleteCard = async (cardId) => {
     await deleteCard(cardId);
@@ -134,6 +138,7 @@ const Column = ({ title, columnId }) => {
 Column.propTypes = {
   title: PropTypes.string.isRequired,
   columnId: PropTypes.string.isRequired,
+  filter: PropTypes.string,
 };
 
 export default Column;
