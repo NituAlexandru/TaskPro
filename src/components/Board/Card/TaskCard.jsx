@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import PropTypes from "prop-types";
+import { Draggable } from "react-beautiful-dnd";
 import { FiEdit, FiTrash2, FiArrowRightCircle } from "react-icons/fi";
 import EditCardForm from "../../Portal/editCard/EditCardModal";
 import StatusModal from "../../Portal/CardStatusModal";
@@ -15,8 +16,8 @@ const Card = ({
   deadline,
   onDelete,
   priorityColor,
-  fetchCardsForColumn,
   columnId,
+  index,
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
@@ -47,9 +48,8 @@ const Card = ({
 
   const handleDelete = async () => {
     try {
-      await cardService.deleteCard(columnId, cardId); // Pass columnId and cardId
+      await cardService.deleteCard(cardId);
       onDelete(cardId);
-      fetchCardsForColumn(columnId); // Fetch cards again after deletion
     } catch (error) {
       console.error("Error deleting card:", error);
     }
@@ -57,7 +57,7 @@ const Card = ({
 
   const handleEditCard = async (values) => {
     try {
-      await cardService.updateCard(columnId, cardId, values); // Pass columnId and cardId
+      await cardService.updateCard(cardId, values);
       fetchCardsForColumn(columnId); // Fetch cards again after editing
       closeModal();
     } catch (error) {
@@ -68,60 +68,62 @@ const Card = ({
   const formattedDeadline = new Date(deadline).toLocaleDateString();
 
   return (
-    <>
-      <CardContainer>
-        <CardPriorityColor color={priorityColor}></CardPriorityColor>
-        <CardContentConteiner>
-          <CardTitle>{titleCard}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-          <CardFooter>
-            <Priority>
-              <PriorityType>
-                <PriorityItem>Priority</PriorityItem>
-                <PriorityColor>
-                  <PriorityColorOne color={priorityColor}></PriorityColorOne>
-                  <PriorityColorTwo>{priority}</PriorityColorTwo>
-                </PriorityColor>
-              </PriorityType>
-              <PriorityType>
-                <PriorityItem>Deadline</PriorityItem>
-                <PriorityDate>{formattedDeadline}</PriorityDate>
-              </PriorityType>
-            </Priority>
-            <Actions>
-              <FiArrowRightCircle onClick={openStatusModal} />
-              <FiEdit onClick={openModal} />
-              <FiTrash2 onClick={handleDelete} />
-            </Actions>
-          </CardFooter>
-        </CardContentConteiner>
-      </CardContainer>
-      {isEditModalOpen && (
-        <ModalWrapper>
-          <ModalContent>
-            <EditCardForm
-              closeModal={closeModal}
-              initialValues={{
-                titleCard,
-                description,
-                priority,
-                deadline: new Date(deadline), // Convert deadline to Date object
-                priorityColor,
-              }}
-              onSubmit={handleEditCard}
+    <Draggable draggableId={cardId} index={index}>
+      {(provided) => (
+        <CardContainer ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+          <CardPriorityColor color={priorityColor}></CardPriorityColor>
+          <CardContentConteiner>
+            <CardTitle>{titleCard}</CardTitle>
+            <CardDescription>{description}</CardDescription>
+            <CardFooter>
+              <Priority>
+                <PriorityType>
+                  <PriorityItem>Priority</PriorityItem>
+                  <PriorityColor>
+                    <PriorityColorOne color={priorityColor}></PriorityColorOne>
+                    <PriorityColorTwo>{priority}</PriorityColorTwo>
+                  </PriorityColor>
+                </PriorityType>
+                <PriorityType>
+                  <PriorityItem>Deadline</PriorityItem>
+                  <PriorityDate>{formattedDeadline}</PriorityDate>
+                </PriorityType>
+              </Priority>
+              <Actions>
+                <FiArrowRightCircle onClick={openStatusModal} />
+                <FiEdit onClick={openModal} />
+                <FiTrash2 onClick={handleDelete} />
+              </Actions>
+            </CardFooter>
+          </CardContentConteiner>
+          {isEditModalOpen && (
+            <ModalWrapper>
+              <ModalContent>
+                <EditCardForm
+                  closeModal={closeModal}
+                  initialValues={{
+                    titleCard,
+                    description,
+                    priority,
+                    deadline: new Date(deadline), // Convert deadline to Date object
+                    priorityColor,
+                  }}
+                  onSubmit={handleEditCard}
+                />
+              </ModalContent>
+            </ModalWrapper>
+          )}
+          {isStatusModalOpen && (
+            <StatusModal
+              isOpen={isStatusModalOpen}
+              onClose={closeStatusModal}
+              onStatusChange={handleStatusChange}
+              currentStatus={currentStatus}
             />
-          </ModalContent>
-        </ModalWrapper>
+          )}
+        </CardContainer>
       )}
-      {isStatusModalOpen && (
-        <StatusModal
-          isOpen={isStatusModalOpen}
-          onClose={closeStatusModal}
-          onStatusChange={handleStatusChange}
-          currentStatus={currentStatus}
-        />
-      )}
-    </>
+    </Draggable>
   );
 };
 
@@ -133,8 +135,8 @@ Card.propTypes = {
   deadline: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
   priorityColor: PropTypes.string,
-  fetchCardsForColumn: PropTypes.func.isRequired,
   columnId: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
 };
 
 export default Card;

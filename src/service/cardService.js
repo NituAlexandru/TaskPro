@@ -42,6 +42,15 @@ class CardService {
     });
     return response.data;
   };
-}
+
+  moveCard = async (columnId, cardId, destinationColumnId) => {
+    const response = await axios.patch(`${BASE_URL}/columns/${columnId}/cards/${cardId}/move`, { destinationColumnId }, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+    return response.data;
+  };
+};
 
 export default CardService;
