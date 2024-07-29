@@ -25,8 +25,8 @@ class CardService {
     return response.data;
   };
 
-  updateCard = async (columnId, cardId, cardData) => {
-    const response = await axios.put(`${BASE_URL}/columns/${columnId}/cards/${cardId}`, cardData, {
+  updateCard = async (cardId, cardData) => {
+    const response = await axios.put(`${BASE_URL}/cards/${cardId}`, cardData, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
@@ -34,8 +34,8 @@ class CardService {
     return response.data;
   };
 
-  deleteCard = async (columnId, cardId) => {
-    const response = await axios.delete(`${BASE_URL}/columns/${columnId}/cards/${cardId}`, {
+  deleteCard = async (cardId) => {
+    const response = await axios.delete(`${BASE_URL}/cards/${cardId}`, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
@@ -43,8 +43,8 @@ class CardService {
     return response.data;
   };
 
-  moveCard = async (columnId, cardId, destinationColumnId) => {
-    const response = await axios.patch(`${BASE_URL}/columns/${columnId}/cards/${cardId}/move`, { destinationColumnId }, {
+  moveCard = async (cardId, newColumnId) => {
+    const response = await axios.patch(`${BASE_URL}/cards/${cardId}/move`, { newColumnId }, {
       headers: {
         Authorization: `Bearer ${this.token}`,
       },
