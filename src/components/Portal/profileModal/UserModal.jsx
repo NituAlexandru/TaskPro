@@ -3,7 +3,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import axios from "axios";
-import { AuthContext } from '../../../contexts/AuthContext';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { AuthContext } from "../../../contexts/AuthContext";
 import {
   ErrorText,
   SubmitButton,
@@ -17,12 +18,16 @@ import {
   CloseButton,
   ModalContent,
   ModalOverlay,
+  IconButton,
 } from "./UserModal.styled";
 
 const ProfileEditForm = ({ onSubmit, onClose, user }) => {
   const { token, updateUser } = useContext(AuthContext);
   const [avatar, setAvatar] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(user?.avatarURL || '/default-avatar.png');
+  const [avatarPreview, setAvatarPreview] = useState(
+    user?.avatarURL || "/default-avatar.png"
+  );
+  const [showPassword, setShowPassword] = useState(false);
 
   const initialValues = {
     name: user?.name || "",
@@ -66,24 +71,35 @@ const ProfileEditForm = ({ onSubmit, onClose, user }) => {
         password: values.password,
       };
 
-      const response = await axios.patch(`${BASE_URL}/user/profile`, profileData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.patch(
+        `${BASE_URL}/user/profile`,
+        profileData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (avatar) {
         const formData = new FormData();
         formData.append("avatar", avatar);
 
-        const avatarResponse = await axios.patch(`${BASE_URL}/user/avatar`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
+        const avatarResponse = await axios.patch(
+          `${BASE_URL}/user/avatar`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        // Update the user context with the new avatar URL
+        updateUser({
+          ...response.data.user,
+          avatarURL: avatarResponse.data.avatarURL,
         });
-         // Update the user context with the new avatar URL
-         updateUser({ ...response.data.user, avatarURL: avatarResponse.data.avatarURL });
       } else {
         // Update the user context with the new profile data
         updateUser(response.data.user);
@@ -97,6 +113,8 @@ const ProfileEditForm = ({ onSubmit, onClose, user }) => {
       setSubmitting(false);
     }
   };
+
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   return (
     <ModalOverlay onClick={handleOverlayClick}>
@@ -133,11 +151,24 @@ const ProfileEditForm = ({ onSubmit, onClose, user }) => {
                 <ErrorMessage name="name" component={ErrorText} />
               </InputWrapper>
               <InputWrapper>
-                <Field as={Input} type="email" name="email" placeholder="Email" />
+                <Field
+                  as={Input}
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                />
                 <ErrorMessage name="email" component={ErrorText} />
               </InputWrapper>
               <InputWrapper>
-                <Field as={Input} type="password" name="password" placeholder="Password" />
+                <Field
+                  as={Input}
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                />
+                <IconButton onClick={togglePasswordVisibility} type="button">
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </IconButton>
                 <ErrorMessage name="password" component={ErrorText} />
               </InputWrapper>
               <SubmitButton type="submit" disabled={isSubmitting}>

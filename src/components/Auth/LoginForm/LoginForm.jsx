@@ -1,11 +1,11 @@
-// src/components/Auth/LoginForm.jsx
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { FaGoogle } from "react-icons/fa";
+import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
+import PasswordStrengthBar from "react-password-strength-bar";
 import { useLoader } from "../../../hooks/useLoader";
 import {
   FormContainer,
@@ -13,6 +13,8 @@ import {
   Title,
   ToggleLink,
   Input,
+  InputWrapper,
+  IconButton,
   StyledErrorMessage,
   SubmitButton,
   GoogleButton,
@@ -24,9 +26,13 @@ const validationSchema = Yup.object({
 });
 
 const LoginForm = ({ onSuccess }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
   const { loginUser } = useContext(AuthContext);
   const { showLoader, hideLoader } = useLoader();
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   return (
     <FormContainer>
@@ -46,7 +52,7 @@ const LoginForm = ({ onSuccess }) => {
           }
         }}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <StyledForm>
             <div className="toggle-container">
               <ToggleLink onClick={() => navigate("/register")}>
@@ -56,11 +62,21 @@ const LoginForm = ({ onSuccess }) => {
             </div>
             <Input type="email" name="email" placeholder="Enter your email" />
             <StyledErrorMessage name="email" component="div" />
-            <Input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-            />
+            <InputWrapper>
+              <Input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter your password"
+                onChange={(e) => {
+                  setFieldValue("password", e.target.value);
+                  setPassword(e.target.value);
+                }}
+              />
+              <IconButton onClick={togglePasswordVisibility} type="button">
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </IconButton>
+            </InputWrapper>
+            <PasswordStrengthBar password={password} />
             <StyledErrorMessage name="password" component="div" />
             <SubmitButton type="submit" disabled={isSubmitting}>
               Log In Now

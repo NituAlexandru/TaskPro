@@ -113,6 +113,27 @@ export const Input = styled(Field)`
   }
 `;
 
+export const IconButton = styled.button`
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  margin: 0;
+
+  &:hover {
+    background-color: transparent;
+  }
+  &:active {
+    background-color: transparent;
+  }
+
+  &:focus {
+    background-color: transparent;
+  }
+`;
+
 export const SubmitButton = styled.button`
   padding: 10px;
   border-radius: 8px;
