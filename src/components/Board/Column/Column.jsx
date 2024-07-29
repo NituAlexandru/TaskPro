@@ -6,7 +6,14 @@ import AddCardButton from "../AddCardBtn";
 import { useCards } from "../../../contexts/CardContext";
 import { useColumns } from "../../../contexts/ColumnContext";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import { ColumnContainer, ColumnSmallContainer, ColumnTitle, ColumnTitleContainer, TitleButtonContainer, CardsList } from "./Column.styled";
+import { 
+  ColumnContainer, 
+  ColumnSmallContainer, 
+  ColumnTitle, 
+  ColumnTitleContainer, 
+  TitleButtonContainer, 
+  CardsList 
+} from "./Column.styled";
 import EditColumnModal from "../../Portal/editColumn/EditColumnModal";
 import Modal from "../../Portal/Modal";
 
@@ -17,9 +24,11 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
   const [columnTitle, setColumnTitle] = useState(title);
 
   useEffect(() => {
-    fetchCardsForColumn(columnId);
-    console.log(`fetchCardsForColumn called with columnId: ${columnId}`);
-  }, [fetchCardsForColumn, columnId]);
+    if (boardId && columnId) {
+      fetchCardsForColumn(boardId, columnId);
+      console.log(`fetchCardsForColumn called with boardId: ${boardId}, columnId: ${columnId}`);
+    }
+  }, [fetchCardsForColumn, boardId, columnId]);
 
   useEffect(() => {
     console.log(`Column component: columnId: ${columnId}, boardId: ${boardId}`);
@@ -34,8 +43,12 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
   }, [cards, columnId, filter]);
 
   const handleDeleteCard = async (cardId) => {
-    await deleteCard(cardId);
-    fetchCardsForColumn(columnId);
+    try {
+      await deleteCard(boardId, columnId, cardId);
+      fetchCardsForColumn(boardId, columnId);
+    } catch (error) {
+      console.error("Error deleting card:", error);
+    }
   };
 
   const handleDeleteColumn = async () => {
@@ -78,8 +91,8 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
                         priority={card.priority}
                         deadline={card.deadline}
                         priorityColor={card.priorityColor}
-                        onDelete={() => handleDeleteCard(card._id)}
-                        fetchCardsForColumn={fetchCardsForColumn}
+                        onDelete={handleDeleteCard}
+                        boardId={boardId}
                         columnId={columnId}
                         index={index} // Ensure index is passed here
                       />
@@ -91,7 +104,7 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
             </CardsList>
           </ColumnSmallContainer>
 
-          <AddCardButton columnId={columnId} />
+          <AddCardButton boardId={boardId} columnId={columnId} />
           {isEditModalOpen && (
             <Modal
               isOpen={isEditModalOpen}
@@ -123,9 +136,4 @@ Column.propTypes = {
 };
 
 export default Column;
-
-
-
-
-
 

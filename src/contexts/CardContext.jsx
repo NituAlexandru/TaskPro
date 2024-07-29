@@ -13,10 +13,10 @@ export const CardProvider = ({ children }) => {
   const cardService = useMemo(() => new CardService(token), [token]);
 
   const fetchCardsForColumn = useCallback(
-    async (columnId) => {
-      console.log(`fetchCardsForColumn called with columnId: ${columnId}`);
+    async (boardId, columnId) => {
+      console.log(`fetchCardsForColumn called with boardId: ${boardId}, columnId: ${columnId}`);
       try {
-        const data = await cardService.getCardsForColumn(columnId);
+        const data = await cardService.getCardsForColumn(boardId, columnId);
         console.log(`Fetched cards:`, data);
         setCards((prevCards) => {
           const filteredCards = prevCards.filter((card) => card.columnId !== columnId);
@@ -35,9 +35,9 @@ export const CardProvider = ({ children }) => {
     [cardService]
   );
 
-  const addCard = async (columnId, cardData) => {
+  const addCard = async (boardId, columnId, cardData) => {
     try {
-      const newCard = await cardService.addCard(columnId, cardData);
+      const newCard = await cardService.addCard(boardId, columnId, cardData);
       setCards((prevCards) => [...prevCards, newCard]);
       return newCard;
     } catch (error) {
@@ -47,9 +47,9 @@ export const CardProvider = ({ children }) => {
     }
   };
 
-  const updateCard = async (cardId, cardData) => {
+  const updateCard = async (boardId, columnId, cardId, cardData) => {
     try {
-      const updatedCard = await cardService.updateCard(cardId, cardData);
+      const updatedCard = await cardService.updateCard(boardId, columnId, cardId, cardData);
       setCards((prevCards) =>
         prevCards.map((card) => (card._id === cardId ? updatedCard : card))
       );
@@ -61,9 +61,9 @@ export const CardProvider = ({ children }) => {
     }
   };
 
-  const deleteCard = async (cardId) => {
+  const deleteCard = async (boardId, columnId, cardId) => {
     try {
-      await cardService.deleteCard(cardId);
+      await cardService.deleteCard(boardId, columnId, cardId);
       setCards((prevCards) => prevCards.filter((card) => card._id !== cardId));
     } catch (error) {
       console.error("Error deleting card:", error.response?.data || error.message);
@@ -72,9 +72,9 @@ export const CardProvider = ({ children }) => {
     }
   };
 
-  const moveCard = async (cardId, newColumnId) => {
+  const moveCard = async (boardId, columnId, cardId, newColumnId) => {
     try {
-      const movedCard = await cardService.moveCard(cardId, newColumnId);
+      const movedCard = await cardService.moveCard(boardId, columnId, cardId, newColumnId);
       setCards((prevCards) =>
         prevCards.map((card) => (card._id === cardId ? movedCard : card))
       );

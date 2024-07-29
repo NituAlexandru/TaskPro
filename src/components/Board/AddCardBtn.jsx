@@ -57,15 +57,15 @@ const AddParagraph = styled.p`
   margin: 0;
 `;
 
-const AddCardButton = ({ columnId }) => {
+const AddCardButton = ({ boardId, columnId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { fetchCardsForColumn } = useCards();
+  const { addCard, fetchCardsForColumn } = useCards();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   const handleCardAdded = async () => {
-    await fetchCardsForColumn(columnId);
+    await fetchCardsForColumn(boardId, columnId);
     closeModal();
   };
 
@@ -84,7 +84,7 @@ const AddCardButton = ({ columnId }) => {
           border="1px solid rgba(190, 219, 176, 0.5)"
           borderRadius="8px"
         >
-          <AddCardForm closeModal={handleCardAdded} columnId={columnId} />
+          <AddCardForm closeModal={handleCardAdded} boardId={boardId} columnId={columnId} />
         </Modal>
       )}
     </>
@@ -92,7 +92,9 @@ const AddCardButton = ({ columnId }) => {
 };
 
 AddCardButton.propTypes = {
+  boardId: PropTypes.string.isRequired,
   columnId: PropTypes.string.isRequired,
 };
 
 export default AddCardButton;
+

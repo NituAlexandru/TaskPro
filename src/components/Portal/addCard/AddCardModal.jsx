@@ -5,16 +5,34 @@ import PropTypes from "prop-types";
 import CustomCalendar from "../../../utils/CustomCalendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCaretDown, FaPlus } from "react-icons/fa";
-// import { AuthContext } from "../../contexts/AuthContext";
 import { useCards } from "../../../contexts/CardContext";
-import { ModalHeader, FormWrapper, Title, CloseButton,StyledForm, InputWrapper, Input, IconWrapper,TextareaWrapper, Textarea, ErrorMessageStyled, LabelColorContainer, Label, ColorOption, DatePickerWrapper, CalendarToggle, CalendarPopup, SubmitButton } from "./AddCardModal.styled";
+import {
+  ModalHeader,
+  FormWrapper,
+  Title,
+  CloseButton,
+  StyledForm,
+  InputWrapper,
+  Input,
+  IconWrapper,
+  TextareaWrapper,
+  Textarea,
+  ErrorMessageStyled,
+  LabelColorContainer,
+  Label,
+  ColorOption,
+  DatePickerWrapper,
+  CalendarToggle,
+  CalendarPopup,
+  SubmitButton
+} from "./AddCardModal.styled";
 
 const validationSchema = Yup.object({
   titleCard: Yup.string().required("Title is required"),
   description: Yup.string().required("Description is required"),
 });
 
-const AddCardForm = ({ closeModal, columnId }) => {
+const AddCardForm = ({ closeModal, boardId, columnId }) => {
   const [priority, setPriority] = useState("#797b78");
   const [deadline, setDeadline] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -25,7 +43,6 @@ const AddCardForm = ({ closeModal, columnId }) => {
     "#e09cb5": "medium",
     "#bedbb0": "high",
   };
-  // const { token } = useContext(AuthContext);
   const { addCard } = useCards();
   const toggleCalendar = () => setIsCalendarOpen(!isCalendarOpen);
 
@@ -47,11 +64,11 @@ const AddCardForm = ({ closeModal, columnId }) => {
               ...values,
               priority: priorityMapping[priority],
               deadline,
-              priorityColor: priority, // Add priorityColor here
+              priorityColor: priority,
               columnId,
             };
             console.log("New Card Data: ", newCard);
-            await addCard(columnId, newCard);
+            await addCard(boardId, columnId, newCard);
             closeModal();
           } catch (error) {
             console.error("Error adding card:", error);
@@ -118,6 +135,7 @@ const AddCardForm = ({ closeModal, columnId }) => {
 
 AddCardForm.propTypes = {
   closeModal: PropTypes.func.isRequired,
+  boardId: PropTypes.string.isRequired,
   columnId: PropTypes.string.isRequired,
 };
 

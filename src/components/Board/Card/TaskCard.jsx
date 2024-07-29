@@ -4,9 +4,26 @@ import { Draggable } from "react-beautiful-dnd";
 import { FiEdit, FiTrash2, FiArrowRightCircle } from "react-icons/fi";
 import EditCardForm from "../../Portal/editCard/EditCardModal";
 import StatusModal from "../../Portal/CardStatusModal";
-import CardService from "../../../service/cardService";
-import { CardContainer, CardContentConteiner, CardPriorityColor, CardTitle, CardDescription, CardFooter, Priority, PriorityType, PriorityItem, PriorityDate, PriorityColor, PriorityColorOne, PriorityColorTwo, Actions, ModalWrapper, ModalContent } from "./TaskCard.styled";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { useCards } from "../../../contexts/CardContext";
+import {
+  CardContainer,
+  CardContentConteiner,
+  CardPriorityColor,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+  Priority,
+  PriorityType,
+  PriorityItem,
+  PriorityDate,
+  PriorityColor,
+  PriorityColorOne,
+  PriorityColorTwo,
+  Actions,
+  ModalWrapper,
+  ModalContent
+} from "./TaskCard.styled";
 
 const Card = ({
   cardId,
@@ -16,14 +33,15 @@ const Card = ({
   deadline,
   onDelete,
   priorityColor,
+  boardId,
   columnId,
-  index,
+  index
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState("In progress");
   const { token } = useContext(AuthContext);
-  const cardService = new CardService(token);
+  const { fetchCardsForColumn, updateCard } = useCards();
 
   const openModal = () => {
     setIsEditModalOpen(true);
@@ -46,19 +64,10 @@ const Card = ({
     setIsStatusModalOpen(false);
   };
 
-  const handleDelete = async () => {
-    try {
-      await cardService.deleteCard(cardId);
-      onDelete(cardId);
-    } catch (error) {
-      console.error("Error deleting card:", error);
-    }
-  };
-
   const handleEditCard = async (values) => {
     try {
-      await cardService.updateCard(cardId, values);
-      fetchCardsForColumn(columnId); // Fetch cards again after editing
+      await updateCard(boardId, columnId, cardId, values);
+      fetchCardsForColumn(boardId, columnId); // Fetch cards again after editing
       closeModal();
     } catch (error) {
       console.error("Error editing card:", error);
@@ -92,7 +101,7 @@ const Card = ({
               <Actions>
                 <FiArrowRightCircle onClick={openStatusModal} />
                 <FiEdit onClick={openModal} />
-                <FiTrash2 onClick={handleDelete} />
+                <FiTrash2 onClick={() => onDelete(cardId)} />
               </Actions>
             </CardFooter>
           </CardContentConteiner>
@@ -135,6 +144,7 @@ Card.propTypes = {
   deadline: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
   priorityColor: PropTypes.string,
+  boardId: PropTypes.string.isRequired,
   columnId: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
 };
