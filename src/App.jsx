@@ -6,15 +6,17 @@ import HomePage from "./pages/HomePage/HomePage.jsx";
 import GlobalStyles from "./utils/GlobalStyles";
 import { ThemeProvider } from "./utils/ThemeProvider";
 import { AuthProvider } from "./contexts/AuthContext";
-import { LoaderProvider } from "./contexts/LoaderContext"; 
+import { BoardProvider } from "./contexts/BoardContext"; 
 import AuthCallback from "./components/Auth/AuthCallback.jsx";
+import { LoaderProvider } from "./contexts/LoaderContext.jsx";
 
 function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
+        <GlobalStyles />
         <LoaderProvider>
-          <GlobalStyles />
+        <BoardProvider>
           <Router>
             <Routes>
               <Route path="/" element={<StartPage />} />
@@ -22,8 +24,10 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/home" element={<HomePage />} />
+              <Route path="/home/:titleBoard" element={<HomePage />} />
             </Routes>
           </Router>
+        </BoardProvider>
         </LoaderProvider>
       </ThemeProvider>
     </AuthProvider>
@@ -31,4 +35,5 @@ function App() {
 }
 
 export default App;
+
 

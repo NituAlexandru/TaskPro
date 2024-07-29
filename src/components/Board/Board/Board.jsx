@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback, useContext, useRef } from "react";
-import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import { FilterButton, ColumnsContainer, AddTitleFilterContainer, BoardContainer, BoardHeader } from "./Board.styled";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -12,8 +11,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import Collaborators from "../Colaborators";
 import CardService from "../../../service/cardService";
 
-const Board = () => {
-  const { boardId, titleBoard } = useParams(); // Get boardId and titleBoard from params
+const Board = ({ boardId, titleBoard }) => {
   const [columns, setColumns] = useState([]);
   const { token } = useContext(AuthContext);
   const columnService = useMemo(() => new ColumnService(token), [token]);
@@ -33,7 +31,7 @@ const Board = () => {
 
   useEffect(() => {
     if (boardId) {
-      console.log("Board ID in Board component:", boardId);
+      console.log("Board ID in Board component:", boardId); // Debugging step
       fetchColumns();
     }
   }, [fetchColumns, boardId]);
@@ -94,7 +92,7 @@ const Board = () => {
     <BoardContainer>
       <BoardHeader>
         <AddTitleFilterContainer>
-          <h2>{titleBoard}</h2>
+          <h2>{titleBoard}</h2> {/* Display titleBoard here */}
           <Collaborators />
         </AddTitleFilterContainer>
 
@@ -127,7 +125,7 @@ const Board = () => {
                 />
               ))}
               {provided.placeholder}
-              <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
+              <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} /> {/* Pass boardId */}
             </ColumnsContainer>
           )}
         </Droppable>
@@ -138,6 +136,7 @@ const Board = () => {
 
 Board.propTypes = {
   boardId: PropTypes.string.isRequired,
+  titleBoard: PropTypes.string.isRequired, // Add titleBoard to PropTypes
 };
 
 export default Board;

@@ -45,7 +45,7 @@ const HomePage = () => {
               <Header isOpen={isOpen} />
               <Content>
                 {selectedBoardId ? (
-                  <Board boardId={selectedBoardId} />
+                  <Board boardId={selectedBoardId} titleBoard={titleBoard} />
                 ) : (
                   <HomeParagraph>
                     Before starting your project, it is essential
@@ -65,5 +65,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
 
