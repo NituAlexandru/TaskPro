@@ -281,11 +281,11 @@ const NewBoardModal = ({ closeModal }) => {
           </Backgrounds>
         </Section>
         <CreateButton onClick={handleSubmit} disabled={loading}>
-          {loading ? <img src={loadingIcon} alt="loading" /> : (
+        
             <>
               <CreateButtonAdd>+</CreateButtonAdd> Create
             </>
-          )}
+  
         </CreateButton>
       </ModalBody>
     </div>

@@ -297,11 +297,9 @@ const EditBoardModal = ({ closeModal, boardId }) => {
           </Backgrounds>
         </Section>
         <CreateButton onClick={handleSubmit} disabled={loading}>
-          {loading ? <img src={loadingIcon} alt="loading" /> : (
             <>
               <CreateButtonAdd>+</CreateButtonAdd> Edit
             </>
-          )}
         </CreateButton>
       </ModalBody>
     </div>
