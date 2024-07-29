@@ -47,6 +47,9 @@ export const darkTheme = {
   filterShowAllBtn: "rgba(255, 255, 255, 0.5);",
   errorColor: "red",
   focusBorderColor: "#bedbb0",
+  loaderBackground: "rgba(0, 0, 0, 0.8)",
+  spinnerBorder: "rgba(255, 255, 255, 0.2)",
+  spinnerBorderLeftColor: "#bedbb0",
 };
 
 export const lightTheme = {
@@ -98,6 +101,9 @@ export const lightTheme = {
   filterShowAllBtn: "rgba(0, 0, 0, 0.5);",
   errorColor: "red",
   focusBorderColor: "#bedbb0",
+  loaderBackground: "rgba(255, 255, 255, 0.9)",
+  spinnerBorder: "rgba(0, 0, 0, 0.1)",
+  spinnerBorderLeftColor: "#22a6b3",
 };
 
 export const violetTheme = {
@@ -149,4 +155,7 @@ export const violetTheme = {
   filterShowAllBtn: "rgba(0, 0, 0, 0.5);",
   errorColor: "red",
   focusBorderColor: "#5255bc",
+  loaderBackground: "rgba(40, 44, 52, 0.8)",
+  spinnerBorder: "rgba(255, 255, 255, 0.2)",
+  spinnerBorderLeftColor: "#7b7ede",
 };

@@ -1,11 +1,11 @@
-// src/components/Auth/RegisterForm.jsx
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { FaGoogle } from "react-icons/fa";
+import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
+import PasswordStrengthBar from "react-password-strength-bar";
 import { useLoader } from "../../../hooks/useLoader";
 import {
   FormContainer,
@@ -13,6 +13,8 @@ import {
   Title,
   ToggleLink,
   Input,
+  InputWrapper,
+  IconButton,
   StyledErrorMessage,
   SubmitButton,
   GoogleButton,
@@ -28,6 +30,7 @@ const RegisterForm = ({ onSuccess }) => {
   const { registerUser } = useContext(AuthContext);
   const { showLoader, hideLoader } = useLoader();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <FormContainer>
@@ -47,7 +50,7 @@ const RegisterForm = ({ onSuccess }) => {
           }
         }}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, handleChange, values }) => (
           <StyledForm>
             <div className="toggle-container">
               <Title>Registration</Title>
@@ -57,11 +60,21 @@ const RegisterForm = ({ onSuccess }) => {
             <StyledErrorMessage name="name" component="div" />
             <Input type="email" name="email" placeholder="Enter your email" />
             <StyledErrorMessage name="email" component="div" />
-            <Input
-              type="password"
-              name="password"
-              placeholder="Create a password"
-            />
+            <InputWrapper>
+              <Input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Create a password"
+                onChange={handleChange}
+              />
+              <IconButton
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </IconButton>
+            </InputWrapper>
+            <PasswordStrengthBar password={values.password} />
             <StyledErrorMessage name="password" component="div" />
             <SubmitButton type="submit" disabled={isSubmitting}>
               Register Now

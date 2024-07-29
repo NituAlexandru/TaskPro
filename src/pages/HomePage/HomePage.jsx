@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar/SideBar/Sidebar";
@@ -36,7 +36,7 @@ const HomePage = () => {
             <Sidebar
               isOpen={isOpen}
               toggleSidebar={toggleSidebar}
-              setSelectedBoardId={(boardId, titleBoard) => {
+              setSelectedBoardId={(boardId) => {
                 setSelectedBoardId(boardId);
                 // Optionally navigate or handle logic if needed
               }}

@@ -67,7 +67,7 @@ export const ToggleLink = styled.div`
 export const Input = styled(Field)`
   border: 1px solid #bedbb0;
   border-radius: 8px;
-  width: 344px;
+  width: 100%;
   height: 49px;
   box-shadow: 0 4px 16px 0 rgba(22, 22, 22, 0.08);
   background: #1f1f1f;
@@ -77,8 +77,35 @@ export const Input = styled(Field)`
   margin: 0;
 
   @media (max-width: 500px) {
-    width: auto;
+    width: 100%;
     padding: 1rem;
+  }
+`;
+
+export const InputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+export const IconButton = styled.button`
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  margin: 0;
+
+  &:hover {
+    background-color: transparent;
+  }
+  &:active {
+    background-color: transparent;
+  }
+
+  &:focus {
+    background-color: transparent;
   }
 `;
 
@@ -92,7 +119,7 @@ export const StyledErrorMessage = styled(ErrorMessage)`
 export const SubmitButton = styled.button`
   font-family: "Poppins", sans-serif;
   border-radius: 8px;
-  width: 344px;
+  width: 100%;
   height: 49px;
   background: #bedbb0;
   cursor: pointer;
@@ -124,7 +151,7 @@ export const GoogleButton = styled.a`
   padding: 10px 0;
   border-radius: 8px;
   text-decoration: none;
-  width: 344px;
+  width: 100%;
   height: 49px;
   font-family: "Poppins", sans-serif;
   font-weight: 500;

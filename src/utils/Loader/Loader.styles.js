@@ -11,16 +11,19 @@ export const LoaderWrapper = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background: rgba(255, 255, 255, 0.7);
+  background: ${({ theme }) =>
+    theme.loaderBackground || "rgba(255, 255, 255, 0.7)"};
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 100;
 `;
 
 export const Spinner = styled.div`
-  border: 8px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #22a6b3;
+  border: 8px solid
+    ${({ theme }) => theme.spinnerBorder || "rgba(0, 0, 0, 0.1)"};
+  border-left-color: ${({ theme }) =>
+    theme.spinnerBorderLeftColor || "#22a6b3"};
   border-radius: 50%;
   width: 64px;
   height: 64px;
