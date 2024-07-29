@@ -72,6 +72,20 @@ export const CardProvider = ({ children }) => {
     }
   };
 
+  const moveCard = async (cardId, newColumnId) => {
+    try {
+      const movedCard = await cardService.moveCard(cardId, newColumnId);
+      setCards((prevCards) =>
+        prevCards.map((card) => (card._id === cardId ? movedCard : card))
+      );
+      return movedCard;
+    } catch (error) {
+      console.error("Error moving card:", error.response?.data || error.message);
+      setError("Failed to move card. Please try again later.");
+      throw error;
+    }
+  };
+
   return (
     <CardContext.Provider
       value={{
@@ -81,6 +95,7 @@ export const CardProvider = ({ children }) => {
         addCard,
         updateCard,
         deleteCard,
+        moveCard,
       }}
     >
       {children}

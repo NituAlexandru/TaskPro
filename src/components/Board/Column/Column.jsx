@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
-import { Droppable } from "react-beautiful-dnd";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 import Card from "../Card/TaskCard";
 import AddCardButton from "../AddCardBtn";
 import { useCards } from "../../../contexts/CardContext";
@@ -10,8 +10,8 @@ import { ColumnContainer, ColumnSmallContainer, ColumnTitle, ColumnTitleContaine
 import EditColumnModal from "../../Portal/editColumn/EditColumnModal";
 import Modal from "../../Portal/Modal";
 
-const Column = ({ title, columnId, filter, boardId, fetchColumns, index }) => {
-  const { fetchCardsForColumn, cards, deleteCard, updateCard } = useCards();
+const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
+  const { fetchCardsForColumn, cards, deleteCard } = useCards();
   const { deleteColumn, updateColumn } = useColumns();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [columnTitle, setColumnTitle] = useState(title);
@@ -64,19 +64,28 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns, index }) => {
             </ColumnTitleContainer>
             <CardsList>
               {filteredCards.map((card, index) => (
-                <Card
-                  key={card._id}
-                  cardId={card._id}
-                  titleCard={card.titleCard}
-                  description={card.description}
-                  priority={card.priority}
-                  deadline={card.deadline}
-                  priorityColor={card.priorityColor}
-                  onDelete={() => handleDeleteCard(card._id)}
-                  fetchCardsForColumn={fetchCardsForColumn}
-                  columnId={columnId}
-                  index={index}
-                />
+                <Draggable key={card._id} draggableId={card._id} index={index}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <Card
+                        cardId={card._id}
+                        titleCard={card.titleCard}
+                        description={card.description}
+                        priority={card.priority}
+                        deadline={card.deadline}
+                        priorityColor={card.priorityColor}
+                        onDelete={() => handleDeleteCard(card._id)}
+                        fetchCardsForColumn={fetchCardsForColumn}
+                        columnId={columnId}
+                        index={index} // Ensure index is passed here
+                      />
+                    </div>
+                  )}
+                </Draggable>
               ))}
               {provided.placeholder}
             </CardsList>
@@ -111,10 +120,12 @@ Column.propTypes = {
   filter: PropTypes.string,
   boardId: PropTypes.string.isRequired,
   fetchColumns: PropTypes.func.isRequired,
-  index: PropTypes.number.isRequired,
 };
 
 export default Column;
+
+
+
 
 
 

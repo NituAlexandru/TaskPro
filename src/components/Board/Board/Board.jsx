@@ -116,7 +116,6 @@ const Board = ({ boardId, titleBoard }) => {
                 <Column
                   key={column._id}
                   title={column.titleColumn}
-                  cards={column.cards}
                   columnId={column._id}
                   filter={filter}
                   boardId={boardId}
@@ -140,3 +139,5 @@ Board.propTypes = {
 };
 
 export default Board;
+
+
