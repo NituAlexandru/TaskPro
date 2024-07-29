@@ -6,15 +6,15 @@ import HomePage from "./pages/HomePage/HomePage.jsx";
 import GlobalStyles from "./utils/GlobalStyles";
 import { ThemeProvider } from "./utils/ThemeProvider";
 import { AuthProvider } from "./contexts/AuthContext";
-import { BoardProvider } from "./contexts/BoardContext"; 
+import { LoaderProvider } from "./contexts/LoaderContext"; 
 import AuthCallback from "./components/Auth/AuthCallback.jsx";
 
 function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <GlobalStyles />
-        <BoardProvider>
+        <LoaderProvider>
+          <GlobalStyles />
           <Router>
             <Routes>
               <Route path="/" element={<StartPage />} />
@@ -22,13 +22,13 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/home/:titleBoard" element={<HomePage />} />
             </Routes>
           </Router>
-        </BoardProvider>
+        </LoaderProvider>
       </ThemeProvider>
     </AuthProvider>
   );
 }
 
 export default App;
+

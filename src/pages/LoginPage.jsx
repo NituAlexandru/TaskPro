@@ -1,7 +1,11 @@
-import LoginForm from "../components/Auth/LoginForm";
+import LoginForm from "../components/Auth/LoginForm/LoginForm";
+import { useLoader } from "../hooks/useLoader";
 
 const LoginPage = () => {
+  const { hideLoader } = useLoader();
+
   const handleSuccess = () => {
+    hideLoader();
     window.location.href = "/home";
   };
 

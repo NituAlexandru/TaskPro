@@ -1,7 +1,11 @@
-import RegisterForm from "../components/Auth/RegisterForm";
+import RegisterForm from "../components/Auth/RegisterForm/RegisterForm";
+import { useLoader } from "../hooks/useLoader";
 
 const RegisterPage = () => {
+  const { hideLoader } = useLoader();
+
   const handleSuccess = () => {
+    hideLoader();
     window.location.href = "/home";
   };
 

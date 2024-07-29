@@ -1,13 +1,7 @@
-import { useContext } from "react";
-import PropTypes from "prop-types";
-import { AuthContext } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { FaGoogle } from "react-icons/fa";
+import { Form, Field, ErrorMessage } from "formik";
 
-const FormContainer = styled.div`
+export const FormContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,7 +15,7 @@ const FormContainer = styled.div`
   );
 `;
 
-const StyledForm = styled(Form)`
+export const StyledForm = styled(Form)`
   background-color: #151515;
   display: flex;
   flex-direction: column;
@@ -55,14 +49,14 @@ const StyledForm = styled(Form)`
   }
 `;
 
-const Title = styled.h2`
+export const Title = styled.h2`
   font-weight: 500;
   font-size: 18px;
   letter-spacing: -0.02em;
   color: #fff;
 `;
 
-const ToggleLink = styled.div`
+export const ToggleLink = styled.div`
   cursor: pointer;
   font-weight: 500;
   font-size: 18px;
@@ -70,7 +64,7 @@ const ToggleLink = styled.div`
   color: rgba(255, 255, 255, 0.3);
 `;
 
-const Input = styled(Field)`
+export const Input = styled(Field)`
   border: 1px solid #bedbb0;
   border-radius: 8px;
   width: 344px;
@@ -88,14 +82,14 @@ const Input = styled(Field)`
   }
 `;
 
-const StyledErrorMessage = styled(ErrorMessage)`
+export const StyledErrorMessage = styled(ErrorMessage)`
   color: red;
   font-size: 12px;
   margin-top: -10px;
   margin-bottom: 10px;
 `;
 
-const SubmitButton = styled.button`
+export const SubmitButton = styled.button`
   font-family: "Poppins", sans-serif;
   border-radius: 8px;
   width: 344px;
@@ -120,7 +114,7 @@ const SubmitButton = styled.button`
   }
 `;
 
-const GoogleButton = styled.a`
+export const GoogleButton = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -148,63 +142,3 @@ const GoogleButton = styled.a`
     padding: 1rem;
   }
 `;
-
-const validationSchema = Yup.object({
-  email: Yup.string().email("Invalid email address").required("Required"),
-  password: Yup.string().required("Required"),
-});
-
-const LoginForm = ({ onSuccess }) => {
-  const { loginUser } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  return (
-    <FormContainer>
-      <Formik
-        initialValues={{ email: "", password: "" }}
-        validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting }) => {
-          try {
-            await loginUser(values);
-            onSuccess();
-          } catch (error) {
-            console.error("Login failed", error);
-          } finally {
-            setSubmitting(false);
-          }
-        }}
-      >
-        {({ isSubmitting }) => (
-          <StyledForm>
-            <div className="toggle-container">
-              <ToggleLink onClick={() => navigate("/register")}>
-                Registration
-              </ToggleLink>
-              <Title>Log In</Title>
-            </div>
-            <Input type="email" name="email" placeholder="Enter your email" />
-            <StyledErrorMessage name="email" component="div" />
-            <Input
-              type="password"
-              name="password"
-              placeholder="Confirm password"
-            />
-            <StyledErrorMessage name="password" component="div" />
-            <SubmitButton type="submit" disabled={isSubmitting}>
-              Log In Now
-            </SubmitButton>
-            <GoogleButton href={`http://localhost:4500/api/auth/google`}>
-              <FaGoogle /> Login with Google
-            </GoogleButton>
-          </StyledForm>
-        )}
-      </Formik>
-    </FormContainer>
-  );
-};
-
-LoginForm.propTypes = {
-  onSuccess: PropTypes.func.isRequired,
-};
-
-export default LoginForm;
