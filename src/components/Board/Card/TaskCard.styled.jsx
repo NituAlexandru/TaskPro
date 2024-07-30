@@ -23,6 +23,10 @@ export const CardContentConteiner = styled.div`
   height: 154px;
   width: 100%;
   color: ${({ theme }) => theme.cardTextColor};
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 export const CardPriorityColor = styled.div`
@@ -46,6 +50,9 @@ export const CardDescription = styled.p`
   letter-spacing: -0.02em;
   color: ${({ theme }) => theme.cardTextSecondaryColor};
   margin: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 10px;
 `;
 
 export const CardFooter = styled.div`

@@ -56,24 +56,4 @@ export const CardsList = styled.div`
   overflow-y: auto;
   padding-right: 10px;
   overflow-x: hidden;
-
-  /* Scrollbar styling */
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #2d2d2d; /* adjust according to your theme */
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #555555; /* adjust according to your theme */
-    border-radius: 10px;
-    border: 2px solid #2d2d2d; /* adjust according to your theme */
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: #777777; /* adjust according to your theme */
-  }
 `;

@@ -1,13 +1,21 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from '../../../contexts/AuthContext';
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
-import NewBoardContainer from '../NewBoardContainer';
-import BoardList from '../BoardList/BoardList';
-import HelpList from '../HelpList';
-import PropTypes from 'prop-types';
-import { LogOutBtn, LogOutImg, SidebarHeading, MainTitle, LogoContainer, SidebarContent, ToggleButton, SidebarContainer } from './Sidebar.styled';
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../../contexts/AuthContext";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import NewBoardContainer from "../NewBoardContainer/NewBoardContainer";
+import BoardList from "../BoardList/BoardList";
+import HelpList from "../HelpList/HelpList";
+import PropTypes from "prop-types";
+import {
+  LogOutBtn,
+  LogOutImg,
+  SidebarHeading,
+  MainTitle,
+  LogoContainer,
+  SidebarContent,
+  ToggleButton,
+  SidebarContainer,
+} from "./Sidebar.styled";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { logout } = useContext(AuthContext);
@@ -15,7 +23,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
   };
 
   const handleBoardSelect = (boardId, titleBoard) => {

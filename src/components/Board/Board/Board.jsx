@@ -1,9 +1,22 @@
-import React, { useState, useEffect, useMemo, useCallback, useContext, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useContext,
+  useRef,
+} from "react";
 import PropTypes from "prop-types";
-import { FilterButton, ColumnsContainer, AddTitleFilterContainer, BoardContainer, BoardHeader } from "./Board.styled";
+import {
+  FilterButton,
+  ColumnsContainer,
+  AddTitleFilterContainer,
+  BoardContainer,
+  BoardHeader,
+} from "./Board.styled";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Column from "../Column/Column";
-import AddColumnButton from "../AddColumnBtn";
+import AddColumnButton from "../AddColumnBtn/AddColumnBtn";
 import FilterModal from "../../Portal/FilterModal";
 import { FiFilter } from "react-icons/fi";
 import ColumnService from "../../../service/columnService";
@@ -50,8 +63,12 @@ const Board = ({ boardId, titleBoard }) => {
 
     if (!destination) return;
 
-    const sourceColumn = columns.find((column) => column._id === source.droppableId);
-    const destColumn = columns.find((column) => column._id === destination.droppableId);
+    const sourceColumn = columns.find(
+      (column) => column._id === source.droppableId
+    );
+    const destColumn = columns.find(
+      (column) => column._id === destination.droppableId
+    );
 
     if (source.droppableId === destination.droppableId) {
       const reorderedCards = Array.from(sourceColumn.cards);
@@ -60,7 +77,9 @@ const Board = ({ boardId, titleBoard }) => {
 
       setColumns((prevColumns) =>
         prevColumns.map((column) =>
-          column._id === sourceColumn._id ? { ...column, cards: reorderedCards } : column
+          column._id === sourceColumn._id
+            ? { ...column, cards: reorderedCards }
+            : column
         )
       );
     } else {
@@ -96,7 +115,10 @@ const Board = ({ boardId, titleBoard }) => {
           <Collaborators />
         </AddTitleFilterContainer>
 
-        <FilterButton ref={filterButtonRef} onClick={() => setIsFilterModalOpen(true)}>
+        <FilterButton
+          ref={filterButtonRef}
+          onClick={() => setIsFilterModalOpen(true)}
+        >
           <FiFilter />
           Filters
         </FilterButton>
@@ -109,9 +131,16 @@ const Board = ({ boardId, titleBoard }) => {
       </BoardHeader>
 
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="all-columns" direction="horizontal" type="column">
+        <Droppable
+          droppableId="all-columns"
+          direction="horizontal"
+          type="column"
+        >
           {(provided) => (
-            <ColumnsContainer {...provided.droppableProps} ref={provided.innerRef}>
+            <ColumnsContainer
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
               {columns.map((column, index) => (
                 <Column
                   key={column._id}
@@ -124,7 +153,11 @@ const Board = ({ boardId, titleBoard }) => {
                 />
               ))}
               {provided.placeholder}
-              <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} /> {/* Pass boardId */}
+              <AddColumnButton
+                boardId={boardId}
+                onColumnAdded={handleColumnAdded}
+              />{" "}
+              {/* Pass boardId */}
             </ColumnsContainer>
           )}
         </Droppable>
@@ -139,5 +172,3 @@ Board.propTypes = {
 };
 
 export default Board;
-
-

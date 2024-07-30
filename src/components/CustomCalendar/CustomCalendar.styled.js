@@ -1,9 +1,6 @@
 import styled from "styled-components";
-import { Calendar } from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import PropTypes from "prop-types";
 
-const CalendarWrapper = styled.div`
+export const CalendarWrapper = styled.div`
   .react-calendar {
     background-color: ${({ theme }) => theme.modalBackgroundColor};
     border: 1px solid ${({ theme }) => theme.inputBackground};
@@ -32,15 +29,18 @@ const CalendarWrapper = styled.div`
       font-family: "Poppins", sans-serif;
       font-weight: 500;
       padding: 2px 5px;
+
       &:hover {
         transform: scale(1.2);
         background: none;
         color: ${({ theme }) => theme.modalTextColor};
       }
+
       &:focus {
         outline: none;
         color: ${({ theme }) => theme.modalTextColor};
       }
+
       &:active {
         background: none;
         color: ${({ theme }) => theme.modalTextColor};
@@ -118,28 +118,3 @@ const CalendarWrapper = styled.div`
     color: ${({ theme }) => theme.modalCreateBtnColor};
   }
 `;
-
-const CustomCalendar = ({ onChange, value }) => {
-  const weekdayFormatter = (locale, date) => {
-    return date
-      .toLocaleDateString(locale, { weekday: "short" })
-      .substring(0, 2);
-  };
-
-  return (
-    <CalendarWrapper>
-      <Calendar
-        onChange={onChange}
-        value={value}
-        formatShortWeekday={weekdayFormatter}
-      />
-    </CalendarWrapper>
-  );
-};
-
-CustomCalendar.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.instanceOf(Date).isRequired,
-};
-
-export default CustomCalendar;

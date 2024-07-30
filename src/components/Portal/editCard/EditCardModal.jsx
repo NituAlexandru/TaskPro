@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import CustomCalendar from "../../../utils/CustomCalendar";
+import CustomCalendar from "../../CustomCalendar/CustomCalendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCaretDown, FaPlus } from "react-icons/fa";
 import {
@@ -32,7 +32,9 @@ const validationSchema = Yup.object({
 });
 
 const EditCardForm = ({ closeModal, initialValues, onSubmit }) => {
-  const [labelColor, setLabelColor] = useState(initialValues.priorityColor || "pink");
+  const [labelColor, setLabelColor] = useState(
+    initialValues.priorityColor || "pink"
+  );
   const [deadline, setDeadline] = useState(new Date(initialValues.deadline));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const labelColors = ["#8fa1d0", "#e09cb5", "#bedbb0", "#797b78"];
@@ -127,4 +129,3 @@ EditCardForm.propTypes = {
 };
 
 export default EditCardForm;
-

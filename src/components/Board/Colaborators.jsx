@@ -4,6 +4,10 @@ import PropTypes from "prop-types";
 const CollaboratorsContainer = styled.div`
   display: flex;
   align-items: center;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
 `;
 
 const CollaboratorTitle = styled.h3`
@@ -12,6 +16,10 @@ const CollaboratorTitle = styled.h3`
   font-size: 18px;
   color: ${({ theme }) => theme.text};
   margin-right: 10px;
+
+  @media (max-width: 500px) {
+    margin: 0;
+  }
 `;
 
 const AvatarsContainer = styled.div`
@@ -72,6 +80,10 @@ const NoCollaborators = styled.p`
   font-weight: 400;
   font-size: 14px;
   color: ${({ theme }) => theme.text};
+
+  @media (max-width: 500px) {
+    margin: 0;
+  }
 `;
 
 const Collaborators = () => {

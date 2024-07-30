@@ -45,6 +45,30 @@ const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.headerText};
     padding: 10px;
   }
+
+ /* Global scrollbar styling */
+  ::-webkit-scrollbar {
+    height: 12px;
+    width: 12px; /* For vertical scrollbar */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.scrollbarTrack};
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+     background-color: ${({ theme }) => theme.scrollbarThumb};
+      border-radius: 8px;
+      border: 2px solid ${({ theme }) => theme.scrollbarTrack};
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+     background: ${({ theme }) => theme.scrollbarThumbHover};
+  }
+
+
+
 `;
 
 export default GlobalStyles;

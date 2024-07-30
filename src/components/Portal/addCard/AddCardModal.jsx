@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import CustomCalendar from "../../../utils/CustomCalendar";
+import CustomCalendar from "../../CustomCalendar/CustomCalendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCaretDown, FaPlus } from "react-icons/fa";
 import { useCards } from "../../../contexts/CardContext";
@@ -24,7 +24,7 @@ import {
   DatePickerWrapper,
   CalendarToggle,
   CalendarPopup,
-  SubmitButton
+  SubmitButton,
 } from "./AddCardModal.styled";
 
 const validationSchema = Yup.object({

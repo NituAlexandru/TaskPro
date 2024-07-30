@@ -1,9 +1,14 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Header from "../../components/Header";
+import Header from "../../components/Header/Header";
 import Sidebar from "../../components/Sidebar/SideBar/Sidebar";
 import Board from "../../components/Board/Board/Board";
-import { HomePageContainer, MainContent, Content, HomeParagraph } from "./HomePage.styled";
+import {
+  HomePageContainer,
+  MainContent,
+  Content,
+  HomeParagraph,
+} from "./HomePage.styled";
 import { ThemeProvider } from "../../utils/ThemeProvider";
 import { useBoards } from "../../contexts/BoardContext";
 import { ColumnProvider } from "../../contexts/ColumnContext";
@@ -51,8 +56,8 @@ const HomePage = () => {
                     Before starting your project, it is essential
                     <b> to create a board </b> to visualize and track all the
                     necessary tasks and milestones. This board serves as a
-                    powerful tool to organize the workflow and ensure
-                    effective collaboration among team members.
+                    powerful tool to organize the workflow and ensure effective
+                    collaboration among team members.
                   </HomeParagraph>
                 )}
               </Content>
@@ -65,4 +70,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-

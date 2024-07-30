@@ -34,26 +34,6 @@ export const ColumnsContainer = styled.div`
   overflow-x: auto;
   height: 100%;
   width: 100%;
-
-  /* Scrollbar styling */
-  &::-webkit-scrollbar {
-    height: 12px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #2d2d2d;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #555555;
-    border-radius: 10px;
-    border: 2px solid #2d2d2d;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: #777777;
-  }
 `;
 
 export const FilterButton = styled.button`

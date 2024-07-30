@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Card from "../Card/TaskCard";
-import AddCardButton from "../AddCardBtn";
+import AddCardButton from "../AddCardBtn/AddCardBtn";
 import { useCards } from "../../../contexts/CardContext";
 import { useColumns } from "../../../contexts/ColumnContext";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import { 
-  ColumnContainer, 
-  ColumnSmallContainer, 
-  ColumnTitle, 
-  ColumnTitleContainer, 
-  TitleButtonContainer, 
-  CardsList 
+import {
+  ColumnContainer,
+  ColumnSmallContainer,
+  ColumnTitle,
+  ColumnTitleContainer,
+  TitleButtonContainer,
+  CardsList,
 } from "./Column.styled";
 import EditColumnModal from "../../Portal/editColumn/EditColumnModal";
 import Modal from "../../Portal/Modal";
@@ -26,7 +26,9 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
   useEffect(() => {
     if (boardId && columnId) {
       fetchCardsForColumn(boardId, columnId);
-      console.log(`fetchCardsForColumn called with boardId: ${boardId}, columnId: ${columnId}`);
+      console.log(
+        `fetchCardsForColumn called with boardId: ${boardId}, columnId: ${columnId}`
+      );
     }
   }, [fetchCardsForColumn, boardId, columnId]);
 
@@ -136,4 +138,3 @@ Column.propTypes = {
 };
 
 export default Column;
-

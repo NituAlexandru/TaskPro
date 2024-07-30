@@ -1,44 +1,10 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-
-const Dropdown = styled.div`
-  position: relative;
-  display: inline-block;
-`;
-
-const DropdownButton = styled.button`
-  background-color: ${({ theme }) => theme.buttonBackground};
-  color: ${({ theme }) => theme.buttonText};
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-`;
-
-const DropdownContent = styled.div`
-  display: ${({ $show }) => ($show ? "block" : "none")};
-  position: absolute;
-  background-color: ${({ theme }) => theme.body};
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  min-width: 160px;
-  right: 0;
-
-  & a {
-    color: ${({ theme }) => theme.text};
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  }
-
-  & a:hover {
-    background-color: ${({ theme }) => theme.text};
-    color: ${({ theme }) => theme.body};
-  }
-`;
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownContent,
+} from "./ThemeSwitcher.styled";
 
 const ThemeSwitcher = ({ handleChangeTheme }) => {
   const [showDropdown, setShowDropdown] = useState(false);
