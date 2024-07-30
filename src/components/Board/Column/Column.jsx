@@ -132,6 +132,7 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
           )}
         </ColumnContainer>
       )}
+     
     </Droppable>
   );
 };

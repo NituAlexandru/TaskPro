@@ -59,22 +59,28 @@ const Board = ({ boardId, titleBoard }) => {
   };
 
   const onDragEnd = async (result) => {
+    console.log("Drag result:", result);
+  
     const { destination, source, draggableId } = result;
-
+  
+    // Exit if dropped outside the list
     if (!destination) return;
-
-    const sourceColumn = columns.find(
-      (column) => column._id === source.droppableId
-    );
-    const destColumn = columns.find(
-      (column) => column._id === destination.droppableId
-    );
-
+  
+    // Find source and destination columns
+    const sourceColumn = columns.find((column) => column._id === source.droppableId);
+    const destColumn = columns.find((column) => column._id === destination.droppableId);
+  
+    if (!sourceColumn || !destColumn) {
+      console.error("Source or Destination column not found");
+      return;
+    }
+  
+    // Handle reordering within the same column
     if (source.droppableId === destination.droppableId) {
       const reorderedCards = Array.from(sourceColumn.cards);
       const [movedCard] = reorderedCards.splice(source.index, 1);
       reorderedCards.splice(destination.index, 0, movedCard);
-
+  
       setColumns((prevColumns) =>
         prevColumns.map((column) =>
           column._id === sourceColumn._id
@@ -83,13 +89,14 @@ const Board = ({ boardId, titleBoard }) => {
         )
       );
     } else {
+      // Handle moving to a different column
       const sourceCards = Array.from(sourceColumn.cards);
       const [movedCard] = sourceCards.splice(source.index, 1);
       const destCards = Array.from(destColumn.cards);
       destCards.splice(destination.index, 0, movedCard);
-
+  
       try {
-        await cardService.moveCard(draggableId, destination.droppableId);
+        await cardService.moveCard(boardId, sourceColumn._id, draggableId, destination.droppableId);
         setColumns((prevColumns) =>
           prevColumns.map((column) => {
             if (column._id === sourceColumn._id) {
@@ -106,7 +113,7 @@ const Board = ({ boardId, titleBoard }) => {
       }
     }
   };
-
+  
   return (
     <BoardContainer>
       <BoardHeader>
