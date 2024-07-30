@@ -1,11 +1,19 @@
 import { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { toast } from "react-toastify";
 import Modal from "../../Portal/Modal";
-import EditBoardModal from "../../Portal/EditBoardModal";
+import EditBoardModal from "../../Portal/EditBoardModal/EditBoardModal";
 import { ThemeContext } from "../../../utils/ThemeProvider";
 import { useBoards } from "../../../contexts/BoardContext";
-import { BoardListItem, BoardListWrapper, BoardListItemContainer, IconButton, IconImage, Paragraph } from "./BoardList.styled";
+import {
+  BoardListItem,
+  BoardListWrapper,
+  BoardListItemContainer,
+  IconButton,
+  IconImage,
+  Paragraph,
+} from "./BoardList.styled";
 import loadingIcon from "../../../assets/icons/loading.svg";
 import colorsIcon from "../../../assets/icons/colors.svg";
 import containerIcon from "../../../assets/icons/container.svg";
@@ -55,9 +63,14 @@ const BoardList = ({ setSelectedBoardId }) => {
   const handleDeleteBoard = async (boardId) => {
     try {
       await deleteBoard(boardId);
+      toast.success("Board deleted successfully!");
       fetchBoards(); // Refresh the board list after deletion
     } catch (error) {
-      console.error("Error deleting board:", error.response?.data || error.message);
+      console.error(
+        "Error deleting board:",
+        error.response?.data || error.message
+      );
+      toast.error("Failed to delete board. Please try again.");
     }
   };
 

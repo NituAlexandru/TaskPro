@@ -19,6 +19,7 @@ import {
   SubmitButton,
   GoogleButton,
 } from "./LoginForm.styles";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required"),
@@ -43,8 +44,10 @@ const LoginForm = ({ onSuccess }) => {
           showLoader();
           try {
             await loginUser(values);
+            toast.success("Logged in successfully!");
             onSuccess();
           } catch (error) {
+            toast.error("Login failed. Please check your email and password.");
             console.error("Login failed", error);
           } finally {
             setSubmitting(false);

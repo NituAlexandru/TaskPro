@@ -10,3 +10,66 @@ body {
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
 }
+
+/* Custom styles for the toast container */
+.Toastify__toast-container {
+  width: 320px;
+}
+
+.Toastify__toast {
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+}
+
+.Toastify__close-button {
+  color: #fff;
+}
+
+/* Close button hover and focus styles */
+.Toastify__close-button:hover,
+.Toastify__close-button:focus {
+  background: transparent;
+}
+
+/* Icon style */
+.Toastify__toast-icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+/* Progress bar common style */
+.Toastify__progress-bar {
+  height: 5px;
+  border-radius: 8px;
+}
+
+/* Success toast */
+.Toastify__toast--success {
+  background-color: #4caf50;
+  color: #fff;
+  --toastify-icon-color-success: #fff;
+  --toastify-color-progress-success: #fff;
+}
+
+/* Error toast */
+.Toastify__toast--error {
+  background-color: #f44336;
+  color: #fff;
+  --toastify-icon-color-error: #fff;
+  --toastify-color-progress-error: #fff;
+}
+
+/* Info toast */
+.Toastify__toast--info {
+  background-color: #2196f3;
+  --toastify-icon-color-info: #fff;
+  --toastify-color-progress-info: #fff;
+}
+
+/* Warning toast */
+.Toastify__toast--warning {
+  background-color: #ff9800;
+  color: #fff;
+  --toastify-icon-color-warning: #fff;
+  --toastify-color-progress-warning: #fff;
+}

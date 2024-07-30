@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import Modal from "../../Portal/Modal";
-import AddColumnModal from "../../Portal/AddColumnModal";
+import AddColumnModal from "../../Portal/AddColumnModal/AddColumnModal";
 import {
   ButtonContainer,
   IconButton,

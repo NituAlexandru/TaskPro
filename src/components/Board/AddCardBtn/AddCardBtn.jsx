@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import Modal from "../../Portal/Modal";
 import AddCardForm from "../../Portal/addCard/AddCardModal";
 import { useCards } from "../../../contexts/CardContext";
@@ -11,14 +12,21 @@ import {
 
 const AddCardButton = ({ boardId, columnId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { fetchCardsForColumn } = useCards();
+  const { fetchCardsForColumn, addCard } = useCards(); // Destructurează addCard din useCards
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleCardAdded = async () => {
-    await fetchCardsForColumn(boardId, columnId);
-    closeModal();
+  const handleCardAdded = async (cardData) => {
+    try {
+      await addCard(boardId, columnId, cardData); // Adaugă cardul
+      await fetchCardsForColumn(boardId, columnId); // Actualizează cardurile din coloană
+      toast.success("Card added successfully!");
+      closeModal();
+    } catch (error) {
+      console.error("Error adding card:", error);
+      toast.error("Failed to add card. Please try again.");
+    }
   };
 
   return (
@@ -37,7 +45,8 @@ const AddCardButton = ({ boardId, columnId }) => {
           borderRadius="8px"
         >
           <AddCardForm
-            closeModal={handleCardAdded}
+            closeModal={closeModal}
+            onCardAdded={handleCardAdded}
             boardId={boardId}
             columnId={columnId}
           />

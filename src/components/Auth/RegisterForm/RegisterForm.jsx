@@ -19,6 +19,7 @@ import {
   SubmitButton,
   GoogleButton,
 } from "./RegisterForm.styles";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Required"),
@@ -41,8 +42,10 @@ const RegisterForm = ({ onSuccess }) => {
           showLoader();
           try {
             await registerUser(values);
+            toast.success("Registration successful!");
             onSuccess();
           } catch (error) {
+            toast.error("Registration failed. Please try again.");
             console.error("Registration failed", error);
           } finally {
             setSubmitting(false);

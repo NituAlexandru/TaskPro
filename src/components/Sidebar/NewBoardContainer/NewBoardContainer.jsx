@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import Modal from "../../Portal/Modal";
-import NewBoardModal from "../../Portal/AddBoardModal";
+import NewBoardModal from "../../Portal/AddBoardModal/AddBoardModal";
 import { ThemeContext } from "../../../utils/ThemeProvider";
 import { useBoards } from "../../../contexts/BoardContext";
 import {

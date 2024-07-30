@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
 import { AuthContext } from "../../../contexts/AuthContext";
 import {
   ErrorText,
@@ -105,10 +106,12 @@ const ProfileEditForm = ({ onSubmit, onClose, user }) => {
         updateUser(response.data.user);
       }
 
+      toast.success("Profile updated successfully!");
       onSubmit(values);
       onClose();
     } catch (error) {
       console.error("Error updating profile", error);
+      toast.error("Failed to update profile. Please try again.");
     } finally {
       setSubmitting(false);
     }

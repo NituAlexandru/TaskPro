@@ -1,10 +1,10 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { Draggable } from "react-beautiful-dnd";
 import { FiEdit, FiTrash2, FiArrowRightCircle } from "react-icons/fi";
+import { toast } from "react-toastify";
 import EditCardForm from "../../Portal/editCard/EditCardModal";
 import StatusModal from "../../Portal/CardStatusModal";
-import { AuthContext } from "../../../contexts/AuthContext";
 import { useCards } from "../../../contexts/CardContext";
 import {
   CardContainer,
@@ -22,7 +22,7 @@ import {
   PriorityColorTwo,
   Actions,
   ModalWrapper,
-  ModalContent
+  ModalContent,
 } from "./TaskCard.styled";
 
 const Card = ({
@@ -31,17 +31,16 @@ const Card = ({
   description,
   priority,
   deadline,
-  onDelete,
+
   priorityColor,
   boardId,
   columnId,
-  index
+  index,
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState("In progress");
-  const { token } = useContext(AuthContext);
-  const { fetchCardsForColumn, updateCard } = useCards();
+  const { fetchCardsForColumn, updateCard, deleteCard } = useCards();
 
   const openModal = () => {
     setIsEditModalOpen(true);
@@ -68,9 +67,22 @@ const Card = ({
     try {
       await updateCard(boardId, columnId, cardId, values);
       fetchCardsForColumn(boardId, columnId); // Fetch cards again after editing
+      toast.success("Card updated successfully!");
       closeModal();
     } catch (error) {
       console.error("Error editing card:", error);
+      toast.error("Failed to update card. Please try again.");
+    }
+  };
+
+  const handleDeleteCard = async () => {
+    try {
+      await deleteCard(boardId, columnId, cardId);
+      fetchCardsForColumn(boardId, columnId); // Fetch cards again after deletion
+      toast.success("Card deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting card:", error);
+      toast.error("Failed to delete card. Please try again.");
     }
   };
 
@@ -79,7 +91,11 @@ const Card = ({
   return (
     <Draggable draggableId={cardId} index={index}>
       {(provided) => (
-        <CardContainer ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+        <CardContainer
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
           <CardPriorityColor color={priorityColor}></CardPriorityColor>
           <CardContentConteiner>
             <CardTitle>{titleCard}</CardTitle>
@@ -101,7 +117,7 @@ const Card = ({
               <Actions>
                 <FiArrowRightCircle onClick={openStatusModal} />
                 <FiEdit onClick={openModal} />
-                <FiTrash2 onClick={() => onDelete(cardId)} />
+                <FiTrash2 onClick={handleDeleteCard} />
               </Actions>
             </CardFooter>
           </CardContentConteiner>

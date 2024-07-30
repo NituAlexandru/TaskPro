@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import { toast } from "react-toastify";
 import Card from "../Card/TaskCard";
 import AddCardButton from "../AddCardBtn/AddCardBtn";
 import { useCards } from "../../../contexts/CardContext";
@@ -54,8 +55,14 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
   };
 
   const handleDeleteColumn = async () => {
-    await deleteColumn(boardId, columnId);
-    fetchColumns();
+    try {
+      await deleteColumn(boardId, columnId);
+      toast.success("Column deleted successfully!");
+      fetchColumns();
+    } catch (error) {
+      console.error("Error deleting column:", error);
+      toast.error("Failed to delete column. Please try again.");
+    }
   };
 
   const handleUpdateColumn = async (columnId, updatedData) => {

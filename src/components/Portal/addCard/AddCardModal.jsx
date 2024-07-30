@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import CustomCalendar from "../../CustomCalendar/CustomCalendar";
 import "react-calendar/dist/Calendar.css";
 import { FaCaretDown, FaPlus } from "react-icons/fa";
+import { toast } from "react-toastify";
 import { useCards } from "../../../contexts/CardContext";
 import {
   ModalHeader,
@@ -67,11 +68,12 @@ const AddCardForm = ({ closeModal, boardId, columnId }) => {
               priorityColor: priority,
               columnId,
             };
-            console.log("New Card Data: ", newCard);
             await addCard(boardId, columnId, newCard);
+            toast.success("Card added successfully!"); // Notificare de succes
             closeModal();
           } catch (error) {
             console.error("Error adding card:", error);
+            toast.error("Failed to add card. Please try again."); // Notificare de eroare
           } finally {
             setSubmitting(false);
           }
