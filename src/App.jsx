@@ -11,9 +11,12 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { BoardProvider } from "./contexts/BoardContext";
 import AuthCallback from "./components/Auth/AuthCallback.jsx";
 import { LoaderProvider } from "./contexts/LoaderContext.jsx";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
   return (
+    <DndProvider backend={HTML5Backend}>
     <AuthProvider>
       <ThemeProvider>
         <GlobalStyles />
@@ -34,6 +37,7 @@ function App() {
         <ToastContainer />
       </ThemeProvider>
     </AuthProvider>
+    </DndProvider>
   );
 }
 

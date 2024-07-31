@@ -1,20 +1,7 @@
-import {
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-  useContext,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useMemo, useCallback, useContext, useRef } from "react";
 import PropTypes from "prop-types";
-import {
-  FilterButton,
-  ColumnsContainer,
-  AddTitleFilterContainer,
-  BoardContainer,
-  BoardHeader,
-} from "./Board.styled";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { FilterButton, ColumnsContainer, AddTitleFilterContainer, BoardContainer, BoardHeader } from "./Board.styled";
+
 import Column from "../Column/Column";
 import AddColumnButton from "../AddColumnBtn/AddColumnBtn";
 import FilterModal from "../../Portal/FilterModal";
@@ -35,6 +22,7 @@ const Board = ({ boardId, titleBoard }) => {
 
   const fetchColumns = useCallback(async () => {
     try {
+      console.log("Fetching columns for board:", boardId); // Debugging log
       const data = await columnService.getColumnsForBoard(boardId);
       setColumns(data);
     } catch (error) {
@@ -44,138 +32,82 @@ const Board = ({ boardId, titleBoard }) => {
 
   useEffect(() => {
     if (boardId) {
-      console.log("Board ID in Board component:", boardId); // Debugging step
+      console.log("useEffect triggered with boardId:", boardId); // Debugging log
       fetchColumns();
     }
-  }, [fetchColumns, boardId]);
+  }, [boardId, fetchColumns]);
 
   const handleColumnAdded = (newColumn) => {
+    console.log("Column added:", newColumn); // Debugging log
     setColumns((prevColumns) => [...prevColumns, newColumn]);
   };
 
   const handleFilterChange = (newFilter) => {
+    console.log("Filter changed to:", newFilter); // Debugging log
     setFilter(newFilter);
     setIsFilterModalOpen(false);
   };
 
-  const onDragEnd = async (result) => {
-    console.log("Drag result:", result);
-  
-    const { destination, source, draggableId } = result;
-  
-    // Exit if dropped outside the list
-    if (!destination) return;
-  
-    // Find source and destination columns
-    const sourceColumn = columns.find((column) => column._id === source.droppableId);
-    const destColumn = columns.find((column) => column._id === destination.droppableId);
-  
-    if (!sourceColumn || !destColumn) {
-      console.error("Source or Destination column not found");
+  const onDrop = async (item, monitor) => {
+    const { sourceColumnId, cardId } = item;
+    const destinationColumnId = monitor.getDropResult()?.columnId;
+
+    if (!destinationColumnId || sourceColumnId === destinationColumnId) {
       return;
     }
-  
-    // Handle reordering within the same column
-    if (source.droppableId === destination.droppableId) {
-      const reorderedCards = Array.from(sourceColumn.cards);
-      const [movedCard] = reorderedCards.splice(source.index, 1);
-      reorderedCards.splice(destination.index, 0, movedCard);
-  
-      setColumns((prevColumns) =>
-        prevColumns.map((column) =>
-          column._id === sourceColumn._id
-            ? { ...column, cards: reorderedCards }
-            : column
-        )
-      );
-    } else {
-      // Handle moving to a different column
-      const sourceCards = Array.from(sourceColumn.cards);
-      const [movedCard] = sourceCards.splice(source.index, 1);
-      const destCards = Array.from(destColumn.cards);
-      destCards.splice(destination.index, 0, movedCard);
-  
-      try {
-        await cardService.moveCard(boardId, sourceColumn._id, draggableId, destination.droppableId);
-        setColumns((prevColumns) =>
-          prevColumns.map((column) => {
-            if (column._id === sourceColumn._id) {
-              return { ...column, cards: sourceCards };
-            } else if (column._id === destColumn._id) {
-              return { ...column, cards: destCards };
-            } else {
-              return column;
-            }
-          })
-        );
-      } catch (error) {
-        console.error("Error updating card column:", error);
-      }
+
+    try {
+      await cardService.moveCard(boardId, sourceColumnId, cardId, destinationColumnId);
+      fetchColumns();
+    } catch (error) {
+      console.error("Error moving card:", error);
     }
   };
-  
+
   return (
-    <BoardContainer>
-      <BoardHeader>
-        <AddTitleFilterContainer>
-          <h2>{titleBoard}</h2> {/* Display titleBoard here */}
-          <Collaborators />
-        </AddTitleFilterContainer>
+  
+      <BoardContainer>
+        <BoardHeader>
+          <AddTitleFilterContainer>
+            <h2>{titleBoard}</h2>
+            <Collaborators />
+          </AddTitleFilterContainer>
 
-        <FilterButton
-          ref={filterButtonRef}
-          onClick={() => setIsFilterModalOpen(true)}
-        >
-          <FiFilter />
-          Filters
-        </FilterButton>
-        <FilterModal
-          isOpen={isFilterModalOpen}
-          onClose={() => setIsFilterModalOpen(false)}
-          onFilterChange={handleFilterChange}
-          buttonRef={filterButtonRef}
-        />
-      </BoardHeader>
+          <FilterButton ref={filterButtonRef} onClick={() => setIsFilterModalOpen(true)}>
+            <FiFilter />
+            Filters
+          </FilterButton>
+          <FilterModal
+            isOpen={isFilterModalOpen}
+            onClose={() => setIsFilterModalOpen(false)}
+            onFilterChange={handleFilterChange}
+            buttonRef={filterButtonRef}
+          />
+        </BoardHeader>
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable
-          droppableId="all-columns"
-          direction="horizontal"
-          type="column"
-        >
-          {(provided) => (
-            <ColumnsContainer
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {columns.map((column, index) => (
-                <Column
-                  key={column._id}
-                  title={column.titleColumn}
-                  columnId={column._id}
-                  filter={filter}
-                  boardId={boardId}
-                  fetchColumns={fetchColumns}
-                  index={index}
-                />
-              ))}
-              {provided.placeholder}
-              <AddColumnButton
-                boardId={boardId}
-                onColumnAdded={handleColumnAdded}
-              />{" "}
-              {/* Pass boardId */}
-            </ColumnsContainer>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </BoardContainer>
+        <ColumnsContainer>
+          {columns.map((column, index) => (
+            <Column
+              key={column._id}
+              title={column.titleColumn}
+              columnId={column._id}
+              filter={filter}
+              boardId={boardId}
+              fetchColumns={fetchColumns}
+              index={index}
+              onDrop={onDrop}
+            />
+          ))}
+          <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
+        </ColumnsContainer>
+      </BoardContainer>
+
   );
 };
 
 Board.propTypes = {
   boardId: PropTypes.string.isRequired,
-  titleBoard: PropTypes.string.isRequired, // Add titleBoard to PropTypes
+  titleBoard: PropTypes.string.isRequired,
 };
 
 export default Board;
