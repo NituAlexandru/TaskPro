@@ -35,7 +35,6 @@ const Board = ({ boardId, titleBoard }) => {
 
   const fetchColumns = useCallback(async () => {
     try {
-      console.log("Fetching columns for board:", boardId); // Debugging log
       const data = await columnService.getColumnsForBoard(boardId);
       setColumns(data);
     } catch (error) {
@@ -45,18 +44,15 @@ const Board = ({ boardId, titleBoard }) => {
 
   useEffect(() => {
     if (boardId) {
-      console.log("useEffect triggered with boardId:", boardId); // Debugging log
       fetchColumns();
     }
   }, [boardId, fetchColumns]);
 
   const handleColumnAdded = (newColumn) => {
-    console.log("Column added:", newColumn); // Debugging log
     setColumns((prevColumns) => [...prevColumns, newColumn]);
   };
 
   const handleFilterChange = (newFilter) => {
-    console.log("Filter changed to:", newFilter); // Debugging log
     setFilter(newFilter);
     setIsFilterModalOpen(false);
   };
@@ -114,6 +110,7 @@ const Board = ({ boardId, titleBoard }) => {
             filter={filter}
             boardId={boardId}
             fetchColumns={fetchColumns}
+            setColumns={setColumns} // Pass setColumns down to Column
             index={index}
             onDrop={onDrop}
           />

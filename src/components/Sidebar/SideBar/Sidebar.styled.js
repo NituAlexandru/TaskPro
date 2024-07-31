@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { HiOutlineLogout } from "react-icons/hi";
 
 export const SidebarContainer = styled.div`
   display: flex;
@@ -10,7 +11,6 @@ export const SidebarContainer = styled.div`
   position: relative;
   width: ${({ $isOpen }) => ($isOpen ? "250px" : "0")};
   transition: width 0.5s ease-in-out;
-  justify-content: space-between;
 `;
 
 export const ToggleButton = styled.button`
@@ -39,8 +39,7 @@ export const SidebarContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: auto;
-  margin-top: 0;
+  flex-grow: 1;
   padding: 20px;
   padding-top: 0;
   opacity: ${({ $isOpen }) => ($isOpen ? "1" : "0")};
@@ -89,7 +88,6 @@ export const LogOutBtn = styled.button`
   font-size: 16px;
   color: ${({ theme }) => theme.sidebarTextColor};
   gap: 10px;
-  stroke: #fff;
   padding: 10px 0;
 
   &:hover,
@@ -100,6 +98,17 @@ export const LogOutBtn = styled.button`
   }
 `;
 
-export const LogOutImg = styled.img`
-  stroke: #fff;
+export const HiOutlineLogoutStyled = styled(HiOutlineLogout)`
+  width: 32px;
+  height: 32px;
+  stroke: #bedbb0;
+
+  ${LogOutBtn}:hover & {
+    stroke: #9dc888;
+  }
+`;
+
+export const BottomContainer = styled.div`
+  margin-top: auto;
+  width: 100%;
 `;

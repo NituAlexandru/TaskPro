@@ -63,7 +63,7 @@ const EditCardForm = ({ closeModal, initialValues, onSubmit }) => {
         {({ isSubmitting }) => (
           <StyledForm>
             <InputWrapper>
-              <Input type="text" name="titleCard" placeholder="Title" />
+              <Input type="text" name="titleCard" placeholder="Title" autoComplete="off" />
               <ErrorMessage name="titleCard" component={ErrorMessageStyled} />
             </InputWrapper>
             <TextareaWrapper>

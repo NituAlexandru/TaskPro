@@ -1,14 +1,14 @@
-import  { useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
-import { FiEdit, FiTrash2, FiArrowRightCircle } from "react-icons/fi";
+import { FiEdit, FiTrash2, FiArrowRightCircle, FiBell } from "react-icons/fi";
 import { toast } from "react-toastify";
 import EditCardForm from "../../Portal/editCard/EditCardModal";
 import StatusModal from "../../Portal/CardStatusModal/CardStatusModal";
 import { useCards } from "../../../contexts/CardContext";
 import {
   CardContainer,
-  CardContentConteiner,
+  CardContentContainer,
   CardPriorityColor,
   CardTitle,
   CardDescription,
@@ -29,6 +29,17 @@ const ItemTypes = {
   CARD: "card",
 };
 
+const formatDate = (dateString) => new Date(dateString).toLocaleDateString();
+
+const isToday = (someDate) => {
+  const today = new Date();
+  return (
+    someDate.getDate() === today.getDate() &&
+    someDate.getMonth() === today.getMonth() &&
+    someDate.getFullYear() === today.getFullYear()
+  );
+};
+
 const Card = ({
   cardId,
   titleCard,
@@ -45,21 +56,7 @@ const Card = ({
   const [currentStatus, setCurrentStatus] = useState("In progress");
   const { fetchCardsForColumn, updateCard, deleteCard } = useCards();
 
-  const openModal = () => {
-    setIsEditModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsEditModalOpen(false);
-  };
-
-  const openStatusModal = () => {
-    setIsStatusModalOpen(true);
-  };
-
-  const closeStatusModal = () => {
-    setIsStatusModalOpen(false);
-  };
+  const toggleModal = (setModalState) => () => setModalState((prev) => !prev);
 
   const handleStatusChange = (status) => {
     setCurrentStatus(status);
@@ -69,11 +66,10 @@ const Card = ({
   const handleEditCard = async (values) => {
     try {
       await updateCard(boardId, columnId, cardId, values);
-      fetchCardsForColumn(boardId, columnId); // Fetch cards again after editing
+      fetchCardsForColumn(boardId, columnId);
       toast.success("Card updated successfully!");
-      closeModal();
+      setIsEditModalOpen(false);
     } catch (error) {
-      console.error("Error editing card:", error);
       toast.error("Failed to update card. Please try again.");
     }
   };
@@ -81,29 +77,30 @@ const Card = ({
   const handleDeleteCard = async () => {
     try {
       await deleteCard(boardId, columnId, cardId);
-      fetchCardsForColumn(boardId, columnId); // Fetch cards again after deletion
+      fetchCardsForColumn(boardId, columnId);
       toast.success("Card deleted successfully!");
     } catch (error) {
-      console.error("Error deleting card:", error);
       toast.error("Failed to delete card. Please try again.");
     }
   };
 
-  const formattedDeadline = new Date(deadline).toLocaleDateString();
+  const formattedDeadline = formatDate(deadline);
+  const deadlineDate = new Date(deadline);
+  const isDeadlineToday = isToday(deadlineDate);
 
-  const [{ isDragging }, drag] = useDrag(() => ({
+  const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.CARD,
     item: { cardId, sourceColumnId: columnId, index },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
-  }));
+  });
 
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
       <CardContainer>
-        <CardPriorityColor color={priorityColor}></CardPriorityColor>
-        <CardContentConteiner>
+        <CardPriorityColor color={priorityColor} />
+        <CardContentContainer>
           <CardTitle>{titleCard}</CardTitle>
           <CardDescription>{description}</CardDescription>
           <CardFooter>
@@ -111,7 +108,7 @@ const Card = ({
               <PriorityType>
                 <PriorityItem>Priority</PriorityItem>
                 <PriorityColor>
-                  <PriorityColorOne color={priorityColor}></PriorityColorOne>
+                  <PriorityColorOne color={priorityColor} />
                   <PriorityColorTwo>{priority}</PriorityColorTwo>
                 </PriorityColor>
               </PriorityType>
@@ -121,22 +118,25 @@ const Card = ({
               </PriorityType>
             </Priority>
             <Actions>
-              <FiArrowRightCircle onClick={openStatusModal} />
-              <FiEdit onClick={openModal} />
+              {isDeadlineToday && (
+                <FiBell style={{ marginLeft: "8px", stroke: "#BEDBB0" }} />
+              )}
+              <FiArrowRightCircle onClick={toggleModal(setIsStatusModalOpen)} />
+              <FiEdit onClick={toggleModal(setIsEditModalOpen)} />
               <FiTrash2 onClick={handleDeleteCard} />
             </Actions>
           </CardFooter>
-        </CardContentConteiner>
+        </CardContentContainer>
         {isEditModalOpen && (
           <ModalWrapper>
             <ModalContent>
               <EditCardForm
-                closeModal={closeModal}
+                closeModal={toggleModal(setIsEditModalOpen)}
                 initialValues={{
                   titleCard,
                   description,
                   priority,
-                  deadline: new Date(deadline), // Convert deadline to Date object
+                  deadline: new Date(deadline),
                   priorityColor,
                 }}
                 onSubmit={handleEditCard}
@@ -147,7 +147,7 @@ const Card = ({
         {isStatusModalOpen && (
           <StatusModal
             isOpen={isStatusModalOpen}
-            onClose={closeStatusModal}
+            onClose={toggleModal(setIsStatusModalOpen)}
             onStatusChange={handleStatusChange}
             currentStatus={currentStatus}
           />
@@ -158,17 +158,15 @@ const Card = ({
 };
 
 Card.propTypes = {
-  cardId: PropTypes.string.isRequired,
   titleCard: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   priority: PropTypes.string.isRequired,
-  deadline: PropTypes.string.isRequired,
   priorityColor: PropTypes.string,
+  deadline: PropTypes.string.isRequired,
   boardId: PropTypes.string.isRequired,
   columnId: PropTypes.string.isRequired,
+  cardId: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
 };
 
 export default Card;
-
-

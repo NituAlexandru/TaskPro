@@ -15,7 +15,7 @@ export const CardContainer = styled.div`
   }
 `;
 
-export const CardContentConteiner = styled.div`
+export const CardContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;

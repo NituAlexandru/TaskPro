@@ -8,13 +8,14 @@ import HelpList from "../HelpList/HelpList";
 import PropTypes from "prop-types";
 import {
   LogOutBtn,
-  LogOutImg,
   SidebarHeading,
   MainTitle,
   LogoContainer,
   SidebarContent,
   ToggleButton,
   SidebarContainer,
+  HiOutlineLogoutStyled,
+  BottomContainer
 } from "./Sidebar.styled";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
@@ -43,11 +44,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         <SidebarHeading>My boards</SidebarHeading>
         <NewBoardContainer />
         <BoardList setSelectedBoardId={handleBoardSelect} />
-        <HelpList />
-        <LogOutBtn onClick={handleLogout}>
-          <LogOutImg src="/src/assets/icons/login.svg" alt="" />
-          <span> Log out</span>
-        </LogOutBtn>
+        <BottomContainer>
+          <HelpList />
+          <LogOutBtn onClick={handleLogout}>
+            <HiOutlineLogoutStyled />
+            <span> Log out</span>
+          </LogOutBtn>
+        </BottomContainer>
       </SidebarContent>
     </SidebarContainer>
   );

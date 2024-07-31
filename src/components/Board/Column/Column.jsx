@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import { toast } from "react-toastify";
@@ -22,23 +22,22 @@ const ItemTypes = {
   CARD: "card",
 };
 
-const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
+const Column = ({ title, columnId, filter, boardId, fetchColumns, setColumns }) => {
   const { fetchCardsForColumn, cards, deleteCard, moveCard } = useCards();
   const { deleteColumn, updateColumn } = useColumns();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [columnTitle, setColumnTitle] = useState(title);
 
+  // Create a ref for the drop target
+  const dropRef = useRef(null);
+
   useEffect(() => {
     if (boardId && columnId) {
       fetchCardsForColumn(boardId, columnId);
-      console.log(
-        `fetchCardsForColumn called with boardId: ${boardId}, columnId: ${columnId}`
-      );
     }
   }, [fetchCardsForColumn, boardId, columnId]);
 
   useEffect(() => {
-    console.log(`Column component: columnId: ${columnId}, boardId: ${boardId}`);
   }, [columnId, boardId]);
 
   const filteredCards = filter
@@ -49,17 +48,17 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
 
   const handleDeleteCard = async (cardId) => {
     try {
-      console.log("Deleting card:", cardId);
       await deleteCard(boardId, columnId, cardId);
+      toast.success("Card deleted successfully!");
       fetchCardsForColumn(boardId, columnId);
     } catch (error) {
       console.error("Error deleting card:", error);
+      toast.error("Failed to delete card. Please try again.");
     }
   };
 
   const handleDeleteColumn = async () => {
     try {
-      console.log("Deleting column:", columnId);
       await deleteColumn(boardId, columnId);
       toast.success("Column deleted successfully!");
       fetchColumns();
@@ -70,16 +69,24 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
   };
 
   const handleUpdateColumn = async (columnId, updatedData) => {
-    const updatedColumn = await updateColumn(boardId, columnId, updatedData);
-    setColumnTitle(updatedColumn.titleColumn);
-    setIsEditModalOpen(false);
-    fetchColumns();
+    try {
+      const updatedColumn = await updateColumn(boardId, columnId, updatedData);
+      setColumnTitle(updatedColumn.titleColumn);
+      setIsEditModalOpen(false);
+      toast.success("Column updated successfully!");
+      fetchColumns();
+    } catch (error) {
+      console.error("Error updating column:", error);
+      toast.error("Failed to update column. Please try again.");
+    }
   };
 
   const moveCardWithinColumn = (columnCards, fromIndex, toIndex) => {
+    console.log(columnCards);
     const updatedCards = Array.from(columnCards);
     const [movedCard] = updatedCards.splice(fromIndex, 1);
     updatedCards.splice(toIndex, 0, movedCard);
+    console.log(updatedCards);
     return updatedCards;
   };
 
@@ -95,39 +102,40 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
       fetchCardsForColumn(boardId, destinationColumnId);
     } catch (error) {
       console.error("Error moving card:", error);
+      toast.error("Failed to move card. Please try again.");
     }
   };
 
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.CARD,
     drop: async (item, monitor) => {
-      const clientOffset = monitor.getClientOffset();
-      const hoverBoundingRect = monitor.getClientOffset();
-      const hoverMiddleY =
-        (hoverBoundingRect.top + hoverBoundingRect.bottom) / 2;
-      const clientY = clientOffset.y;
-      const hoverIndex =
-        clientY > hoverMiddleY ? item.index + 1 : item.index - 1;
+      const didDrop = monitor.didDrop();
+      if (didDrop) {
+        return;
+      }
 
-      console.log(
-        `Dropped item: ${item.cardId} into column: ${columnId} at index: ${hoverIndex}`
-      );
+      const hoverBoundingRect = dropRef.current?.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+      let hoverIndex = item.index;
+
+      if (hoverClientY < hoverMiddleY) {
+        hoverIndex = item.index - 1;
+      } else {
+        hoverIndex = item.index + 1;
+      }
 
       if (item.sourceColumnId === columnId) {
-        const updatedCards = moveCardWithinColumn(
-          filteredCards,
-          item.index,
-          hoverIndex
-        );
+        const updatedCards = moveCardWithinColumn(filteredCards, item.index, hoverIndex);
         setColumns((prevColumns) =>
           prevColumns.map((column) =>
-            column._id === columnId
-              ? { ...column, cards: updatedCards }
-              : column
+            column._id === columnId ? { ...column, cards: updatedCards } : column
           )
         );
       } else {
-        moveCardToAnotherColumn(item, columnId, hoverIndex);
+        await moveCardToAnotherColumn(item, columnId);
       }
     },
     collect: (monitor) => ({
@@ -135,11 +143,9 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
     }),
   });
 
-  console.log("Drop state for column:", columnId, isOver);
-
   return (
-    <div ref={drop}>
-      <ColumnContainer>
+    <div ref={dropRef}>
+      <ColumnContainer ref={drop}>
         <ColumnSmallContainer>
           <ColumnTitleContainer>
             <ColumnTitle>{columnTitle}</ColumnTitle>
@@ -197,3 +203,4 @@ Column.propTypes = {
 };
 
 export default Column;
+

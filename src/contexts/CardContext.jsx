@@ -14,15 +14,12 @@ export const CardProvider = ({ children }) => {
 
   const fetchCardsForColumn = useCallback(
     async (boardId, columnId) => {
-      console.log(`fetchCardsForColumn called with boardId: ${boardId}, columnId: ${columnId}`);
       try {
         const data = await cardService.getCardsForColumn(boardId, columnId);
-        console.log(`Fetched cards:`, data);
         setCards((prevCards) => {
           const filteredCards = prevCards.filter((card) => card.columnId !== columnId);
           const newCards = [...filteredCards, ...data];
           if (JSON.stringify(prevCards) !== JSON.stringify(newCards)) {
-            console.log(`Updating state with new cards for columnId: ${columnId}`);
             return newCards;
           }
           return prevCards;
