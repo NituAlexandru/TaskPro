@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import { FiEdit, FiTrash2, FiArrowRightCircle } from "react-icons/fi";
 import { toast } from "react-toastify";
 import EditCardForm from "../../Portal/editCard/EditCardModal";
-import StatusModal from "../../Portal/CardStatusModal";
+import StatusModal from "../../Portal/CardStatusModal/CardStatusModal";
 import { useCards } from "../../../contexts/CardContext";
 import {
   CardContainer,

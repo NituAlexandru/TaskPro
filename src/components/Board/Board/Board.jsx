@@ -1,10 +1,23 @@
-import React, { useState, useEffect, useMemo, useCallback, useContext, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useContext,
+  useRef,
+} from "react";
 import PropTypes from "prop-types";
-import { FilterButton, ColumnsContainer, AddTitleFilterContainer, BoardContainer, BoardHeader } from "./Board.styled";
+import {
+  FilterButton,
+  ColumnsContainer,
+  AddTitleFilterContainer,
+  BoardContainer,
+  BoardHeader,
+} from "./Board.styled";
 
 import Column from "../Column/Column";
 import AddColumnButton from "../AddColumnBtn/AddColumnBtn";
-import FilterModal from "../../Portal/FilterModal";
+import FilterModal from "../../Portal/FilterModal/FilterModal";
 import { FiFilter } from "react-icons/fi";
 import ColumnService from "../../../service/columnService";
 import { AuthContext } from "../../../contexts/AuthContext";
@@ -57,7 +70,12 @@ const Board = ({ boardId, titleBoard }) => {
     }
 
     try {
-      await cardService.moveCard(boardId, sourceColumnId, cardId, destinationColumnId);
+      await cardService.moveCard(
+        boardId,
+        sourceColumnId,
+        cardId,
+        destinationColumnId
+      );
       fetchColumns();
     } catch (error) {
       console.error("Error moving card:", error);
@@ -65,43 +83,44 @@ const Board = ({ boardId, titleBoard }) => {
   };
 
   return (
-  
-      <BoardContainer>
-        <BoardHeader>
-          <AddTitleFilterContainer>
-            <h2>{titleBoard}</h2>
-            <Collaborators />
-          </AddTitleFilterContainer>
+    <BoardContainer>
+      <BoardHeader>
+        <AddTitleFilterContainer>
+          <h2>{titleBoard}</h2>
+          <Collaborators />
+        </AddTitleFilterContainer>
 
-          <FilterButton ref={filterButtonRef} onClick={() => setIsFilterModalOpen(true)}>
-            <FiFilter />
-            Filters
-          </FilterButton>
-          <FilterModal
-            isOpen={isFilterModalOpen}
-            onClose={() => setIsFilterModalOpen(false)}
-            onFilterChange={handleFilterChange}
-            buttonRef={filterButtonRef}
+        <FilterButton
+          ref={filterButtonRef}
+          onClick={() => setIsFilterModalOpen(true)}
+        >
+          <FiFilter />
+          Filters
+        </FilterButton>
+        <FilterModal
+          isOpen={isFilterModalOpen}
+          onClose={() => setIsFilterModalOpen(false)}
+          onFilterChange={handleFilterChange}
+          buttonRef={filterButtonRef}
+        />
+      </BoardHeader>
+
+      <ColumnsContainer>
+        {columns.map((column, index) => (
+          <Column
+            key={column._id}
+            title={column.titleColumn}
+            columnId={column._id}
+            filter={filter}
+            boardId={boardId}
+            fetchColumns={fetchColumns}
+            index={index}
+            onDrop={onDrop}
           />
-        </BoardHeader>
-
-        <ColumnsContainer>
-          {columns.map((column, index) => (
-            <Column
-              key={column._id}
-              title={column.titleColumn}
-              columnId={column._id}
-              filter={filter}
-              boardId={boardId}
-              fetchColumns={fetchColumns}
-              index={index}
-              onDrop={onDrop}
-            />
-          ))}
-          <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
-        </ColumnsContainer>
-      </BoardContainer>
-
+        ))}
+        <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
+      </ColumnsContainer>
+    </BoardContainer>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import { toast } from "react-toastify";
@@ -83,9 +83,14 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
     return updatedCards;
   };
 
-  const moveCardToAnotherColumn = async (item, destinationColumnId, toIndex) => {
+  const moveCardToAnotherColumn = async (item, destinationColumnId) => {
     try {
-      await moveCard(boardId, item.sourceColumnId, item.cardId, destinationColumnId);
+      await moveCard(
+        boardId,
+        item.sourceColumnId,
+        item.cardId,
+        destinationColumnId
+      );
       fetchCardsForColumn(boardId, item.sourceColumnId);
       fetchCardsForColumn(boardId, destinationColumnId);
     } catch (error) {
@@ -98,17 +103,27 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns }) => {
     drop: async (item, monitor) => {
       const clientOffset = monitor.getClientOffset();
       const hoverBoundingRect = monitor.getClientOffset();
-      const hoverMiddleY = (hoverBoundingRect.top + hoverBoundingRect.bottom) / 2;
+      const hoverMiddleY =
+        (hoverBoundingRect.top + hoverBoundingRect.bottom) / 2;
       const clientY = clientOffset.y;
-      const hoverIndex = clientY > hoverMiddleY ? item.index + 1 : item.index - 1;
+      const hoverIndex =
+        clientY > hoverMiddleY ? item.index + 1 : item.index - 1;
 
-      console.log(`Dropped item: ${item.cardId} into column: ${columnId} at index: ${hoverIndex}`);
+      console.log(
+        `Dropped item: ${item.cardId} into column: ${columnId} at index: ${hoverIndex}`
+      );
 
       if (item.sourceColumnId === columnId) {
-        const updatedCards = moveCardWithinColumn(filteredCards, item.index, hoverIndex);
+        const updatedCards = moveCardWithinColumn(
+          filteredCards,
+          item.index,
+          hoverIndex
+        );
         setColumns((prevColumns) =>
           prevColumns.map((column) =>
-            column._id === columnId ? { ...column, cards: updatedCards } : column
+            column._id === columnId
+              ? { ...column, cards: updatedCards }
+              : column
           )
         );
       } else {
