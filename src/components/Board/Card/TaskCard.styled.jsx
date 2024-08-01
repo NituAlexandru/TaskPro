@@ -9,6 +9,7 @@ export const CardContainer = styled.div`
   display: flex;
   color: ${({ theme }) => theme.cardTextColor};
   cursor: grab;
+  position: relative;
 
   @media (max-width: 500px) {
     width: 100%;
@@ -84,6 +85,7 @@ export const PriorityItem = styled.div`
   letter-spacing: -0.02em;
   color: ${({ theme }) => theme.cardTextSecondaryColor};
 `;
+
 export const PriorityDate = styled.div`
   font-size: 10px;
   letter-spacing: -0.02em;
@@ -103,6 +105,7 @@ export const PriorityColorOne = styled.div`
   height: 12px;
   border-radius: 50%;
 `;
+
 export const PriorityColorTwo = styled.div`
   font-size: 10px;
   letter-spacing: -0.02em;
@@ -144,4 +147,59 @@ export const ModalContent = styled.div`
   background-color: ${({ theme }) => theme.modalBackgroundColor};
   padding: 20px;
   border-radius: 8px;
+`;
+
+export const AvatarsContainer = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px;
+`;
+
+export const AvatarWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+export const Avatar = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+`;
+
+export const Tooltip = styled.div`
+  visibility: hidden;
+  opacity: 0;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 5px;
+  position: absolute;
+  bottom: 40px;
+  width: 120px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 1;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+  }
 `;

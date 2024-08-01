@@ -166,3 +166,42 @@ export const IconWrapper = styled.div`
   border-radius: 6px;
   margin-right: 10px;
 `;
+export const CollaboratorsInputWrapper = styled.div`
+  margin-bottom: 10px;
+`;
+
+export const CollaboratorsInput = styled.input`
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+export const CollaboratorsList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+`;
+
+export const CollaboratorItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 5px;
+`;
+
+export const CollaboratorEmail = styled.span`
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+`;
+
+export const RemoveCollaboratorButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+`;

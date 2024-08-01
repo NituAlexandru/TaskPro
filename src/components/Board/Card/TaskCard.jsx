@@ -1,11 +1,12 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
-import { useDrag } from "react-dnd";
-import { FiEdit, FiTrash2, FiArrowRightCircle, FiBell } from "react-icons/fi";
-import { toast } from "react-toastify";
-import EditCardForm from "../../Portal/editCard/EditCardModal";
-import StatusModal from "../../Portal/CardStatusModal/CardStatusModal";
-import { useCards } from "../../../contexts/CardContext";
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useDrag } from 'react-dnd';
+import { FiEdit, FiTrash2, FiArrowRightCircle, FiBell } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import EditCardForm from '../../Portal/editCard/EditCardModal';
+import StatusModal from '../../Portal/CardStatusModal/CardStatusModal';
+import { useCards } from '../../../contexts/CardContext';
+import { getUsersByIds } from '../../../service/authService'; // Import the service
 import {
   CardContainer,
   CardContentContainer,
@@ -23,10 +24,14 @@ import {
   Actions,
   ModalWrapper,
   ModalContent,
-} from "./TaskCard.styled";
+  AvatarsContainer,
+  AvatarWrapper,
+  Avatar,
+  Tooltip,
+} from './TaskCard.styled';
 
 const ItemTypes = {
-  CARD: "card",
+  CARD: 'card',
 };
 
 const formatDate = (dateString) => new Date(dateString).toLocaleDateString();
@@ -50,11 +55,27 @@ const Card = ({
   boardId,
   columnId,
   index,
+  collaborators = [], // Default parameter
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState("In progress");
+  const [currentStatus, setCurrentStatus] = useState('In progress');
   const { fetchCardsForColumn, updateCard, deleteCard } = useCards();
+  const [collaboratorDetails, setCollaboratorDetails] = useState([]);
+
+  useEffect(() => {
+    const fetchCollaborators = async () => {
+      if (collaborators.length > 0) {
+        try {
+          const users = await getUsersByIds(collaborators);
+          setCollaboratorDetails(users);
+        } catch (error) {
+          console.error('Failed to fetch collaborators:', error);
+        }
+      }
+    };
+    fetchCollaborators();
+  }, [collaborators]);
 
   const toggleModal = (setModalState) => () => setModalState((prev) => !prev);
 
@@ -67,10 +88,10 @@ const Card = ({
     try {
       await updateCard(boardId, columnId, cardId, values);
       fetchCardsForColumn(boardId, columnId);
-      toast.success("Card updated successfully!");
+      toast.success('Card updated successfully!');
       setIsEditModalOpen(false);
     } catch (error) {
-      toast.error("Failed to update card. Please try again.");
+      toast.error('Failed to update card. Please try again.');
     }
   };
 
@@ -78,9 +99,9 @@ const Card = ({
     try {
       await deleteCard(boardId, columnId, cardId);
       fetchCardsForColumn(boardId, columnId);
-      toast.success("Card deleted successfully!");
+      toast.success('Card deleted successfully!');
     } catch (error) {
-      toast.error("Failed to delete card. Please try again.");
+      toast.error('Failed to delete card. Please try again.');
     }
   };
 
@@ -100,6 +121,14 @@ const Card = ({
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
       <CardContainer>
         <CardPriorityColor color={priorityColor} />
+        <AvatarsContainer>
+          {collaboratorDetails.map((collaborator) => (
+            <AvatarWrapper key={collaborator._id}>
+              <Avatar src={collaborator.avatar} alt={collaborator.name} />
+              <Tooltip className="tooltip">{collaborator.email}</Tooltip>
+            </AvatarWrapper>
+          ))}
+        </AvatarsContainer>
         <CardContentContainer>
           <CardTitle>{titleCard}</CardTitle>
           <CardDescription>{description}</CardDescription>
@@ -119,7 +148,7 @@ const Card = ({
             </Priority>
             <Actions>
               {isDeadlineToday && (
-                <FiBell style={{ marginLeft: "8px", stroke: "#BEDBB0" }} />
+                <FiBell style={{ marginLeft: '8px', stroke: '#BEDBB0' }} />
               )}
               <FiArrowRightCircle onClick={toggleModal(setIsStatusModalOpen)} />
               <FiEdit onClick={toggleModal(setIsEditModalOpen)} />
@@ -167,6 +196,7 @@ Card.propTypes = {
   columnId: PropTypes.string.isRequired,
   cardId: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
+  collaborators: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Card;

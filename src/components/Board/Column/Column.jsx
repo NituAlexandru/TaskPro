@@ -168,6 +168,7 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns, setColumns }) 
                 boardId={boardId}
                 columnId={columnId}
                 index={index}
+                collaborators={card.collaborators || []}
               />
             ))}
           </CardsList>

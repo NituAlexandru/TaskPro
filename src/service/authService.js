@@ -21,3 +21,23 @@ export const fetchCurrentUser = async (token) => {
 
   return response.data;
 };
+
+export const getUserDetailsByEmail = async (email) => {
+  try {
+    const response = await axios.get(`/api/user/details-by-email/${email}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    return null;
+  }
+};
+
+export const getUsersByIds = async (ids) => {
+  try {
+    const response = await axios.post('/api/user/get-users-by-ids', { ids });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    throw error;
+  }
+};
