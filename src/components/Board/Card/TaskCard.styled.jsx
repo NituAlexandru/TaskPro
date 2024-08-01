@@ -187,7 +187,8 @@ export const Tooltip = styled.div`
   position: absolute;
   bottom: 40px;
   width: 120px;
-  left: 50%;
+  right: 150%;
+  top: 100%;
   transform: translateX(-50%) translateY(10px);
   transition: opacity 0.3s, transform 0.3s;
   z-index: 1;
@@ -196,7 +197,7 @@ export const Tooltip = styled.div`
     content: "";
     position: absolute;
     top: 100%;
-    left: 50%;
+    right: 50%;
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
