@@ -1,13 +1,13 @@
-import React, { createContext, useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import ColumnService from '../service/columnService';
-import { AuthContext } from './AuthContext';
+import { createContext, useContext, useState } from "react";
+import PropTypes from "prop-types";
+import ColumnService from "../service/columnService";
+import { AuthContext } from "./AuthContext";
 
 export const ColumnContext = createContext();
 
 export const ColumnProvider = ({ children }) => {
   const [columns, setColumns] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { token } = useContext(AuthContext);
   const columnService = new ColumnService(token);
 
@@ -16,8 +16,11 @@ export const ColumnProvider = ({ children }) => {
       const data = await columnService.getColumnsForBoard(boardId);
       setColumns(data);
     } catch (error) {
-      console.error('Error fetching columns:', error.response?.data || error.message);
-      setError('Failed to fetch columns. Please try again later.');
+      console.error(
+        "Error fetching columns:",
+        error.response?.data || error.message
+      );
+      setError("Failed to fetch columns. Please try again later.");
     }
   };
 
@@ -27,15 +30,22 @@ export const ColumnProvider = ({ children }) => {
       setColumns((prevColumns) => [...prevColumns, newColumn]);
       return newColumn;
     } catch (error) {
-      console.error('Error adding column:', error.response?.data || error.message);
-      setError('Failed to add column. Please try again later.');
+      console.error(
+        "Error adding column:",
+        error.response?.data || error.message
+      );
+      setError("Failed to add column. Please try again later.");
       throw error;
     }
   };
 
   const updateColumn = async (boardId, columnId, columnData) => {
     try {
-      const updatedColumn = await columnService.updateColumn(boardId, columnId, columnData);
+      const updatedColumn = await columnService.updateColumn(
+        boardId,
+        columnId,
+        columnData
+      );
       setColumns((prevColumns) =>
         prevColumns.map((column) =>
           column._id === columnId ? updatedColumn : column
@@ -43,8 +53,11 @@ export const ColumnProvider = ({ children }) => {
       );
       return updatedColumn;
     } catch (error) {
-      console.error('Error updating column:', error.response?.data || error.message);
-      setError('Failed to update column. Please try again later.');
+      console.error(
+        "Error updating column:",
+        error.response?.data || error.message
+      );
+      setError("Failed to update column. Please try again later.");
       throw error;
     }
   };
@@ -52,10 +65,15 @@ export const ColumnProvider = ({ children }) => {
   const deleteColumn = async (boardId, columnId) => {
     try {
       await columnService.deleteColumn(boardId, columnId);
-      setColumns((prevColumns) => prevColumns.filter((column) => column._id !== columnId));
+      setColumns((prevColumns) =>
+        prevColumns.filter((column) => column._id !== columnId)
+      );
     } catch (error) {
-      console.error('Error deleting column:', error.response?.data || error.message);
-      setError('Failed to delete column. Please try again later.');
+      console.error(
+        "Error deleting column:",
+        error.response?.data || error.message
+      );
+      setError("Failed to delete column. Please try again later.");
       throw error;
     }
   };

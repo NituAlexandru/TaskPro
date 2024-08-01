@@ -10,6 +10,7 @@ export const ModalWrapper = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
 `;
 
 export const ModalContent = styled.div`
@@ -30,8 +31,8 @@ export const StatusOption = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: ${({ active, theme }) =>
-    active ? theme.activeBackgroundColor : theme.inactiveBackgroundColor};
+  background-color: ${({ $active, theme }) =>
+    $active ? theme.activeBackgroundColor : theme.inactiveBackgroundColor};
   border-radius: 8px;
   cursor: pointer;
 

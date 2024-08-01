@@ -40,13 +40,13 @@ const StatusModal = ({
     <ModalWrapper onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <StatusOption
-          active={currentStatus === "In progress"}
+          $active={currentStatus === "In progress"}
           onClick={() => onStatusChange("In progress")}
         >
           In progress <FiArrowRightCircle />
         </StatusOption>
         <StatusOption
-          active={currentStatus === "Done"}
+          $active={currentStatus === "Done"}
           onClick={() => onStatusChange("Done")}
         >
           Done <FiArrowRightCircle />
@@ -61,7 +61,7 @@ StatusModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onStatusChange: PropTypes.func.isRequired,
   currentStatus: PropTypes.string.isRequired,
-  buttonRef: PropTypes.object.isRequired,
+  buttonRef: PropTypes.object,
 };
 
 export default StatusModal;
