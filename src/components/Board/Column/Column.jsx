@@ -22,7 +22,14 @@ const ItemTypes = {
   CARD: "card",
 };
 
-const Column = ({ title, columnId, filter, boardId, fetchColumns, setColumns }) => {
+const Column = ({
+  title,
+  columnId,
+  filter,
+  boardId,
+  fetchColumns,
+  setColumns,
+}) => {
   const { fetchCardsForColumn, cards, deleteCard, moveCard } = useCards();
   const { deleteColumn, updateColumn } = useColumns();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -37,8 +44,7 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns, setColumns }) 
     }
   }, [fetchCardsForColumn, boardId, columnId]);
 
-  useEffect(() => {
-  }, [columnId, boardId]);
+  useEffect(() => {}, [columnId, boardId]);
 
   const filteredCards = filter
     ? cards.filter(
@@ -115,7 +121,8 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns, setColumns }) 
       }
 
       const hoverBoundingRect = dropRef.current?.getBoundingClientRect();
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
@@ -128,10 +135,16 @@ const Column = ({ title, columnId, filter, boardId, fetchColumns, setColumns }) 
       }
 
       if (item.sourceColumnId === columnId) {
-        const updatedCards = moveCardWithinColumn(filteredCards, item.index, hoverIndex);
+        const updatedCards = moveCardWithinColumn(
+          filteredCards,
+          item.index,
+          hoverIndex
+        );
         setColumns((prevColumns) =>
           prevColumns.map((column) =>
-            column._id === columnId ? { ...column, cards: updatedCards } : column
+            column._id === columnId
+              ? { ...column, cards: updatedCards }
+              : column
           )
         );
       } else {
@@ -201,7 +214,7 @@ Column.propTypes = {
   filter: PropTypes.string,
   boardId: PropTypes.string.isRequired,
   fetchColumns: PropTypes.func.isRequired,
+  setColumns: PropTypes.func.isRequired,
 };
 
 export default Column;
-
