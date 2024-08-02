@@ -10,7 +10,7 @@ import {
   AddParagraph,
 } from "../AddCardBtn/AddCardBtn.styled";
 
-const AddCardButton = ({ boardId, columnId }) => {
+const AddCardButton = ({ boardId, columnId, collaborators }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { fetchCardsForColumn, addCard } = useCards(); // Destructurează addCard din useCards
 
@@ -49,6 +49,7 @@ const AddCardButton = ({ boardId, columnId }) => {
             onCardAdded={handleCardAdded}
             boardId={boardId}
             columnId={columnId}
+            collaborators={collaborators} // Pass collaborators down to AddCardForm
           />
         </Modal>
       )}
@@ -59,6 +60,13 @@ const AddCardButton = ({ boardId, columnId }) => {
 AddCardButton.propTypes = {
   boardId: PropTypes.string.isRequired,
   columnId: PropTypes.string.isRequired,
+  collaborators: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      avatarURL: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default AddCardButton;

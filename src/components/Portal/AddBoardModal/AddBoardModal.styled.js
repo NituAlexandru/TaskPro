@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ErrorMessage } from "formik";
+import { ErrorMessage, Form } from "formik";
 
 export const ModalHeader = styled.div`
   display: flex;
@@ -135,9 +135,9 @@ export const StyledErrorMessage = styled(ErrorMessage)`
   position: absolute;
   color: red;
   font-size: 12px;
-  margin-top: -5px; // Ajustați după necesități
-  margin-left: 5px; // Ajustați după necesități
-  height: 0; // Nu afectează înălțimea containerului
+  margin-top: -5px;
+  margin-left: 5px;
+  height: 0;
   line-height: normal;
   pointer-events: none;
 `;
@@ -146,5 +146,54 @@ export const InputWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem; // Spațiu pentru eroare
+  margin-bottom: 1rem;
+`;
+
+export const CollaboratorsInputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+`;
+
+export const CollaboratorsInput = styled.input`
+  border: 1px solid #bedbb0;
+  border-radius: 8px;
+  width: 100%;
+  height: 49px;
+  box-shadow: 0 4px 16px 0 rgba(22, 22, 22, 0.08);
+  background-color: ${({ theme }) => theme.modalBackgroundColor};
+  opacity: 0.4;
+  margin: 0;
+  padding: 10px;
+`;
+
+export const CollaboratorsList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const CollaboratorItem = styled.li`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const RemoveCollaboratorButton = styled.button`
+  border: none;
+  background: none;
+  color: red;
+  font-size: 18px;
+  cursor: pointer;
+`;
+
+export const StyledForm = styled(Form)`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;

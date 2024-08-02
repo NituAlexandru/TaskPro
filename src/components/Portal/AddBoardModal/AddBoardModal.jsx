@@ -1,5 +1,8 @@
 import { useState, useContext } from "react";
+import { Formik, FieldArray, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import loadingIcon from "../../../assets/icons/loading.svg";
 import colorsIcon from "../../../assets/icons/colors.svg";
 import containerIcon from "../../../assets/icons/container.svg";
@@ -26,7 +29,7 @@ import turquoiseBay from "../../../assets/portal-img/TurquoiseBay.webp";
 import starryMountains from "../../../assets/portal-img/StarryMountains.webp";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { useBoards } from "../../../contexts/BoardContext";
-import { getCollaboratorIdByName } from "../../../service/collaboratorService";
+import { getUserDetailsByEmail } from "../../../service/authService";
 import {
   ModalHeader,
   Title,
@@ -40,8 +43,13 @@ import {
   Background,
   CreateButton,
   CreateButtonAdd,
+  CollaboratorsInputWrapper,
+  CollaboratorsInput,
+  CollaboratorsList,
+  CollaboratorItem,
+  RemoveCollaboratorButton,
+  StyledForm,
 } from "../AddBoardModal/AddBoardModal.styled";
-import { toast } from "react-toastify";
 
 const icons = [
   { name: "loadingIcon", src: loadingIcon },
@@ -73,43 +81,48 @@ const backgrounds = [
   { name: "starryMountains", url: starryMountains },
 ];
 
+const validationSchema = Yup.object({
+  title: Yup.string().required("Title is required"),
+  collaborators: Yup.array().of(
+    Yup.object({
+      email: Yup.string().email("Invalid email address").required("Email is required"),
+      userId: Yup.string().required("User ID is required"),
+      name: Yup.string().required("Name is required"),
+      avatar: Yup.string().required("Avatar is required"),
+    })
+  ),
+});
+
 const NewBoardModal = ({ closeModal }) => {
-  const [title, setTitle] = useState("");
-  const [collaborator, setCollaborator] = useState("");
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [selectedBackground, setSelectedBackground] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { createBoard, fetchBoards } = useBoards();
-  const { user } = useContext(AuthContext); 
+  const { user } = useContext(AuthContext);
 
-  const handleSubmit = async () => {
-    if (!title || selectedIcon === null || selectedBackground === null) {
-      toast.error("Please select all fields");
+  const handleSubmit = async (values, { setSubmitting }) => {
+    if (!selectedIcon || !selectedBackground) {
+      toast.error("Please select an icon and a background");
       return;
     }
 
     setLoading(true);
     setError("");
     try {
-      // Fetch collaborator IDs
-      let collaboratorIds = [];
-      if (collaborator) {
-        const id = await getCollaboratorIdByName(collaborator);
-        collaboratorIds = [id];
-      }
+      const collaboratorIds = values.collaborators.map(collaborator => collaborator.userId);
 
       const boardData = {
-        owner: user._id, // Ensure the user ID is included
-        titleBoard: title,
-        background: selectedBackground, // Use background name
-        icon: selectedIcon, // Use icon name
+        owner: user._id,
+        titleBoard: values.title,
+        background: selectedBackground,
+        icon: selectedIcon,
         collaborators: collaboratorIds,
       };
 
       const newBoard = await createBoard(boardData);
-      console.log("New Board Created:", newBoard); // Log the new board to see its format
-      await fetchBoards(); // Refresh the board list
+      console.log("New Board Created:", newBoard);
+      await fetchBoards();
       toast.success("New board created successfully!");
       closeModal();
     } catch (error) {
@@ -118,6 +131,7 @@ const NewBoardModal = ({ closeModal }) => {
       toast.error("Failed to create board. Please try again.");
     } finally {
       setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -127,51 +141,114 @@ const NewBoardModal = ({ closeModal }) => {
         <Title>New board</Title>
         <CloseButton onClick={closeModal}>&times;</CloseButton>
       </ModalHeader>
-      <ModalBody>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <Input
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <Input
-          placeholder="Invite Collaborator"
-          value={collaborator}
-          onChange={(e) => setCollaborator(e.target.value)}
-        />
-        <Section>
-          <Title as="h3">Icons</Title>
-          <Icons>
-            {icons.map((icon, index) => (
-              <Icon
-                key={index}
-                selected={selectedIcon === icon.name}
-                onClick={() => setSelectedIcon(icon.name)}
-              >
-                <img src={icon.src} alt={`icon-${index}`} />
-              </Icon>
-            ))}
-          </Icons>
-        </Section>
-        <Section>
-          <Title as="h3">Background</Title>
-          <Backgrounds>
-            {backgrounds.map(({ name, url }, index) => (
-              <Background
-                key={index}
-                src={url}
-                selected={selectedBackground === name}
-                onClick={() => setSelectedBackground(name)}
+      <Formik
+        initialValues={{
+          title: "",
+          collaborators: [],
+        }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting, values, setFieldValue }) => (
+          <StyledForm>
+            <ModalBody>
+              {error && <p style={{ color: "red" }}>{error}</p>}
+              <Input
+                placeholder="Title"
+                name="title"
+                autoComplete="off"
+                onChange={(e) => setFieldValue("title", e.target.value)}
               />
-            ))}
-          </Backgrounds>
-        </Section>
-        <CreateButton onClick={handleSubmit} disabled={loading}>
-          <>
-            <CreateButtonAdd>+</CreateButtonAdd> Create
-          </>
-        </CreateButton>
-      </ModalBody>
+              <ErrorMessage name="title" component="div" className="error" />
+              <CollaboratorsInputWrapper>
+                <FieldArray
+                  name="collaborators"
+                  render={(arrayHelpers) => (
+                    <>
+                      <CollaboratorsInput
+                        autoComplete="off"
+                        type="email"
+                        placeholder="Enter collaborator email"
+                        onKeyDown={async (e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (e.target.value) {
+                              const email = e.target.value;
+                              try {
+                                const userDetails = await getUserDetailsByEmail(email);
+                                if (userDetails) {
+                                  arrayHelpers.push({
+                                    email,
+                                    userId: userDetails.userId,
+                                    name: userDetails.name,
+                                    avatar: userDetails.avatar,
+                                  });
+                                } else {
+                                  toast.error(`User with email ${email} not found`);
+                                }
+                              } catch (error) {
+                                console.error("Error fetching user details:", error);
+                                toast.error("Error fetching user details. Please try again.");
+                              }
+                              e.target.value = "";
+                            }
+                          }
+                        }}
+                      />
+                      <ErrorMessage name="collaborators" component="div" className="error" />
+                      <CollaboratorsList>
+                        {values.collaborators.map((collaborator, index) => (
+                          <CollaboratorItem key={index}>
+                            <img src={collaborator.avatar} alt={collaborator.name} style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "10px" }} />
+                            <RemoveCollaboratorButton
+                              type="button"
+                              onClick={() => arrayHelpers.remove(index)}
+                            >
+                              &times;
+                            </RemoveCollaboratorButton>
+                          </CollaboratorItem>
+                        ))}
+                      </CollaboratorsList>
+                    </>
+                  )}
+                />
+              </CollaboratorsInputWrapper>
+              <Section>
+                <Title as="h3">Icons</Title>
+                <Icons>
+                  {icons.map((icon, index) => (
+                    <Icon
+                      key={index}
+                      selected={selectedIcon === icon.name}
+                      onClick={() => setSelectedIcon(icon.name)}
+                    >
+                      <img src={icon.src} alt={`icon-${index}`} />
+                    </Icon>
+                  ))}
+                </Icons>
+              </Section>
+              <Section>
+                <Title as="h3">Background</Title>
+                <Backgrounds>
+                  {backgrounds.map(({ name, url }, index) => (
+                    <Background
+                      key={index}
+                      src={url}
+                      selected={selectedBackground === name}
+                      onClick={() => setSelectedBackground(name)}
+                    />
+                  ))}
+                </Backgrounds>
+              </Section>
+              <CreateButton type="submit" disabled={isSubmitting || loading}>
+                <>
+                  <CreateButtonAdd>+</CreateButtonAdd> Create
+                </>
+              </CreateButton>
+            </ModalBody>
+          </StyledForm>
+        )}
+      </Formik>
     </div>
   );
 };

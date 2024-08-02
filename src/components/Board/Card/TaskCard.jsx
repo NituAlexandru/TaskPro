@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import { FiEdit, FiTrash2, FiArrowRightCircle, FiBell } from "react-icons/fi";
@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import EditCardForm from "../../Portal/editCard/EditCardModal";
 import StatusModal from "../../Portal/CardStatusModal/CardStatusModal";
 import { useCards } from "../../../contexts/CardContext";
-import { getUsersByIds } from "../../../service/authService"; // Import the service
 import {
   CardContainer,
   CardContentContainer,
@@ -45,7 +44,7 @@ const isToday = (someDate) => {
   );
 };
 
-const Card = ({
+const TaskCard = ({
   cardId,
   titleCard,
   description,
@@ -55,27 +54,12 @@ const Card = ({
   boardId,
   columnId,
   index,
-  collaborators = [], // Default parameter
+  collaborators,
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState("In progress");
   const { fetchCardsForColumn, updateCard, deleteCard } = useCards();
-  const [collaboratorDetails, setCollaboratorDetails] = useState([]);
-
-  useEffect(() => {
-    const fetchCollaborators = async () => {
-      if (collaborators.length > 0) {
-        try {
-          const users = await getUsersByIds(collaborators);
-          setCollaboratorDetails(users);
-        } catch (error) {
-          console.error("Failed to fetch collaborators:", error);
-        }
-      }
-    };
-    fetchCollaborators();
-  }, [collaborators]);
 
   const toggleModal = (setModalState) => () => setModalState((prev) => !prev);
 
@@ -120,17 +104,17 @@ const Card = ({
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
       <CardContainer>
-        <CardPriorityColor color={priorityColor} />
-        <AvatarsContainer>
-          {collaboratorDetails.map((collaborator) => (
-            <AvatarWrapper key={collaborator._id}>
-              <Avatar src={collaborator.avatar} alt={collaborator.name} />
-              <Tooltip className="tooltip">{collaborator.email}</Tooltip>
-            </AvatarWrapper>
-          ))}
-        </AvatarsContainer>
+        <CardPriorityColor color={priorityColor} />        
         <CardContentContainer>
           <CardTitle>{titleCard}</CardTitle>
+          <AvatarsContainer>
+            {collaborators.map((collaborator) => (
+              <AvatarWrapper key={collaborator._id}>
+                <Avatar src={collaborator.avatarURL} alt={collaborator.name} />
+                <Tooltip className="tooltip">{collaborator.name}</Tooltip>
+              </AvatarWrapper>
+            ))}
+          </AvatarsContainer>
           <CardDescription>{description}</CardDescription>
           <CardFooter>
             <Priority>
@@ -167,6 +151,7 @@ const Card = ({
                   priority,
                   deadline: new Date(deadline),
                   priorityColor,
+                  collaborators,
                 }}
                 onSubmit={handleEditCard}
               />
@@ -186,7 +171,7 @@ const Card = ({
   );
 };
 
-Card.propTypes = {
+TaskCard.propTypes = {
   titleCard: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   priority: PropTypes.string.isRequired,
@@ -196,7 +181,13 @@ Card.propTypes = {
   columnId: PropTypes.string.isRequired,
   cardId: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
-  collaborators: PropTypes.arrayOf(PropTypes.string).isRequired,
+  collaborators: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      avatarURL: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
-export default Card;
+export default TaskCard;

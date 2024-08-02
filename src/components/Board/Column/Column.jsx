@@ -29,6 +29,7 @@ const Column = ({
   boardId,
   fetchColumns,
   setColumns,
+  collaborators,
 }) => {
   const { fetchCardsForColumn, cards, deleteCard, moveCard } = useCards();
   const { deleteColumn, updateColumn } = useColumns();
@@ -181,12 +182,12 @@ const Column = ({
                 boardId={boardId}
                 columnId={columnId}
                 index={index}
-                collaborators={card.collaborators || []}
+                collaborators={collaborators} // Pass collaborators down to Card
               />
             ))}
           </CardsList>
         </ColumnSmallContainer>
-        <AddCardButton boardId={boardId} columnId={columnId} />
+        <AddCardButton boardId={boardId} columnId={columnId} collaborators={collaborators} />
         {isEditModalOpen && (
           <Modal
             isOpen={isEditModalOpen}
@@ -215,6 +216,7 @@ Column.propTypes = {
   boardId: PropTypes.string.isRequired,
   fetchColumns: PropTypes.func.isRequired,
   setColumns: PropTypes.func.isRequired,
+  collaborators: PropTypes.array.isRequired,
 };
 
 export default Column;

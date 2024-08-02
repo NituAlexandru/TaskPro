@@ -170,38 +170,24 @@ export const CollaboratorsInputWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
-export const CollaboratorsInput = styled.input`
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-export const CollaboratorsList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
-`;
-
-export const CollaboratorItem = styled.li`
+export const CollaboratorSelectList = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
+export const CollaboratorSelectItem = styled.div`
+  display: flex;
   align-items: center;
   padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 5px;
-`;
-
-export const CollaboratorEmail = styled.span`
-  font-family: "Poppins", sans-serif;
-  font-size: 14px;
-`;
-
-export const RemoveCollaboratorButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 16px;
+  border-radius: 50%;
   cursor: pointer;
+  border: 2px solid ${({ selected }) => (selected ? "#007BFF" : "transparent")};
+  transition: border-color 0.3s;
+
+  img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
 `;

@@ -7,7 +7,6 @@ import "react-calendar/dist/Calendar.css";
 import { FaCaretDown, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useCards } from "../../../contexts/CardContext";
-import {getUserDetailsByEmail} from "../../../service/authService";
 import {
   ModalHeader,
   FormWrapper,
@@ -28,11 +27,8 @@ import {
   CalendarPopup,
   SubmitButton,
   CollaboratorsInputWrapper,
-  CollaboratorsInput,
-  CollaboratorsList,
-  CollaboratorItem,
-  // CollaboratorDetails,
-  RemoveCollaboratorButton,
+  CollaboratorSelectList,
+  CollaboratorSelectItem,
 } from "./AddCardModal.styled";
 
 const validationSchema = Yup.object({
@@ -40,7 +36,6 @@ const validationSchema = Yup.object({
   description: Yup.string().required("Description is required"),
   collaborators: Yup.array().of(
     Yup.object({
-      email: Yup.string().email("Invalid email address").required("Email is required"),
       userId: Yup.string().required("User ID is required"),
       name: Yup.string().required("Name is required"),
       avatar: Yup.string().required("Avatar is required"),
@@ -48,7 +43,7 @@ const validationSchema = Yup.object({
   ),
 });
 
-const AddCardForm = ({ closeModal, boardId, columnId }) => {
+const AddCardForm = ({ closeModal, boardId, columnId, collaborators }) => {
   const [priority, setPriority] = useState("#797b78");
   const [deadline, setDeadline] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -76,20 +71,15 @@ const AddCardForm = ({ closeModal, boardId, columnId }) => {
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
-          console.log("Form values on submit:", values); // Debugging log
           try {
-            const collaboratorIds = values.collaborators.map(collaborator => collaborator.userId);
-
             const newCard = {
               ...values,
               priority: priorityMapping[priority],
               deadline,
               priorityColor: priority,
               columnId,
-              collaborators: collaboratorIds,
+              collaborators: values.collaborators,
             };
-
-            console.log("New card to be added:", newCard); // Debugging log
 
             await addCard(boardId, columnId, newCard);
             toast.success("Card added successfully!");
@@ -105,7 +95,7 @@ const AddCardForm = ({ closeModal, boardId, columnId }) => {
         {({ isSubmitting, values, setFieldValue }) => (
           <StyledForm>
             <InputWrapper>
-              <Input type="text" name="titleCard" placeholder="Title" autoComplete="off"/>
+              <Input type="text" name="titleCard" placeholder="Title" autoComplete="off" />
               <ErrorMessage name="titleCard" component={ErrorMessageStyled} />
             </InputWrapper>
             <CollaboratorsInputWrapper>
@@ -113,79 +103,43 @@ const AddCardForm = ({ closeModal, boardId, columnId }) => {
                 name="collaborators"
                 render={(arrayHelpers) => (
                   <>
-                    <CollaboratorsInput
-                    autoComplete="off"
-                      type="email"
-                      placeholder="Enter collaborator email"
-                      onKeyDown={async (e) => {
-                        console.log("Key down event:", e); // Debugging log
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          if (e.target.value) {
-                            const email = e.target.value;
-                            console.log("Email entered:", email); // Debugging log
-                            try {
-                              const userDetails = await getUserDetailsByEmail(email);
-                              console.log("User details fetched:", userDetails); // Debugging log
-                              if (userDetails) {
-                                arrayHelpers.push({
-                                  email,
-                                  userId: userDetails.userId,
-                                  name: userDetails.name,
-                                  avatar: userDetails.avatar,
-                                });
-                                console.log("Collaborators array after push:", values.collaborators); // Debugging log
-                              } else {
-                                toast.error(`User with email ${email} not found`);
-                              }
-                            } catch (error) {
-                              console.error("Error fetching user details:", error);
-                              toast.error("Error fetching user details. Please try again.");
+                    <CollaboratorSelectList>
+                      {collaborators.map((collab) => (
+                        <CollaboratorSelectItem
+                          key={collab._id}
+                          selected={values.collaborators.some((c) => c.userId === collab._id)}
+                          onClick={() => {
+                            const selectedCollaboratorIndex = values.collaborators.findIndex(
+                              (c) => c.userId === collab._id
+                            );
+                            if (selectedCollaboratorIndex > -1) {
+                              arrayHelpers.remove(selectedCollaboratorIndex);
+                            } else {
+                              arrayHelpers.push({
+                                userId: collab._id,
+                                name: collab.name,
+                                avatar: collab.avatarURL,
+                              });
                             }
-                            e.target.value = '';
-                          }
-                        }
-                      }}
-                    />
-                    <ErrorMessage name="collaborators" component={ErrorMessageStyled} />
-                    <CollaboratorsList>
-                      {values.collaborators.map((collaborator, index) => (
-                        <CollaboratorItem key={index}>
-                          <img src={collaborator.avatar} alt={collaborator.name} style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "10px" }} />
-                          {/* <CollaboratorDetails>
-                            <div>{collaborator.name}</div>
-                            <div>{collaborator.email}</div>
-                          </CollaboratorDetails> */}
-                          <RemoveCollaboratorButton
-                            type="button"
-                            onClick={() => arrayHelpers.remove(index)}
-                          >
-                            &times;
-                          </RemoveCollaboratorButton>
-                        </CollaboratorItem>
+                          }}
+                        >
+                          <img src={collab.avatarURL} alt={collab.name} />
+                        </CollaboratorSelectItem>
                       ))}
-                    </CollaboratorsList>
+                    </CollaboratorSelectList>
+                    <ErrorMessage name="collaborators" component={ErrorMessageStyled} />
                   </>
                 )}
               />
             </CollaboratorsInputWrapper>
             <TextareaWrapper>
-              <Textarea
-                name="description"
-                component="textarea"
-                placeholder="Description"
-              />
+              <Textarea name="description" component="textarea" placeholder="Description" />
               <ErrorMessage name="description" component={ErrorMessageStyled} />
             </TextareaWrapper>
             <Label>Priority</Label>
             <LabelColorContainer>
               {labelColors.map((color) => (
-                <ColorOption
-                  key={color}
-                  color={color}
-                  selected={priority === color}
-                  onClick={() => setPriority(color)}
-                />
+                <ColorOption key={color} color={color} selected={priority === color} onClick={() => setPriority(color)} />
               ))}
             </LabelColorContainer>
             <Label>Deadline</Label>
@@ -223,6 +177,13 @@ AddCardForm.propTypes = {
   closeModal: PropTypes.func.isRequired,
   boardId: PropTypes.string.isRequired,
   columnId: PropTypes.string.isRequired,
+  collaborators: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      avatarURL: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default AddCardForm;
