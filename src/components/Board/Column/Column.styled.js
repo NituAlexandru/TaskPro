@@ -43,7 +43,11 @@ export const TitleButtonContainer = styled.div`
 
   svg {
     cursor: pointer;
-    stroke: rgba(255, 255, 255, 0.5);
+    stroke: ${({ theme }) => theme.columnSvgColor};
+
+    &:hover {
+      transform: scale(1.2);
+    }
   }
 `;
 

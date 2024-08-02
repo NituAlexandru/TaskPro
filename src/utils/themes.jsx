@@ -50,6 +50,7 @@ export const darkTheme = {
   loaderBackground: "rgba(0, 0, 0, 0.8)",
   spinnerBorder: "rgba(255, 255, 255, 0.2)",
   spinnerBorderLeftColor: "#bedbb0",
+  columnSvgColor: "rgba(255, 255, 255, 0.5)",
 };
 
 export const lightTheme = {
@@ -104,6 +105,7 @@ export const lightTheme = {
   loaderBackground: "rgba(255, 255, 255, 0.9)",
   spinnerBorder: "rgba(0, 0, 0, 0.1)",
   spinnerBorderLeftColor: "#22a6b3",
+  columnSvgColor: "rgba(0, 0, 0, 0.5)",
 };
 
 export const violetTheme = {
@@ -158,4 +160,5 @@ export const violetTheme = {
   loaderBackground: "rgba(40, 44, 52, 0.8)",
   spinnerBorder: "rgba(255, 255, 255, 0.2)",
   spinnerBorderLeftColor: "#7b7ede",
+  columnSvgColor: "rgba(0, 0, 0, 0.5)",
 };

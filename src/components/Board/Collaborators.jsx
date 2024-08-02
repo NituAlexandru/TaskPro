@@ -49,30 +49,24 @@ const Avatar = styled.img`
 const Tooltip = styled.div`
   visibility: hidden;
   opacity: 0;
-  background-color: ${({ theme }) => theme.tooltipBackground};
-  color: ${({ theme }) => theme.tooltipText};
+  background-color: #333;
+  color: #fff;
   text-align: center;
-  border-radius: 4px;
-  padding: 5px;
+  border-radius: 8px;
+  padding: 10px;
   position: absolute;
-  bottom: 50px;
-  width: 120px;
-  left: 50%;
+  bottom: 0;
+  width: auto;
+  right: auto;
+  left: auto;
+  right: 40px;
+  top: 0;
   transform: translateX(-50%) translateY(10px);
   transition: opacity 0.3s, transform 0.3s;
   z-index: 1;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: ${({ theme }) => theme.tooltipBackground} transparent
-      transparent transparent;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const NoCollaborators = styled.p`
@@ -94,7 +88,10 @@ const Collaborators = ({ collaborators }) => {
         <AvatarsContainer>
           {collaborators.map((collaborator, index) => (
             <AvatarWrapper key={index}>
-              <Avatar src={collaborator.avatarURL} alt={`Collaborator Avatar`} />
+              <Avatar
+                src={collaborator.avatarURL}
+                alt={`Collaborator Avatar`}
+              />
               <Tooltip className="tooltip">{collaborator.name}</Tooltip>
             </AvatarWrapper>
           ))}

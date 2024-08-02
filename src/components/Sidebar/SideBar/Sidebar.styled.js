@@ -101,14 +101,18 @@ export const LogOutBtn = styled.button`
 export const HiOutlineLogoutStyled = styled(HiOutlineLogout)`
   width: 32px;
   height: 32px;
-  stroke: #bedbb0;
+  stroke: red;
 
   ${LogOutBtn}:hover & {
-    stroke: #9dc888;
+    stroke: red;
+    transform: scale(1.2);
   }
 `;
 
 export const BottomContainer = styled.div`
-  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 100px;
   width: 100%;
 `;

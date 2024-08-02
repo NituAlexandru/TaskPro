@@ -7,6 +7,7 @@ import EditCardForm from "../../Portal/editCard/EditCardModal";
 import StatusModal from "../../Portal/CardStatusModal/CardStatusModal";
 import { useCards } from "../../../contexts/CardContext";
 import {
+  CardMainContainer,
   CardContainer,
   CardContentContainer,
   CardPriorityColor,
@@ -102,9 +103,9 @@ const TaskCard = ({
   });
 
   return (
-    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+    <CardMainContainer ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
       <CardContainer>
-        <CardPriorityColor color={priorityColor} />        
+        <CardPriorityColor color={priorityColor} />
         <CardContentContainer>
           <CardTitle>{titleCard}</CardTitle>
           <AvatarsContainer>
@@ -167,7 +168,7 @@ const TaskCard = ({
           />
         )}
       </CardContainer>
-    </div>
+    </CardMainContainer>
   );
 };
 

@@ -27,6 +27,7 @@ const ModalContent = styled.div`
   width: ${({ $width }) => $width || "100%"};
   height: ${({ $height }) => $height || "auto"};
   border: ${({ $border }) => $border || "none"};
+  z-index: 100;
 `;
 
 const Modal = ({

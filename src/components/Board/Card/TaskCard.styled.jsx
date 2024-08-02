@@ -1,11 +1,19 @@
 import styled from "styled-components";
 
+export const CardMainContainer = styled.div``;
+
+export const CardPriorityColor = styled.div`
+  background-color: ${({ color }) => color};
+  width: 8px;
+  height: 154px;
+  border-radius: 8px 0 0 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+`;
+
 export const CardContainer = styled.div`
   background-color: ${({ theme }) => theme.cardBackgroundColor};
   border-radius: 8px;
-  width: 334px;
-  height: 154px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
   display: flex;
   color: ${({ theme }) => theme.cardTextColor};
   cursor: grab;
@@ -22,18 +30,12 @@ export const CardContentContainer = styled.div`
   justify-content: space-between;
   padding: 15px;
   height: 154px;
-  width: 100%;
+  width: 314px;
   color: ${({ theme }) => theme.cardTextColor};
 
   @media (max-width: 500px) {
     width: 100%;
   }
-`;
-
-export const CardPriorityColor = styled.div`
-  background-color: ${({ color }) => color};
-  width: 8px;
-  border-radius: 8px 0 0 8px;
 `;
 
 export const CardTitle = styled.h3`
@@ -182,25 +184,19 @@ export const Tooltip = styled.div`
   background-color: #333;
   color: #fff;
   text-align: center;
-  border-radius: 4px;
-  padding: 5px;
+  border-radius: 8px;
+  padding: 10px;
   position: absolute;
-  bottom: 40px;
-  width: 120px;
-  right: 150%;
-  top: 100%;
+  bottom: 0;
+  width: auto;
+  right: auto;
+  left: auto;
+  right: 40px;
+  top: 0;
   transform: translateX(-50%) translateY(10px);
   transition: opacity 0.3s, transform 0.3s;
   z-index: 1;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    right: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #333 transparent transparent transparent;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
