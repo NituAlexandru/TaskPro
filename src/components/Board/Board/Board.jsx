@@ -1,4 +1,11 @@
-import { useState, useEffect, useMemo, useCallback, useContext, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useContext,
+  useRef,
+} from "react";
 import PropTypes from "prop-types";
 import {
   FilterButton,
@@ -18,38 +25,128 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import Collaborators from "../Collaborators";
 import CardService from "../../../service/cardService";
 
-import abstractSpheres from "../../../assets/backgrounds/abstract-spheres.png";
-import balloonFestival from "../../../assets/backgrounds/BalloonFestival.png";
-import cherryBlossomTree from "../../../assets/backgrounds/CherryBlossomTree.png";
-import cloudySky from "../../../assets/backgrounds/CloudySky.png";
-import crescentMoon from "../../../assets/backgrounds/CrescentMoon.png";
-import desertArch from "../../../assets/backgrounds/DesertArch.png";
-import hotAirBalloon from "../../../assets/backgrounds/HotAirBalloon.png";
-import milkyWayCamp from "../../../assets/backgrounds/MilkyWayCamp.png";
-import moonEclipse from "../../../assets/backgrounds/moon-eclipse.png";
-import palmLeaves from "../../../assets/backgrounds/PalmLeaves.png";
-import pinkFlowers from "../../../assets/backgrounds/PinkFlowers.png";
-import rockyCoast from "../../../assets/backgrounds/RockyCoast.png";
-import sailboat from "../../../assets/backgrounds/Sailboat.png";
-import turquoiseBay from "../../../assets/backgrounds/TurquoiseBay.png";
-import starryMountains from "../../../assets/backgrounds/StarryMountains.png";
+import abstractSpheresD from "../../../assets/board-img/abstract-spheres-d.webp";
+import abstractSpheresT from "../../../assets/board-img/abstract-spheres-t.webp";
+import abstractSpheresM from "../../../assets/board-img/abstract-spheres-m.webp";
+import balloonFestivalD from "../../../assets/board-img/BalloonFestival-d.webp";
+import balloonFestivalT from "../../../assets/board-img/BalloonFestival-t.webp";
+import balloonFestivalM from "../../../assets/board-img/BalloonFestival-m.webp";
+import cherryBlossomTreeD from "../../../assets/board-img/CherryBlossomTree-d.webp";
+import cherryBlossomTreeT from "../../../assets/board-img/CherryBlossomTree-t.webp";
+import cherryBlossomTreeM from "../../../assets/board-img/CherryBlossomTree-m.webp";
+import cloudySkyD from "../../../assets/board-img/CloudySky-d.webp";
+import cloudySkyT from "../../../assets/board-img/CloudySky-t.webp";
+import cloudySkyM from "../../../assets/board-img/CloudySky-m.webp";
+import crescentMoonD from "../../../assets/board-img/CrescentMoon-d.webp";
+import crescentMoonT from "../../../assets/board-img/CrescentMoon-t.webp";
+import crescentMoonM from "../../../assets/board-img/CrescentMoon-m.webp";
+import desertArchD from "../../../assets/board-img/DesertArch-d.webp";
+import desertArchT from "../../../assets/board-img/DesertArch-t.webp";
+import desertArchM from "../../../assets/board-img/DesertArch-m.webp";
+import hotAirBalloonD from "../../../assets/board-img/HotAirBalloon-d.webp";
+import hotAirBalloonT from "../../../assets/board-img/HotAirBalloon-t.webp";
+import hotAirBalloonM from "../../../assets/board-img/HotAirBalloon-m.webp";
+import milkyWayCampD from "../../../assets/board-img/MilkyWayCamp-d.webp";
+import milkyWayCampT from "../../../assets/board-img/MilkyWayCamp-t.webp";
+import milkyWayCampM from "../../../assets/board-img/MilkyWayCamp-m.webp";
+import moonEclipseD from "../../../assets/board-img/moon-eclipse-d.webp";
+import moonEclipseT from "../../../assets/board-img/moon-eclipse-t.webp";
+import moonEclipseM from "../../../assets/board-img/moon-eclipse-m.webp";
+import palmLeavesD from "../../../assets/board-img/PalmLeaves-d.webp";
+import palmLeavesT from "../../../assets/board-img/PalmLeaves-t.webp";
+import palmLeavesM from "../../../assets/board-img/PalmLeaves-m.webp";
+import pinkFlowersD from "../../../assets/board-img/PinkFlowers-d.webp";
+import pinkFlowersT from "../../../assets/board-img/PinkFlowers-t.webp";
+import pinkFlowersM from "../../../assets/board-img/PinkFlowers-m.webp";
+import rockyCoastD from "../../../assets/board-img/RockyCoast-d.webp";
+import rockyCoastT from "../../../assets/board-img/RockyCoast-t.webp";
+import rockyCoastM from "../../../assets/board-img/RockyCoast-m.webp";
+import sailboatD from "../../../assets/board-img/Sailboat-d.webp";
+import sailboatT from "../../../assets/board-img/Sailboat-t.webp";
+import sailboatM from "../../../assets/board-img/Sailboat-m.webp";
+import turquoiseBayD from "../../../assets/board-img/TurquoiseBay-d.webp";
+import turquoiseBayT from "../../../assets/board-img/TurquoiseBay-t.webp";
+import turquoiseBayM from "../../../assets/board-img/TurquoiseBay-m.webp";
+import starryMountainsD from "../../../assets/board-img/StarryMountains-d.webp";
+import starryMountainsT from "../../../assets/board-img/StarryMountains-t.webp";
+import starryMountainsM from "../../../assets/board-img/StarryMountains-m.webp";
 
 const backgrounds = {
-  abstractSpheres,
-  balloonFestival,
-  cherryBlossomTree,
-  cloudySky,
-  crescentMoon,
-  desertArch,
-  hotAirBalloon,
-  milkyWayCamp,
-  moonEclipse,
-  palmLeaves,
-  pinkFlowers,
-  rockyCoast,
-  sailboat,
-  turquoiseBay,
-  starryMountains,
+  abstractSpheres: {
+    desktop: abstractSpheresD,
+    tablet: abstractSpheresT,
+    mobile: abstractSpheresM,
+  },
+  balloonFestival: {
+    desktop: balloonFestivalD,
+    tablet: balloonFestivalT,
+    mobile: balloonFestivalM,
+  },
+  cherryBlossomTree: {
+    desktop: cherryBlossomTreeD,
+    tablet: cherryBlossomTreeT,
+    mobile: cherryBlossomTreeM,
+  },
+  cloudySky: {
+    desktop: cloudySkyD,
+    tablet: cloudySkyT,
+    mobile: cloudySkyM,
+  },
+  crescentMoon: {
+    desktop: crescentMoonD,
+    tablet: crescentMoonT,
+    mobile: crescentMoonM,
+  },
+  desertArch: {
+    desktop: desertArchD,
+    tablet: desertArchT,
+    mobile: desertArchM,
+  },
+  hotAirBalloon: {
+    desktop: hotAirBalloonD,
+    tablet: hotAirBalloonT,
+    mobile: hotAirBalloonM,
+  },
+  milkyWayCamp: {
+    desktop: milkyWayCampD,
+    tablet: milkyWayCampT,
+    mobile: milkyWayCampM,
+  },
+  moonEclipse: {
+    desktop: moonEclipseD,
+    tablet: moonEclipseT,
+    mobile: moonEclipseM,
+  },
+  palmLeaves: {
+    desktop: palmLeavesD,
+    tablet: palmLeavesT,
+    mobile: palmLeavesM,
+  },
+  pinkFlowers: {
+    desktop: pinkFlowersD,
+    tablet: pinkFlowersT,
+    mobile: pinkFlowersM,
+  },
+  rockyCoast: {
+    desktop: rockyCoastD,
+    tablet: rockyCoastT,
+    mobile: rockyCoastM,
+  },
+  sailboat: {
+    desktop: sailboatD,
+    tablet: sailboatT,
+    mobile: sailboatM,
+  },
+  turquoiseBay: {
+    desktop: turquoiseBayD,
+    tablet: turquoiseBayT,
+    mobile: turquoiseBayM,
+  },
+  starryMountains: {
+    desktop: starryMountainsD,
+    tablet: starryMountainsT,
+    mobile: starryMountainsM,
+  },
 };
 
 const Board = ({ boardId, titleBoard }) => {
@@ -100,22 +197,32 @@ const Board = ({ boardId, titleBoard }) => {
     }
 
     try {
-      await cardService.moveCard(boardId, sourceColumnId, cardId, destinationColumnId);
+      await cardService.moveCard(
+        boardId,
+        sourceColumnId,
+        cardId,
+        destinationColumnId
+      );
       fetchBoardData(); // Refetch the board data to update the state
     } catch (error) {
       console.error("Error moving card:", error);
     }
   };
 
+  const backgroundImageSet = backgrounds[background] || {};
+
   return (
-    <BoardContainer $backgroundImage={backgrounds[background]}>
+    <BoardContainer $backgroundImage={backgroundImageSet}>
       <BoardHeader>
         <AddTitleFilterContainer>
           <h2>{titleBoard}</h2>
           <Collaborators collaborators={collaborators} />
         </AddTitleFilterContainer>
 
-        <FilterButton ref={filterButtonRef} onClick={() => setIsFilterModalOpen(true)}>
+        <FilterButton
+          ref={filterButtonRef}
+          onClick={() => setIsFilterModalOpen(true)}
+        >
           <FiFilter />
           Filters
         </FilterButton>

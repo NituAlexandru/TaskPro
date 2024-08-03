@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const BoardContainer = styled.div`
   flex-grow: 1;
   padding: 20px;
-  background-image: url(${(props) => props.$backgroundImage});
+  background-image: url(${(props) => props.$backgroundImage.desktop});
   background-size: cover;
   background-position: center;
   color: ${({ theme }) => theme.text};
@@ -11,6 +11,14 @@ export const BoardContainer = styled.div`
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    background-image: url(${(props) => props.$backgroundImage.tablet});
+  }
+
+  @media (max-width: 480px) {
+    background-image: url(${(props) => props.$backgroundImage.mobile});
+  }
 
   img {
     height: 30px;
