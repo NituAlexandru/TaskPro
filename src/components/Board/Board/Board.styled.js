@@ -49,23 +49,30 @@ export const ColumnsContainer = styled.div`
 export const FilterButton = styled.button`
   background: none;
   border: none;
-  color: ${({ theme }) => theme.text};
+  background-color: ${({ theme }) => theme.buttonBackground};
+  color: ${({ theme }) => theme.buttonText};
   display: flex;
   align-items: center;
   gap: 5px;
   cursor: pointer;
   font-size: 14px;
   margin-bottom: 10px;
+  height: 40px;
+  border-radius: 4px;
 
   &:hover {
     background-color: ${({ theme }) => theme.body};
+    color: ${({ theme }) => theme.text};
   }
+
   &:active {
     background-color: ${({ theme }) => theme.body};
+    color: ${({ theme }) => theme.text};
   }
 
   &:focus {
     background-color: ${({ theme }) => theme.body};
+    color: ${({ theme }) => theme.text};
     outline: none;
   }
 `;

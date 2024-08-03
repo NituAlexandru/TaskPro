@@ -16,6 +16,7 @@ export const DropdownButton = styled.button`
   align-items: center;
   height: 40px;
   width: 100px;
+  border-radius: 4px;
 
   @media (max-width: 400px) {
     font-size: 14px;
