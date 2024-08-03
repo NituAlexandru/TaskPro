@@ -16,6 +16,15 @@ class CardService {
     return response.data;
   };
 
+  getCardData = async (boardId, columnId, cardId) => {
+    const response = await axios.get(`${BASE_URL}/boards/${boardId}/columns/${columnId}/cards/${cardId}`, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+    return response.data;
+  };
+
   addCard = async (boardId, columnId, cardData) => {
     const response = await axios.post(`${BASE_URL}/boards/${boardId}/columns/${columnId}/cards`, cardData, {
       headers: {

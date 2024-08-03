@@ -51,11 +51,17 @@ const EditCardForm = ({ closeModal, initialValues, onSubmit }) => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
+          const { collaborators, ...otherValues } = values;
           const updatedValues = {
-            ...values,
+            ...otherValues,
             priorityColor: labelColor,
             deadline,
+            columnId: initialValues.columnId,
           };
+          
+          // Log the payload for debugging
+          console.log('Payload being sent to server:', updatedValues);
+          
           onSubmit(updatedValues);
           setSubmitting(false);
         }}
@@ -124,8 +130,10 @@ EditCardForm.propTypes = {
     priority: PropTypes.string,
     deadline: PropTypes.instanceOf(Date),
     priorityColor: PropTypes.string,
+    columnId: PropTypes.string.isRequired, // Ensure columnId is included
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 
 export default EditCardForm;
+

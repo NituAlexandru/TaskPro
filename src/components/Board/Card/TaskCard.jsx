@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import {
@@ -54,7 +54,7 @@ const isToday = (someDate) => {
 };
 
 const TaskCard = ({
-  cardId,
+  
   titleCard,
   description,
   priority,
@@ -62,13 +62,14 @@ const TaskCard = ({
   priorityColor,
   boardId,
   columnId,
+  cardId,
   index,
   collaborators,
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState("In progress");
-  const { fetchCardsForColumn, updateCard, deleteCard } = useCards();
+  const { fetchCardsForColumn, fetchCardData, updateCard, deleteCard } = useCards();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [assignedCollaborator, setAssignedCollaborator] = useState(null);
 
@@ -79,10 +80,24 @@ const TaskCard = ({
     setIsStatusModalOpen(false);
   };
 
+  useEffect(() => {
+    const fetchCard = async () => {
+      console.log('Fetching card with cardId:', cardId); // Debugging statement
+      const card = await fetchCardData(boardId, columnId, cardId);
+      console.log('Fetched card:', card); // Debugging statement
+      if (card && card.collaborators && card.collaborators.length > 0) {
+        setAssignedCollaborator(card.collaborators[0]);
+      }
+    };
+
+    fetchCard();
+  }, [boardId, columnId, cardId, fetchCardData]);
+
+
   const handleEditCard = async (values) => {
     try {
       await updateCard(boardId, columnId, cardId, values);
-      fetchCardsForColumn(boardId, columnId);
+      fetchCardData(boardId, columnId, cardId);
       toast.success("Card updated successfully!");
       setIsEditModalOpen(false);
     } catch (error) {
@@ -100,11 +115,39 @@ const TaskCard = ({
     }
   };
 
-  const handleAssignCollaborator = (collaborator) => {
+  const handleAssignCollaborator = async (collaborator) => {
     setAssignedCollaborator(collaborator);
     setIsDropdownOpen(false);
+  
+    try {
+      const collaboratorData = {
+        userId: collaborator._id,
+        name: collaborator.name,
+        avatarURL: collaborator.avatarURL
+      };
+  
+      const updatedCardData = {
+      
+        columnId,
+        titleCard,
+        description,
+        priority,
+        priorityColor,
+        deadline,
+        collaborators: [collaboratorData],
+      };
+  
+      console.log('Updated Card Data:', updatedCardData); // Log data to debug
+      await updateCard(boardId, columnId, cardId, updatedCardData);
+      fetchCardsForColumn(boardId, columnId);
+      toast.success("Collaborator assigned successfully!");
+    } catch (error) {
+      console.error('Error:', error); // Log error to debug
+      toast.error("Failed to assign collaborator. Please try again.");
+    }
   };
-
+  
+  
   const formattedDeadline = formatDate(deadline);
   const deadlineDate = new Date(deadline);
   const isDeadlineToday = isToday(deadlineDate);
@@ -188,7 +231,7 @@ const TaskCard = ({
                   priority,
                   deadline: new Date(deadline),
                   priorityColor,
-                  collaborators,
+                  columnId
                 }}
                 onSubmit={handleEditCard}
               />

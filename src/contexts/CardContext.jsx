@@ -32,6 +32,16 @@ export const CardProvider = ({ children }) => {
     [cardService]
   );
 
+  const fetchCardData = useCallback(async (boardId, columnId, cardId) => {
+    try {
+      const data = await cardService.getCardData(boardId, columnId, cardId);
+      return data; // Assuming response.data is the card object
+    } catch (error) {
+      console.error("Error fetching card data:", error);
+      return null;
+    }
+  }, [cardService]);
+
   const addCard = async (boardId, columnId, cardData) => {
     try {
       const newCard = await cardService.addCard(boardId, columnId, cardData);
@@ -93,6 +103,7 @@ export const CardProvider = ({ children }) => {
         updateCard,
         deleteCard,
         moveCard,
+        fetchCardData,
       }}
     >
       {children}
