@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
-export const CardMainContainer = styled.div``;
+export const CardMainContainer = styled.div`
+  position: relative;
+  z-index: 1;
+`;
 
 export const CardPriorityColor = styled.div`
   background-color: ${({ color }) => color};
@@ -18,6 +21,7 @@ export const CardContainer = styled.div`
   color: ${({ theme }) => theme.cardTextColor};
   cursor: grab;
   position: relative;
+  z-index: 1;
 
   @media (max-width: 500px) {
     width: 100%;

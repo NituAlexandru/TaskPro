@@ -24,6 +24,11 @@ export const CloseButton = styled.button`
   cursor: pointer;
   padding: 0;
   margin: 0;
+
+  &:hover {
+    background-color: transparent;
+    transform: scale(1.2);
+  }
 `;
 
 export const ModalBody = styled.div`
@@ -50,7 +55,7 @@ export const Section = styled.div``;
 export const Icons = styled.div`
   display: flex;
   justify-content: flex-start;
-  gap: 0;
+  gap: 1px;
   margin-top: 10px;
 `;
 
@@ -60,10 +65,12 @@ export const Icon = styled.div`
   background: transparent;
   border-radius: 50%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   cursor: pointer;
   opacity: 0.8;
+  border-radius: 8px;
+  background-color: rgba(32, 32, 32, 0.2);
 
   img {
     width: 20px;

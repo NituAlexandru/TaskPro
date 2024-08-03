@@ -13,6 +13,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10000;
 `;
 
 const ModalContent = styled.div`
@@ -27,7 +28,7 @@ const ModalContent = styled.div`
   width: ${({ $width }) => $width || "100%"};
   height: ${({ $height }) => $height || "auto"};
   border: ${({ $border }) => $border || "none"};
-  z-index: 100;
+  z-index: 10000;
 `;
 
 const Modal = ({

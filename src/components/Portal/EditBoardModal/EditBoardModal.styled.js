@@ -23,6 +23,11 @@ export const CloseButton = styled.button`
   cursor: pointer;
   padding: 0;
   margin: 0;
+
+  &:hover {
+    background-color: transparent;
+    transform: scale(1.2);
+  }
 `;
 
 export const ModalBody = styled.div`
@@ -42,6 +47,7 @@ export const Input = styled.input`
   opacity: 0.4;
   margin: 0;
   padding: 10px;
+  color: ${({ theme }) => theme.modalTextColor};
 `;
 
 export const Section = styled.div``;
@@ -49,25 +55,25 @@ export const Section = styled.div``;
 export const Icons = styled.div`
   display: flex;
   justify-content: flex-start;
-  gap: 0;
+  gap: 1px;
   margin-top: 10px;
 `;
 
 export const Icon = styled.div`
   width: 30px;
   height: 30px;
-  background: transparent;
-  border-radius: 50%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
+  border-radius: 50%;
   cursor: pointer;
   opacity: 0.8;
+  border-radius: 8px;
+  background-color: rgba(32, 32, 32, 0.2);
 
   img {
     width: 18px;
     height: 18px;
-    stroke: #fff;
     transition: all 250ms ease-in-out;
     border: ${({ selected }) => (selected ? "2px solid #fff" : "none")};
   }
