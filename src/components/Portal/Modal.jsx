@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled, { ThemeContext } from "styled-components";
 import Portal from "./Portal";
 
+// Styled components for the modal
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -31,6 +32,7 @@ const ModalContent = styled.div`
   z-index: 10000;
 `;
 
+// Modal component
 const Modal = ({
   children,
   isOpen,
@@ -45,13 +47,13 @@ const Modal = ({
 }) => {
   const theme = useContext(ThemeContext);
 
-  if (!isOpen) return null;
+  if (!isOpen) return null; // Return null if the modal is not open
 
   return (
     <Portal>
       <ModalOverlay onClick={onClose} $background="rgba(0, 0, 0, 0.5)">
         <ModalContent
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()} // Prevent click propagation to the overlay
           $width={width}
           $height={height}
           $border={border}
@@ -68,6 +70,7 @@ const Modal = ({
   );
 };
 
+// Prop types for the Modal component
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
   isOpen: PropTypes.bool.isRequired,
@@ -82,3 +85,4 @@ Modal.propTypes = {
 };
 
 export default Modal;
+

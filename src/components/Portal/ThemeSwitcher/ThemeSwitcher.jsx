@@ -9,8 +9,10 @@ import {
 const ThemeSwitcher = ({ handleChangeTheme }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
+  // Toggle the visibility of the dropdown
   const toggleDropdown = () => setShowDropdown(!showDropdown);
 
+  // Change the theme and close the dropdown
   const changeTheme = (newTheme) => {
     handleChangeTheme(newTheme);
     setShowDropdown(false);

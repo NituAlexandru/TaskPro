@@ -20,7 +20,6 @@ const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-
       getCurrentUser();
     }
   }, [token, getCurrentUser]);
@@ -31,13 +30,10 @@ const ThemeProvider = ({ children }) => {
     }
   }, [user]);
 
-  useEffect(() => {
-  }, [theme]);
-
   const handleChangeTheme = async (newTheme) => {
     setTheme(newTheme);
     try {
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:4500/api/user/theme",
         { theme: newTheme },
         {
@@ -46,7 +42,6 @@ const ThemeProvider = ({ children }) => {
           },
         }
       );
-
     } catch (error) {
       console.error("Failed to update theme:", error);
     }

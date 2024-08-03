@@ -7,7 +7,6 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: rgb(255, 255, 255);
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 1) 9%,
@@ -31,7 +30,6 @@ const StyledLink = styled(Link)`
   text-align: center;
   color: #fff;
   text-decoration: none;
-  text-align: center;
   border-radius: 8px;
   width: 344px;
   height: 49px;
@@ -85,7 +83,6 @@ const StartPage = () => {
         <img src="/src/assets/logo-black.png" alt="Task Pro Logo" />
         <h1>Task Pro</h1>
       </LogoContainer>
-
       <Paragraph>
         Supercharge your productivity and take control of your tasks with Task
         Pro - Don&rsquo;t wait, start achieving your goals now!
@@ -97,3 +94,4 @@ const StartPage = () => {
 };
 
 export default StartPage;
+

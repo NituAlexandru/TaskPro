@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import NewBoardContainer from "../NewBoardContainer/NewBoardContainer";
@@ -18,8 +18,9 @@ import {
   BottomContainer
 } from "./Sidebar.styled";
 
-const Sidebar = ({ isOpen, toggleSidebar }) => {
+const Sidebar = ({ isOpen, toggleSidebar, onCollaboratorUpdate }) => {
   const { logout } = useContext(AuthContext);
+  const [selectedBoardId, setSelectedBoardId] = useState(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -27,7 +28,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     navigate("/");
   };
 
+  const navigateHome = () => {
+    navigate("/home");
+  };
+
   const handleBoardSelect = (boardId, titleBoard) => {
+    setSelectedBoardId(boardId);
     navigate(`/home/${titleBoard}`);
   };
 
@@ -43,7 +49,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         </LogoContainer>
         <SidebarHeading>My boards</SidebarHeading>
         <NewBoardContainer />
-        <BoardList setSelectedBoardId={handleBoardSelect} />
+        <BoardList setSelectedBoardId={handleBoardSelect} navigateHome={navigateHome} onCollaboratorUpdate={onCollaboratorUpdate}/>
         <BottomContainer>
           <HelpList />
           <LogOutBtn onClick={handleLogout}>
@@ -59,6 +65,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 Sidebar.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
+  onCollaboratorUpdate: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

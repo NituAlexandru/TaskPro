@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ColumnService from "../service/columnService";
 import { AuthContext } from "./AuthContext";
@@ -11,16 +11,18 @@ export const ColumnProvider = ({ children }) => {
   const { token } = useContext(AuthContext);
   const columnService = new ColumnService(token);
 
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+    }
+  }, [error]);
+
   const fetchColumnsForBoard = async (boardId) => {
     try {
       const data = await columnService.getColumnsForBoard(boardId);
       setColumns(data);
-    } catch (error) {
-      console.error(
-        "Error fetching columns:",
-        error.response?.data || error.message
-      );
-      setError("Failed to fetch columns. Please try again later.");
+    } catch (err) {
+      handleError(err, "Failed to fetch columns.");
     }
   };
 
@@ -29,13 +31,9 @@ export const ColumnProvider = ({ children }) => {
       const newColumn = await columnService.addColumn(boardId, columnData);
       setColumns((prevColumns) => [...prevColumns, newColumn]);
       return newColumn;
-    } catch (error) {
-      console.error(
-        "Error adding column:",
-        error.response?.data || error.message
-      );
-      setError("Failed to add column. Please try again later.");
-      throw error;
+    } catch (err) {
+      handleError(err, "Failed to add column.");
+      throw err;
     }
   };
 
@@ -52,13 +50,9 @@ export const ColumnProvider = ({ children }) => {
         )
       );
       return updatedColumn;
-    } catch (error) {
-      console.error(
-        "Error updating column:",
-        error.response?.data || error.message
-      );
-      setError("Failed to update column. Please try again later.");
-      throw error;
+    } catch (err) {
+      handleError(err, "Failed to update column.");
+      throw err;
     }
   };
 
@@ -68,14 +62,16 @@ export const ColumnProvider = ({ children }) => {
       setColumns((prevColumns) =>
         prevColumns.filter((column) => column._id !== columnId)
       );
-    } catch (error) {
-      console.error(
-        "Error deleting column:",
-        error.response?.data || error.message
-      );
-      setError("Failed to delete column. Please try again later.");
-      throw error;
+    } catch (err) {
+      handleError(err, "Failed to delete column.");
+      throw err;
     }
+  };
+
+  const handleError = (err, defaultMessage) => {
+    const message = err.response?.data || err.message || defaultMessage;
+    console.error(message);
+    setError(message);
   };
 
   return (

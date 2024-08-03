@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Sidebar from "../../components/Sidebar/SideBar/Sidebar";
@@ -9,7 +9,6 @@ import {
   Content,
   HomeParagraph,
 } from "./HomePage.styled";
-import { ThemeProvider } from "../../utils/ThemeProvider";
 import { useBoards } from "../../contexts/BoardContext";
 import { ColumnProvider } from "../../contexts/ColumnContext";
 import { CardProvider } from "../../contexts/CardContext";
@@ -17,40 +16,57 @@ import { CardProvider } from "../../contexts/CardContext";
 const HomePage = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [selectedBoardId, setSelectedBoardId] = useState(null);
-  const { boards } = useBoards();
+  const [selectedBoardTitle, setSelectedBoardTitle] = useState(null);
   const { titleBoard } = useParams();
+  const { boards, fetchBoards } = useBoards();
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  const toggleSidebar = () => setIsOpen(!isOpen);
 
   useEffect(() => {
     if (titleBoard && boards.length > 0) {
       const board = boards.find((b) => b.titleBoard === titleBoard);
       if (board) {
-        setSelectedBoardId(board._id); // Correctly use _id
+        setSelectedBoardId(board._id);
+        setSelectedBoardTitle(board.titleBoard);
       }
+    } else {
+      setSelectedBoardId(null);
+      setSelectedBoardTitle(null);
     }
   }, [titleBoard, boards]);
 
+  const handleCollaboratorUpdate = () => {
+    const updatedBoard = boards.find((b) => b.titleBoard === titleBoard);
+    if (updatedBoard) {
+      setSelectedBoardId(updatedBoard._id);
+      setSelectedBoardTitle(updatedBoard.titleBoard);
+    }
+  };
+
+
   return (
-    <ThemeProvider>
+
       <ColumnProvider>
         <CardProvider>
           <HomePageContainer>
             <Sidebar
               isOpen={isOpen}
               toggleSidebar={toggleSidebar}
-              setSelectedBoardId={(boardId) => {
+              setSelectedBoardId={(boardId, boardTitle) => {
                 setSelectedBoardId(boardId);
-                // Optionally navigate or handle logic if needed
+                setSelectedBoardTitle(boardTitle);
               }}
+              onCollaboratorUpdate={handleCollaboratorUpdate} 
             />
             <MainContent $isOpen={isOpen}>
               <Header isOpen={isOpen} />
               <Content>
                 {selectedBoardId ? (
-                  <Board boardId={selectedBoardId} titleBoard={titleBoard} />
+                  <Board
+                    boardId={selectedBoardId}
+                    titleBoard={selectedBoardTitle}
+                    onCollaboratorUpdate={handleCollaboratorUpdate}
+                  />
                 ) : (
                   <HomeParagraph>
                     Before starting your project, it is essential
@@ -65,8 +81,10 @@ const HomePage = () => {
           </HomePageContainer>
         </CardProvider>
       </ColumnProvider>
-    </ThemeProvider>
+
   );
 };
 
 export default HomePage;
+
+

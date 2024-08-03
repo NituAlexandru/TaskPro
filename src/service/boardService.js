@@ -7,6 +7,7 @@ class BoardService {
     this.token = token;
   }
 
+  // Create a new board
   createBoard = async (boardData) => {
     const response = await axios.post(BASE_URL, boardData, {
       headers: {
@@ -16,6 +17,7 @@ class BoardService {
     return response.data;
   };
 
+  // Get all boards for the current user
   getBoardsForUser = async () => {
     const response = await axios.get(BASE_URL, {
       headers: {
@@ -25,6 +27,7 @@ class BoardService {
     return response.data;
   };
 
+  // Get a specific board by ID
   getBoard = async (boardId) => {
     const response = await axios.get(`${BASE_URL}/${boardId}`, {
       headers: {
@@ -34,6 +37,7 @@ class BoardService {
     return response.data;
   };
 
+  // Update a specific board by ID
   updateBoard = async (boardId, boardData) => {
     const response = await axios.put(`${BASE_URL}/${boardId}`, boardData, {
       headers: {
@@ -43,6 +47,7 @@ class BoardService {
     return response.data;
   };
 
+  // Delete a specific board by ID
   deleteBoard = async (boardId) => {
     const response = await axios.delete(`${BASE_URL}/${boardId}`, {
       headers: {

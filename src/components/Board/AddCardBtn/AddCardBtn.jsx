@@ -1,9 +1,16 @@
+// React and PropTypes imports
 import { useState } from "react";
 import PropTypes from "prop-types";
+
+// Notification and modal imports
 import { toast } from "react-toastify";
 import Modal from "../../Portal/Modal";
 import AddCardForm from "../../Portal/addCard/AddCardModal";
+
+// Context import
 import { useCards } from "../../../contexts/CardContext";
+
+// Style imports
 import {
   ButtonContainer,
   IconButton,
@@ -12,15 +19,19 @@ import {
 
 const AddCardButton = ({ boardId, columnId, collaborators }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { fetchCardsForColumn, addCard } = useCards(); // Destructurează addCard din useCards
+  const { fetchCardsForColumn, addCard } = useCards();
 
+  // Open modal
   const openModal = () => setIsModalOpen(true);
+
+  // Close modal
   const closeModal = () => setIsModalOpen(false);
 
+  // Handle card addition
   const handleCardAdded = async (cardData) => {
     try {
-      await addCard(boardId, columnId, cardData); // Adaugă cardul
-      await fetchCardsForColumn(boardId, columnId); // Actualizează cardurile din coloană
+      await addCard(boardId, columnId, cardData);
+      await fetchCardsForColumn(boardId, columnId);
       toast.success("Card added successfully!");
       closeModal();
     } catch (error) {
@@ -36,20 +47,13 @@ const AddCardButton = ({ boardId, columnId, collaborators }) => {
         <AddParagraph>Add another card</AddParagraph>
       </ButtonContainer>
       {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          width="350px"
-          height="522px"
-          border="1px solid rgba(190, 219, 176, 0.5)"
-          borderRadius="8px"
-        >
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
           <AddCardForm
             closeModal={closeModal}
             onCardAdded={handleCardAdded}
             boardId={boardId}
             columnId={columnId}
-            collaborators={collaborators} // Pass collaborators down to AddCardForm
+            collaborators={collaborators}
           />
         </Modal>
       )}

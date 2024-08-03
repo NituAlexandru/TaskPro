@@ -10,40 +10,39 @@ import {
   UserAvatar,
   UserName,
 } from "./Header.styled";
+import Modal from "../Portal/Modal";
 
 const Header = () => {
-  const { user } = useContext(AuthContext);
+  const { user, updateUser } = useContext(AuthContext);
   const { theme, handleChangeTheme } = useContext(ThemeContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+// Handlers
+const handleProfileUpdate = (updatedUser) => {
+  updateUser(updatedUser);
+  setIsModalOpen(false);
+};
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleProfileUpdate = (values) => {
-    console.log("Profile updated with values:", values);
-    handleCloseModal();
-  };
 
   return (
     <>
       <HeaderContainer>
         <ThemeSwitcher theme={theme} handleChangeTheme={handleChangeTheme} />
-        <UserInfo onClick={handleOpenModal}>
+        <UserInfo onClick={() => setIsModalOpen(true)}>
           <UserName>{user?.name}</UserName>
           <UserAvatar src={user?.avatarURL} alt={`${user?.name}'s avatar`} />
         </UserInfo>
       </HeaderContainer>
       {isModalOpen && (
+        <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}>
         <ProfileEditForm
           user={user}
           onSubmit={handleProfileUpdate}
-          onClose={handleCloseModal}
+          closeModal={() => setIsModalOpen(false)}
         />
+        </Modal>
       )}
     </>
   );

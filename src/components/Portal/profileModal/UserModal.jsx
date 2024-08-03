@@ -15,14 +15,14 @@ import {
   ChangeAvatarButton,
   AvatarImage,
   AvatarWrapper,
-  FormTitle,
+  FormWrapper,
+  ModalHeader,
+  Title,
   CloseButton,
-  ModalContent,
-  ModalOverlay,
   IconButton,
 } from "./UserModal.styled";
 
-const ProfileEditForm = ({ onSubmit, onClose, user }) => {
+const ProfileEditForm = ({ closeModal, onSubmit, user }) => {
   const { token, updateUser } = useContext(AuthContext);
   const [avatar, setAvatar] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(
@@ -53,12 +53,6 @@ const ProfileEditForm = ({ onSubmit, onClose, user }) => {
       };
       reader.readAsDataURL(file);
       setAvatar(file);
-    }
-  };
-
-  const handleOverlayClick = (event) => {
-    if (event.target === event.currentTarget) {
-      onClose();
     }
   };
 
@@ -108,7 +102,7 @@ const ProfileEditForm = ({ onSubmit, onClose, user }) => {
 
       toast.success("Profile updated successfully!");
       onSubmit(values);
-      onClose();
+      closeModal();
     } catch (error) {
       console.error("Error updating profile", error);
       toast.error("Failed to update profile. Please try again.");
@@ -120,75 +114,71 @@ const ProfileEditForm = ({ onSubmit, onClose, user }) => {
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   return (
-    <ModalOverlay onClick={handleOverlayClick}>
-      <ModalContent>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
-        <FormTitle>Edit Profile</FormTitle>
-        <AvatarWrapper>
-          <AvatarImage
-            src={avatarPreview} // Use avatarPreview state here
-            alt="User Avatar"
-          />
-          <HiddenFileInput
-            type="file"
-            id="avatar"
-            name="avatar"
-            accept="image/*"
-            onChange={handleAvatarChange}
-          />
-          <ChangeAvatarButton
-            onClick={() => document.getElementById("avatar").click()}
-          >
-            +
-          </ChangeAvatarButton>
-        </AvatarWrapper>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              <InputWrapper>
-                <Field as={Input} type="text" name="name" placeholder="Name" />
-                <ErrorMessage name="name" component={ErrorText} />
-              </InputWrapper>
-              <InputWrapper>
-                <Field
-                  as={Input}
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                />
-                <ErrorMessage name="email" component={ErrorText} />
-              </InputWrapper>
-              <InputWrapper>
-                <Field
-                  as={Input}
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Password"
-                />
-                <IconButton onClick={togglePasswordVisibility} type="button">
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </IconButton>
-                <ErrorMessage name="password" component={ErrorText} />
-              </InputWrapper>
-              <SubmitButton type="submit" disabled={isSubmitting}>
-                Save
-              </SubmitButton>
-            </Form>
-          )}
-        </Formik>
-      </ModalContent>
-    </ModalOverlay>
+    <FormWrapper>
+      <ModalHeader>
+        <Title>Edit Profile</Title>
+        <CloseButton onClick={closeModal}>&times;</CloseButton>
+      </ModalHeader>
+      <AvatarWrapper>
+        <AvatarImage src={avatarPreview} alt="User Avatar" />
+        <HiddenFileInput
+          type="file"
+          id="avatar"
+          name="avatar"
+          accept="image/*"
+          onChange={handleAvatarChange}
+        />
+        <ChangeAvatarButton onClick={() => document.getElementById("avatar").click()}>
+          +
+        </ChangeAvatarButton>
+      </AvatarWrapper>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <InputWrapper>
+              <Field as={Input} type="text" name="name" placeholder="Name" />
+              <ErrorMessage name="name" component={ErrorText} />
+            </InputWrapper>
+            <InputWrapper>
+              <Field as={Input} type="email" name="email" placeholder="Email" />
+              <ErrorMessage name="email" component={ErrorText} />
+            </InputWrapper>
+            <InputWrapper>
+              <Field
+                as={Input}
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+              />
+              <IconButton onClick={togglePasswordVisibility} type="button">
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </IconButton>
+              <ErrorMessage name="password" component={ErrorText} />
+            </InputWrapper>
+            <SubmitButton type="submit" disabled={isSubmitting}>
+              Save
+            </SubmitButton>
+          </Form>
+        )}
+      </Formik>
+    </FormWrapper>
   );
 };
 
 ProfileEditForm.propTypes = {
+  closeModal: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    email: PropTypes.string,
+    avatarURL: PropTypes.string,
+  }).isRequired,
 };
 
 export default ProfileEditForm;
+
+

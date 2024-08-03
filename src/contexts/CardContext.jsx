@@ -18,11 +18,7 @@ export const CardProvider = ({ children }) => {
         const data = await cardService.getCardsForColumn(boardId, columnId);
         setCards((prevCards) => {
           const filteredCards = prevCards.filter((card) => card.columnId !== columnId);
-          const newCards = [...filteredCards, ...data];
-          if (JSON.stringify(prevCards) !== JSON.stringify(newCards)) {
-            return newCards;
-          }
-          return prevCards;
+          return [...filteredCards, ...data];
         });
       } catch (error) {
         console.error("Error fetching cards:", error.response?.data || error.message);
@@ -32,15 +28,18 @@ export const CardProvider = ({ children }) => {
     [cardService]
   );
 
-  const fetchCardData = useCallback(async (boardId, columnId, cardId) => {
-    try {
-      const data = await cardService.getCardData(boardId, columnId, cardId);
-      return data; // Assuming response.data is the card object
-    } catch (error) {
-      console.error("Error fetching card data:", error);
-      return null;
-    }
-  }, [cardService]);
+  const fetchCardData = useCallback(
+    async (boardId, columnId, cardId) => {
+      try {
+        const data = await cardService.getCardData(boardId, columnId, cardId);
+        return data;
+      } catch (error) {
+        console.error("Error fetching card data:", error.response?.data || error.message);
+        return null;
+      }
+    },
+    [cardService]
+  );
 
   const addCard = async (boardId, columnId, cardData) => {
     try {
@@ -57,9 +56,7 @@ export const CardProvider = ({ children }) => {
   const updateCard = async (boardId, columnId, cardId, cardData) => {
     try {
       const updatedCard = await cardService.updateCard(boardId, columnId, cardId, cardData);
-      setCards((prevCards) =>
-        prevCards.map((card) => (card._id === cardId ? updatedCard : card))
-      );
+      setCards((prevCards) => prevCards.map((card) => (card._id === cardId ? updatedCard : card)));
       return updatedCard;
     } catch (error) {
       console.error("Error updating card:", error.response?.data || error.message);
@@ -79,12 +76,10 @@ export const CardProvider = ({ children }) => {
     }
   };
 
-  const moveCard = async (boardId, columnId, cardId, newColumnId) => {
+  const moveCardToColumn = async (boardId, columnId, cardId, newColumnId) => {
     try {
       const movedCard = await cardService.moveCard(boardId, columnId, cardId, newColumnId);
-      setCards((prevCards) =>
-        prevCards.map((card) => (card._id === cardId ? movedCard : card))
-      );
+      setCards((prevCards) => prevCards.map((card) => (card._id === cardId ? movedCard : card)));
       return movedCard;
     } catch (error) {
       console.error("Error moving card:", error.response?.data || error.message);
@@ -99,11 +94,11 @@ export const CardProvider = ({ children }) => {
         cards,
         error,
         fetchCardsForColumn,
+        fetchCardData,
         addCard,
         updateCard,
         deleteCard,
-        moveCard,
-        fetchCardData,
+        moveCardToColumn,
       }}
     >
       {children}

@@ -28,6 +28,7 @@ import {
   SubmitButton,
 } from "./AddCardModal.styled";
 
+// Validation schema for form validation
 const validationSchema = Yup.object({
   titleCard: Yup.string().required("Title is required"),
   description: Yup.string().required("Description is required"),
@@ -40,19 +41,45 @@ const validationSchema = Yup.object({
   ),
 });
 
+const labelColors = ["#797b78", "#8fa1d0", "#e09cb5", "#bedbb0"];
+const priorityMapping = {
+  "#797b78": "without",
+  "#8fa1d0": "low",
+  "#e09cb5": "medium",
+  "#bedbb0": "high",
+};
+
 const AddCardForm = ({ closeModal, boardId, columnId }) => {
   const [priority, setPriority] = useState("#797b78");
   const [deadline, setDeadline] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const labelColors = ["#797b78", "#8fa1d0", "#e09cb5", "#bedbb0"];
-  const priorityMapping = {
-    "#797b78": "without",
-    "#8fa1d0": "low",
-    "#e09cb5": "medium",
-    "#bedbb0": "high",
-  };
   const { addCard } = useCards();
+
+  // Handler to toggle calendar visibility
   const toggleCalendar = () => setIsCalendarOpen(!isCalendarOpen);
+
+  // Handler for form submission
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const newCard = {
+        ...values,
+        priority: priorityMapping[priority],
+        deadline,
+        priorityColor: priority,
+        columnId,
+        collaborators: values.collaborators,
+      };
+
+      await addCard(boardId, columnId, newCard);
+      toast.success("Card added successfully!");
+      closeModal();
+    } catch (error) {
+      console.error("Error adding card:", error);
+      toast.error("Failed to add card. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <FormWrapper>
@@ -67,27 +94,7 @@ const AddCardForm = ({ closeModal, boardId, columnId }) => {
           collaborators: [],
         }}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting }) => {
-          try {
-            const newCard = {
-              ...values,
-              priority: priorityMapping[priority],
-              deadline,
-              priorityColor: priority,
-              columnId,
-              collaborators: values.collaborators,
-            };
-
-            await addCard(boardId, columnId, newCard);
-            toast.success("Card added successfully!");
-            closeModal();
-          } catch (error) {
-            console.error("Error adding card:", error);
-            toast.error("Failed to add card. Please try again.");
-          } finally {
-            setSubmitting(false);
-          }
-        }}
+        onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
           <StyledForm>
@@ -109,6 +116,7 @@ const AddCardForm = ({ closeModal, boardId, columnId }) => {
               />
               <ErrorMessage name="description" component={ErrorMessageStyled} />
             </TextareaWrapper>
+
             <Label>Priority</Label>
             <LabelColorContainer>
               {labelColors.map((color) => (
@@ -120,6 +128,7 @@ const AddCardForm = ({ closeModal, boardId, columnId }) => {
                 />
               ))}
             </LabelColorContainer>
+
             <Label>Deadline</Label>
             <DatePickerWrapper>
               <CalendarToggle onClick={toggleCalendar}>
@@ -138,6 +147,7 @@ const AddCardForm = ({ closeModal, boardId, columnId }) => {
                 </CalendarPopup>
               )}
             </DatePickerWrapper>
+
             <SubmitButton type="submit" disabled={isSubmitting}>
               <IconWrapper>
                 <FaPlus />
@@ -157,11 +167,11 @@ AddCardForm.propTypes = {
   columnId: PropTypes.string.isRequired,
   collaborators: PropTypes.arrayOf(
     PropTypes.shape({
-      _id: PropTypes.string.isRequired,
+      userId: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      avatarURL: PropTypes.string.isRequired,
+      avatar: PropTypes.string.isRequired,
     })
-  ).isRequired,
+  ),
 };
 
 export default AddCardForm;

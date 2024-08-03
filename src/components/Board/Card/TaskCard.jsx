@@ -1,17 +1,13 @@
-import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { useDrag } from "react-dnd";
-import {
-  FiEdit,
-  FiTrash2,
-  FiArrowRightCircle,
-  FiBell,
-  FiChevronDown,
-} from "react-icons/fi";
-import { toast } from "react-toastify";
-import EditCardForm from "../../Portal/editCard/EditCardModal";
-import StatusModal from "../../Portal/CardStatusModal/CardStatusModal";
-import { useCards } from "../../../contexts/CardContext";
+import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
+import { useDrag } from 'react-dnd';
+import { FiEdit, FiTrash2, FiArrowRightCircle, FiBell, FiChevronDown } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import EditCardForm from '../../Portal/editCard/EditCardModal';
+import StatusModal from '../../Portal/CardStatusModal/CardStatusModal';
+import { useCards } from '../../../contexts/CardContext';
+import { useColumns } from '../../../contexts/ColumnContext';
+import Modal from '../../Portal/Modal';
 import {
   CardMainContainer,
   CardContainer,
@@ -28,18 +24,16 @@ import {
   PriorityColorOne,
   PriorityColorTwo,
   Actions,
-  ModalWrapper,
-  ModalContent,
   AvatarsContainer,
   AvatarWrapper,
   Avatar,
   Tooltip,
   CollaboratorDropdown,
   CollaboratorItem,
-} from "./TaskCard.styled";
+} from './TaskCard.styled';
 
 const ItemTypes = {
-  CARD: "card",
+  CARD: 'card',
 };
 
 const formatDate = (dateString) => new Date(dateString).toLocaleDateString();
@@ -54,7 +48,6 @@ const isToday = (someDate) => {
 };
 
 const TaskCard = ({
-  
   titleCard,
   description,
   priority,
@@ -65,26 +58,21 @@ const TaskCard = ({
   cardId,
   index,
   collaborators,
+  columns,
 }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState("In progress");
-  const { fetchCardsForColumn, fetchCardData, updateCard, deleteCard } = useCards();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState(columnId);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [assignedCollaborator, setAssignedCollaborator] = useState(null);
+  const statusButtonRef = useRef(null);
 
-  const toggleModal = (setModalState) => () => setModalState((prev) => !prev);
-
-  const handleStatusChange = (status) => {
-    setCurrentStatus(status);
-    setIsStatusModalOpen(false);
-  };
+  const { fetchCardsForColumn, fetchCardData, updateCard, deleteCard, moveCardToColumn } = useCards();
+  const { fetchColumnsForBoard } = useColumns();
 
   useEffect(() => {
     const fetchCard = async () => {
-      console.log('Fetching card with cardId:', cardId); // Debugging statement
       const card = await fetchCardData(boardId, columnId, cardId);
-      console.log('Fetched card:', card); // Debugging statement
       if (card && card.collaborators && card.collaborators.length > 0) {
         setAssignedCollaborator(card.collaborators[0]);
       }
@@ -93,15 +81,28 @@ const TaskCard = ({
     fetchCard();
   }, [boardId, columnId, cardId, fetchCardData]);
 
+  const toggleModal = (setModalState) => () => setModalState((prev) => !prev);
+
+  const handleStatusChange = async (newColumnId) => {
+    try {
+      await moveCardToColumn(boardId, columnId, cardId, newColumnId);
+      setCurrentStatus(newColumnId);
+      setIsModalOpen(false);
+      fetchColumnsForBoard(boardId);
+      toast.success('Card moved successfully!');
+    } catch (error) {
+      toast.error('Failed to move card. Please try again.');
+    }
+  };
 
   const handleEditCard = async (values) => {
     try {
       await updateCard(boardId, columnId, cardId, values);
       fetchCardData(boardId, columnId, cardId);
-      toast.success("Card updated successfully!");
+      toast.success('Card updated successfully!');
       setIsEditModalOpen(false);
     } catch (error) {
-      toast.error("Failed to update card. Please try again.");
+      toast.error('Failed to update card. Please try again.');
     }
   };
 
@@ -109,25 +110,24 @@ const TaskCard = ({
     try {
       await deleteCard(boardId, columnId, cardId);
       fetchCardsForColumn(boardId, columnId);
-      toast.success("Card deleted successfully!");
+      toast.success('Card deleted successfully!');
     } catch (error) {
-      toast.error("Failed to delete card. Please try again.");
+      toast.error('Failed to delete card. Please try again.');
     }
   };
 
   const handleAssignCollaborator = async (collaborator) => {
     setAssignedCollaborator(collaborator);
     setIsDropdownOpen(false);
-  
+
     try {
       const collaboratorData = {
         userId: collaborator._id,
         name: collaborator.name,
-        avatarURL: collaborator.avatarURL
+        avatarURL: collaborator.avatarURL,
       };
-  
+
       const updatedCardData = {
-      
         columnId,
         titleCard,
         description,
@@ -136,18 +136,15 @@ const TaskCard = ({
         deadline,
         collaborators: [collaboratorData],
       };
-  
-      console.log('Updated Card Data:', updatedCardData); // Log data to debug
+
       await updateCard(boardId, columnId, cardId, updatedCardData);
       fetchCardsForColumn(boardId, columnId);
-      toast.success("Collaborator assigned successfully!");
+      toast.success('Collaborator assigned successfully!');
     } catch (error) {
-      console.error('Error:', error); // Log error to debug
-      toast.error("Failed to assign collaborator. Please try again.");
+      toast.error('Failed to assign collaborator. Please try again.');
     }
   };
-  
-  
+
   const formattedDeadline = formatDate(deadline);
   const deadlineDate = new Date(deadline);
   const isDeadlineToday = isToday(deadlineDate);
@@ -169,18 +166,11 @@ const TaskCard = ({
           <AvatarsContainer>
             {assignedCollaborator ? (
               <AvatarWrapper onClick={() => setIsDropdownOpen((prev) => !prev)}>
-                <Avatar
-                  src={assignedCollaborator.avatarURL}
-                  alt={assignedCollaborator.name}
-                />
-                <Tooltip className="tooltip">
-                  {assignedCollaborator.name}
-                </Tooltip>
+                <Avatar src={assignedCollaborator.avatarURL} alt={assignedCollaborator.name} />
+                <Tooltip className="tooltip">{assignedCollaborator.name}</Tooltip>
               </AvatarWrapper>
             ) : (
-              <FiChevronDown
-                onClick={() => setIsDropdownOpen((prev) => !prev)}
-              />
+              <FiChevronDown onClick={() => setIsDropdownOpen((prev) => !prev)} />
             )}
             {isDropdownOpen && (
               <CollaboratorDropdown>
@@ -212,39 +202,45 @@ const TaskCard = ({
             </Priority>
             <Actions>
               {isDeadlineToday && (
-                <FiBell style={{ marginLeft: "8px", stroke: "#BEDBB0" }} />
+                <FiBell style={{ marginLeft: '8px', stroke: '#BEDBB0' }} />
               )}
-              <FiArrowRightCircle onClick={toggleModal(setIsStatusModalOpen)} />
+              <div ref={statusButtonRef} onClick={toggleModal(setIsModalOpen)}>
+                <FiArrowRightCircle />
+              </div>
               <FiEdit onClick={toggleModal(setIsEditModalOpen)} />
               <FiTrash2 onClick={handleDeleteCard} />
             </Actions>
           </CardFooter>
         </CardContentContainer>
         {isEditModalOpen && (
-          <ModalWrapper>
-            <ModalContent>
-              <EditCardForm
-                closeModal={toggleModal(setIsEditModalOpen)}
-                initialValues={{
-                  titleCard,
-                  description,
-                  priority,
-                  deadline: new Date(deadline),
-                  priorityColor,
-                  columnId
-                }}
-                onSubmit={handleEditCard}
-              />
-            </ModalContent>
-          </ModalWrapper>
+          <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+            <EditCardForm
+              closeModal={toggleModal(setIsEditModalOpen)}
+              initialValues={{
+                titleCard,
+                description,
+                priority,
+                deadline: new Date(deadline),
+                priorityColor,
+                columnId,
+              }}
+              onSubmit={handleEditCard}
+            />
+          </Modal>
         )}
-        {isStatusModalOpen && (
+        {isModalOpen && (
+          <Modal 
+          isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          >
           <StatusModal
-            isOpen={isStatusModalOpen}
-            onClose={toggleModal(setIsStatusModalOpen)}
+            closeModal={() => setIsModalOpen(false)}
             onStatusChange={handleStatusChange}
             currentStatus={currentStatus}
+            buttonRef={statusButtonRef}
+            columns={columns}
           />
+          </Modal>
         )}
       </CardContainer>
     </CardMainContainer>
@@ -268,6 +264,7 @@ TaskCard.propTypes = {
       name: PropTypes.string.isRequired,
     })
   ).isRequired,
+  columns: PropTypes.array.isRequired,
 };
 
 export default TaskCard;

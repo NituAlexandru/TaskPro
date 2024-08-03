@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { forwardRef } from "react";
 import PropTypes from "prop-types";
 import { FiArrowRightCircle } from "react-icons/fi";
 import {
@@ -8,60 +8,44 @@ import {
 } from "./CardStatusModal.styled";
 
 const StatusModal = ({
-  isOpen,
-  onClose,
+  closeModal,
   onStatusChange,
   currentStatus,
-  buttonRef,
+  columns,
 }) => {
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-
-  const updatePosition = useCallback(() => {
-    if (buttonRef && buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setPosition({
-        top: rect.bottom + window.scrollY,
-        left: rect.left + window.scrollX,
-      });
-    }
-  }, [buttonRef]);
-
-  useEffect(() => {
-    updatePosition();
-    window.addEventListener("resize", updatePosition);
-    return () => {
-      window.removeEventListener("resize", updatePosition);
-    };
-  }, [updatePosition]);
-
-  if (!isOpen) return null;
+  // Prevent event propagation when clicking inside the modal content
+  const handleContentClick = (e) => {
+    e.stopPropagation();
+  };
 
   return (
-    <ModalWrapper onClick={onClose}>
-      <ModalContent onClick={(e) => e.stopPropagation()}>
-        <StatusOption
-          $active={currentStatus === "In progress"}
-          onClick={() => onStatusChange("In progress")}
-        >
-          In progress <FiArrowRightCircle />
-        </StatusOption>
-        <StatusOption
-          $active={currentStatus === "Done"}
-          onClick={() => onStatusChange("Done")}
-        >
-          Done <FiArrowRightCircle />
-        </StatusOption>
+    <ModalWrapper onClick={closeModal}>
+      <ModalContent onClick={handleContentClick}>
+        {columns.map((column) => (
+          <StatusOption
+            key={column._id}
+            $active={currentStatus === column._id}
+            onClick={() => onStatusChange(column._id)}
+          >
+            {column.titleColumn}
+            <FiArrowRightCircle style={{ marginLeft: '8px' }} />
+          </StatusOption>
+        ))}
       </ModalContent>
     </ModalWrapper>
   );
 };
 
 StatusModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
   onStatusChange: PropTypes.func.isRequired,
   currentStatus: PropTypes.string.isRequired,
-  buttonRef: PropTypes.object,
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      titleColumn: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default StatusModal;

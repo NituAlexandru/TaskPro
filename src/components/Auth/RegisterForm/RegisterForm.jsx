@@ -1,12 +1,21 @@
+// React and PropTypes imports
 import { useContext, useState } from "react";
 import PropTypes from "prop-types";
+
+// Context and hooks imports
 import { AuthContext } from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useLoader } from "../../../hooks/useLoader";
+
+// Form and validation imports
 import { Formik } from "formik";
 import * as Yup from "yup";
+
+// Icon imports
 import { FaGoogle, FaEye, FaEyeSlash } from "react-icons/fa";
 import PasswordStrengthBar from "react-password-strength-bar";
-import { useLoader } from "../../../hooks/useLoader";
+
+// Style and notification imports
 import {
   FormContainer,
   StyledForm,
@@ -21,6 +30,7 @@ import {
 } from "./RegisterForm.styles";
 import { toast } from "react-toastify";
 
+// Validation schema for the form
 const validationSchema = Yup.object({
   name: Yup.string().required("Required"),
   email: Yup.string().email("Invalid email address").required("Required"),
@@ -33,31 +43,44 @@ const RegisterForm = ({ onSuccess }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
+  // Toggle password visibility
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+
+  // Handle form submission
+  const handleSubmit = async (values, { setSubmitting }) => {
+    showLoader();
+    try {
+      await registerUser(values);
+      toast.success("Registration successful!");
+      onSuccess();
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        toast.error("User already registered. Redirecting to login.");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000); // Redirect to login after 2 seconds
+      } else {
+        toast.error("Registration failed. Please try again.");
+      }
+      console.error("Registration failed", error);
+    } finally {
+      setSubmitting(false);
+      hideLoader();
+    }
+  };
+
   return (
     <FormContainer>
       <Formik
         initialValues={{ name: "", email: "", password: "" }}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting }) => {
-          showLoader();
-          try {
-            await registerUser(values);
-            toast.success("Registration successful!");
-            onSuccess();
-          } catch (error) {
-            toast.error("Registration failed. Please try again.");
-            console.error("Registration failed", error);
-          } finally {
-            setSubmitting(false);
-            hideLoader();
-          }
-        }}
+        onSubmit={handleSubmit}
       >
         {({ isSubmitting, handleChange, values }) => (
           <StyledForm>
             <div className="toggle-container">
-              <Title>Registration</Title>
               <ToggleLink onClick={() => navigate("/login")}>Log In</ToggleLink>
+              <Title>Registration</Title>
             </div>
             <Input type="text" name="name" placeholder="Enter your name" />
             <StyledErrorMessage name="name" component="div" />
@@ -70,10 +93,7 @@ const RegisterForm = ({ onSuccess }) => {
                 placeholder="Create a password"
                 onChange={handleChange}
               />
-              <IconButton
-                type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
-              >
+              <IconButton type="button" onClick={togglePasswordVisibility}>
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </IconButton>
             </InputWrapper>
@@ -97,3 +117,5 @@ RegisterForm.propTypes = {
 };
 
 export default RegisterForm;
+
+

@@ -1,53 +1,42 @@
 import styled from "styled-components";
 import { Field } from "formik";
 
-export const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+
+export const ModalHeader = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  z-index: 100;
 `;
 
-export const ModalContent = styled.div`
-  background-color: ${({ theme }) => theme.modalBackgroundColor};
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  height: auto;
-  position: relative;
+export const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 `;
 
-export const CloseButton = styled.button`
-  background: none;
-  border: none;
-  color: ${({ theme }) => theme.modalTextColor};
-  font-size: 20px;
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
 
-  &:hover {
-    transform: scale(1.2);
-    background-color: ${({ theme }) => theme.modalBackgroundColor};
-  }
-`;
-
-export const FormTitle = styled.h3`
+export const Title = styled.h2`
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 18px;
-  letter-spacing: -0.02em;
-  color: #fff;
+  color: ${({ theme }) => theme.modalTextColor};
   margin: 0;
-  margin-bottom: 20px;
-  text-align: left;
+`;
+
+export const CloseButton = styled.button`
+  border: none;
+  background: none;
+  color: ${({ theme }) => theme.modalTextColor};
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    background: ${({ theme }) => theme.modalBackgroundColor};
+    transform: scale(1.2);
+  }
 `;
 
 export const AvatarWrapper = styled.div`

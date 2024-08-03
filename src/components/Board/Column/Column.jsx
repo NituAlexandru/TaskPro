@@ -1,12 +1,17 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import { toast } from "react-toastify";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
+
 import Card from "../Card/TaskCard";
 import AddCardButton from "../AddCardBtn/AddCardBtn";
+import EditColumnModal from "../../Portal/editColumn/EditColumnModal";
+import Modal from "../../Portal/Modal";
+
 import { useCards } from "../../../contexts/CardContext";
 import { useColumns } from "../../../contexts/ColumnContext";
-import { FiEdit, FiTrash2 } from "react-icons/fi";
+
 import {
   ColumnContainer,
   ColumnSmallContainer,
@@ -15,8 +20,6 @@ import {
   TitleButtonContainer,
   CardsList,
 } from "./Column.styled";
-import EditColumnModal from "../../Portal/editColumn/EditColumnModal";
-import Modal from "../../Portal/Modal";
 
 const ItemTypes = {
   CARD: "card",
@@ -30,13 +33,13 @@ const Column = ({
   fetchColumns,
   setColumns,
   collaborators,
+  columns,
 }) => {
-  const { fetchCardsForColumn, cards, deleteCard, moveCard } = useCards();
+  const { fetchCardsForColumn, cards, deleteCard, moveCardToColumn } = useCards();
   const { deleteColumn, updateColumn } = useColumns();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [columnTitle, setColumnTitle] = useState(title);
 
-  // Create a ref for the drop target
   const dropRef = useRef(null);
 
   useEffect(() => {
@@ -44,8 +47,6 @@ const Column = ({
       fetchCardsForColumn(boardId, columnId);
     }
   }, [fetchCardsForColumn, boardId, columnId]);
-
-  useEffect(() => {}, [columnId, boardId]);
 
   const filteredCards = filter
     ? cards.filter(
@@ -75,12 +76,17 @@ const Column = ({
     }
   };
 
-  const handleUpdateColumn = async (columnId, updatedData) => {
+  const handleUpdateColumn = async (updatedTitle) => {
+    if (!updatedTitle.trim()) {
+      toast.warn("Title cannot be empty.");
+      return;
+    }
+
     try {
-      const updatedColumn = await updateColumn(boardId, columnId, updatedData);
-      setColumnTitle(updatedColumn.titleColumn);
-      setIsEditModalOpen(false);
-      toast.success("Column updated successfully!");
+      await updateColumn(boardId, columnId, { titleColumn: updatedTitle });
+      setColumnTitle(updatedTitle);
+      toast.success("Column title updated successfully!");
+      setIsEditModalOpen(false); // Close the modal after successful update
       fetchColumns();
     } catch (error) {
       console.error("Error updating column:", error);
@@ -88,30 +94,23 @@ const Column = ({
     }
   };
 
-  const moveCardWithinColumn = (columnCards, fromIndex, toIndex) => {
-    console.log(columnCards);
+  const moveCardWithinColumn = useCallback((columnCards, fromIndex, toIndex) => {
     const updatedCards = Array.from(columnCards);
     const [movedCard] = updatedCards.splice(fromIndex, 1);
     updatedCards.splice(toIndex, 0, movedCard);
-    console.log(updatedCards);
     return updatedCards;
-  };
+  }, []);
 
-  const moveCardToAnotherColumn = async (item, destinationColumnId) => {
+  const moveCardToAnotherColumn = useCallback(async (item, newColumnId) => {
     try {
-      await moveCard(
-        boardId,
-        item.sourceColumnId,
-        item.cardId,
-        destinationColumnId
-      );
-      fetchCardsForColumn(boardId, item.sourceColumnId);
-      fetchCardsForColumn(boardId, destinationColumnId);
+      await moveCardToColumn(boardId, item.columnId, item.cardId, newColumnId);
+      fetchCardsForColumn(boardId, item.columnId);
+      fetchCardsForColumn(boardId, newColumnId);
     } catch (error) {
       console.error("Error moving card:", error);
       toast.error("Failed to move card. Please try again.");
     }
-  };
+  }, [boardId, fetchCardsForColumn, moveCardToColumn]);
 
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.CARD,
@@ -182,7 +181,8 @@ const Column = ({
                 boardId={boardId}
                 columnId={columnId}
                 index={index}
-                collaborators={collaborators} // Pass collaborators down to Card
+                collaborators={collaborators}
+                columns={columns}
               />
             ))}
           </CardsList>
@@ -192,9 +192,6 @@ const Column = ({
           <Modal
             isOpen={isEditModalOpen}
             onClose={() => setIsEditModalOpen(false)}
-            width="400px"
-            height="auto"
-            borderRadius="8px"
           >
             <EditColumnModal
               closeModal={() => setIsEditModalOpen(false)}
@@ -216,7 +213,19 @@ Column.propTypes = {
   boardId: PropTypes.string.isRequired,
   fetchColumns: PropTypes.func.isRequired,
   setColumns: PropTypes.func.isRequired,
-  collaborators: PropTypes.array.isRequired,
+  collaborators: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      avatarURL: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      titleColumn: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default Column;

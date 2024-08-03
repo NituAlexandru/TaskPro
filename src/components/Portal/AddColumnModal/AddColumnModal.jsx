@@ -17,22 +17,24 @@ const AddColumnModal = ({ closeModal, boardId, onColumnAdded }) => {
   const [title, setTitle] = useState("");
   const { addColumn } = useColumns();
 
+  // Handler for adding a column
   const handleAddColumn = async () => {
-    if (title.trim()) {
-      try {
-        const newColumn = await addColumn(boardId, {
-          titleColumn: title,
-          boardId,
-        });
-        onColumnAdded(newColumn); // Update the columns in the parent component
-        toast.success("Column added successfully!");
-        closeModal();
-      } catch (error) {
-        console.error("Error adding column:", error);
-        toast.error("Failed to add column. Please try again.");
-      }
-    } else {
+    if (!title.trim()) {
       toast.error("Column title cannot be empty.");
+      return;
+    }
+
+    try {
+      const newColumn = await addColumn(boardId, {
+        titleColumn: title,
+        boardId,
+      });
+      onColumnAdded(newColumn); // Update the columns in the parent component
+      toast.success("Column added successfully!");
+      closeModal();
+    } catch (error) {
+      console.error("Error adding column:", error);
+      toast.error("Failed to add column. Please try again.");
     }
   };
 

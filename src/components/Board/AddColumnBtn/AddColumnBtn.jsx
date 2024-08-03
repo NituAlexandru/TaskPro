@@ -1,7 +1,12 @@
+// React and PropTypes imports
 import { useState } from "react";
 import PropTypes from "prop-types";
+
+// Modal imports
 import Modal from "../../Portal/Modal";
 import AddColumnModal from "../../Portal/AddColumnModal/AddColumnModal";
+
+// Style imports
 import {
   ButtonContainer,
   IconButton,
@@ -11,7 +16,10 @@ import {
 const AddColumnButton = ({ boardId, onColumnAdded }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Open modal
   const openModal = () => setIsModalOpen(true);
+
+  // Close modal
   const closeModal = () => setIsModalOpen(false);
 
   return (
@@ -21,14 +29,7 @@ const AddColumnButton = ({ boardId, onColumnAdded }) => {
         <AddParagraph>Add another column</AddParagraph>
       </ButtonContainer>
       {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          width="350px"
-          height="221px"
-          border="1px solid rgba(190, 219, 176, 0.5)"
-          borderRadius="8px"
-        >
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
           <AddColumnModal
             closeModal={closeModal}
             boardId={boardId}

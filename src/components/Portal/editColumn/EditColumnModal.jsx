@@ -1,7 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { FaPlus } from "react-icons/fa";
-import { toast } from "react-toastify";
 import {
   IconWrapper,
   SubmitButton,
@@ -12,27 +11,11 @@ import {
   FormWrapper,
 } from "./EditColumnModal.styled";
 
-const EditColumnModal = ({
-  closeModal,
-  updateColumn,
-  initialTitle,
-  columnId,
-}) => {
+const EditColumnModal = ({ closeModal, updateColumn, initialTitle }) => {
   const [title, setTitle] = useState(initialTitle);
 
-  const handleUpdateColumn = async () => {
-    if (title.trim()) {
-      try {
-        await updateColumn(columnId, { titleColumn: title }); // Send the titleColumn correctly
-        toast.success("Column title updated successfully!");
-        closeModal();
-      } catch (error) {
-        console.error("Error updating column:", error);
-        toast.error("Failed to update column. Please try again.");
-      }
-    } else {
-      toast.warn("Title cannot be empty."); // Notification for empty title
-    }
+  const handleSubmit = () => {
+    updateColumn(title);
   };
 
   return (
@@ -47,7 +30,7 @@ const EditColumnModal = ({
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Column Title"
       />
-      <SubmitButton onClick={handleUpdateColumn}>
+      <SubmitButton onClick={handleSubmit}>
         <IconWrapper>
           <FaPlus />
         </IconWrapper>
@@ -61,7 +44,7 @@ EditColumnModal.propTypes = {
   closeModal: PropTypes.func.isRequired,
   updateColumn: PropTypes.func.isRequired,
   initialTitle: PropTypes.string.isRequired,
-  columnId: PropTypes.string.isRequired, // Ensure columnId is received as a prop
+  columnId: PropTypes.string.isRequired, 
 };
 
 export default EditColumnModal;

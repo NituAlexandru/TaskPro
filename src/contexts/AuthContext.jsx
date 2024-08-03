@@ -20,21 +20,31 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const registerUser = async (userData) => {
-    const data = await register(userData);
-    setUser(data.user);
-    setToken(data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("refreshToken", data.refreshToken);
-    localStorage.setItem("sessionId", data.sid);
-    return data;
+    try {
+      const data = await register(userData);
+      setUser(data.user);
+      setToken(data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      localStorage.setItem("sessionId", data.sid);
+      return data;
+    } catch (error) {
+      console.error("Error registering user:", error);
+      throw error;
+    }
   };
 
   const loginUser = async (userData) => {
+    try{
     const data = await apiLogin(userData);
     login(data.user, data.token, data.refreshToken, data.sid);
     return data;
-  };
+  }catch (error) {
+    console.error("Error logging in user:", error);
+    throw error;
+  }
+};
 
   const login = (userData, token, refreshToken, sessionId) => {
     setUser(userData);

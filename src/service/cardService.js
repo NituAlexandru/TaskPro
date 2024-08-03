@@ -52,11 +52,11 @@ class CardService {
     return response.data;
   };
 
-  moveCard = async (boardId, sourceColumnId, cardId, destinationColumnId) => {
+  moveCard = async (boardId, sourceColumnId, cardId, newColumnId) => {
     try {
       const response = await axios.patch(
         `${BASE_URL}/boards/${boardId}/columns/${sourceColumnId}/cards/${cardId}/move`,
-        { newColumnId: destinationColumnId },
+        { newColumnId }, 
         {
           headers: {
             Authorization: `Bearer ${this.token}`,
@@ -66,9 +66,9 @@ class CardService {
       return response.data;
     } catch (error) {
       console.error("Error moving card:", error);
-      throw error; // Ensure errors are propagated
+      throw error;
     }
   };
-};
+}
 
 export default CardService;

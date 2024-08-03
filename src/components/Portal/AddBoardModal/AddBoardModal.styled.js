@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import { ErrorMessage, Form } from "formik";
 
+export const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+`;
+
 export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;

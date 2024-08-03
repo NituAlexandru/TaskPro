@@ -47,9 +47,6 @@ const HelpList = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        width="400px"
-        height="355px"
-        borderRadius="8px"
       >
         <CloseButton onClick={handleCloseModal}>&times;</CloseButton>
         <HelpForm onSubmit={handleSubmit} />

@@ -1,3 +1,4 @@
+// React and PropTypes imports
 import {
   useState,
   useEffect,
@@ -7,6 +8,8 @@ import {
   useRef,
 } from "react";
 import PropTypes from "prop-types";
+
+// Style imports
 import {
   FilterButton,
   ColumnsContainer,
@@ -15,16 +18,24 @@ import {
   BoardHeader,
 } from "./Board.styled";
 
+// Component imports
 import Column from "../Column/Column";
 import AddColumnButton from "../AddColumnBtn/AddColumnBtn";
 import FilterModal from "../../Portal/FilterModal/FilterModal";
 import { FiFilter } from "react-icons/fi";
+
+// Service imports
 import ColumnService from "../../../service/columnService";
-import BoardService from "../../../service/boardService"; // Import BoardService
-import { AuthContext } from "../../../contexts/AuthContext";
-import Collaborators from "../Collaborators";
+import BoardService from "../../../service/boardService";
 import CardService from "../../../service/cardService";
 
+// Context import
+import { AuthContext } from "../../../contexts/AuthContext";
+
+// Collaborators component
+import Collaborators from "../Collaborators";
+
+// Background images imports
 import abstractSpheresD from "../../../assets/board-img/abstract-spheres-d.webp";
 import abstractSpheresT from "../../../assets/board-img/abstract-spheres-t.webp";
 import abstractSpheresM from "../../../assets/board-img/abstract-spheres-m.webp";
@@ -149,22 +160,21 @@ const backgrounds = {
   },
 };
 
-const Board = ({ boardId, titleBoard }) => {
+const Board = ({ boardId, titleBoard, onCollaboratorUpdate}) => {
   const [columns, setColumns] = useState([]);
   const [collaborators, setCollaborators] = useState([]);
   const [background, setBackground] = useState(null);
   const { token } = useContext(AuthContext);
-  const columnService = useMemo(() => new ColumnService(token), [token]);
   const cardService = useMemo(() => new CardService(token), [token]);
-  const boardService = useMemo(() => new BoardService(token), [token]); // Initialize BoardService
+  const boardService = useMemo(() => new BoardService(token), [token]);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [filter, setFilter] = useState(null);
   const filterButtonRef = useRef(null);
 
+  // Fetch board data
   const fetchBoardData = useCallback(async () => {
     try {
       const boardData = await boardService.getBoard(boardId);
-      console.log(boardData);
       setColumns(boardData.columns);
       setCollaborators(boardData.collaborators);
       setBackground(boardData.background);
@@ -179,15 +189,18 @@ const Board = ({ boardId, titleBoard }) => {
     }
   }, [boardId, fetchBoardData]);
 
+  // Handle column addition
   const handleColumnAdded = (newColumn) => {
     setColumns((prevColumns) => [...prevColumns, newColumn]);
   };
 
+  // Handle filter change
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
     setIsFilterModalOpen(false);
   };
 
+  // Handle card drop
   const onDrop = async (item, monitor) => {
     const { sourceColumnId, cardId } = item;
     const destinationColumnId = monitor.getDropResult()?.columnId;
@@ -203,7 +216,7 @@ const Board = ({ boardId, titleBoard }) => {
         cardId,
         destinationColumnId
       );
-      fetchBoardData(); // Refetch the board data to update the state
+      fetchBoardData();
     } catch (error) {
       console.error("Error moving card:", error);
     }
@@ -243,10 +256,11 @@ const Board = ({ boardId, titleBoard }) => {
             filter={filter}
             boardId={boardId}
             fetchColumns={fetchBoardData}
-            setColumns={setColumns} // Pass setColumns down to Column
-            collaborators={collaborators} // Pass collaborators down to Column
+            setColumns={setColumns} 
+            collaborators={collaborators} 
             index={index}
             onDrop={onDrop}
+            columns={columns} 
           />
         ))}
         <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />
@@ -258,6 +272,8 @@ const Board = ({ boardId, titleBoard }) => {
 Board.propTypes = {
   boardId: PropTypes.string.isRequired,
   titleBoard: PropTypes.string.isRequired,
+  onCollaboratorUpdate: PropTypes.func.isRequired,
 };
 
 export default Board;
+

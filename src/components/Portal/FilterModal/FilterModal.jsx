@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Modal from "../Modal";
 import {
@@ -13,6 +13,7 @@ import {
 const FilterModal = ({ isOpen, onClose, onFilterChange, buttonRef }) => {
   const [position, setPosition] = useState({ top: "50%", left: "50%" });
 
+  // Update the position of the modal based on the button's position
   const updatePosition = () => {
     if (buttonRef && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
@@ -45,7 +46,8 @@ const FilterModal = ({ isOpen, onClose, onFilterChange, buttonRef }) => {
     };
   }, [buttonRef]);
 
-  const handleFilterChange = (filter) => {
+  // Handle filter change
+  const handleFilterSelection = (filter) => {
     onFilterChange(filter);
   };
 
@@ -63,23 +65,23 @@ const FilterModal = ({ isOpen, onClose, onFilterChange, buttonRef }) => {
       <FilterTitle>Filters</FilterTitle>
       <Label>
         Label color{" "}
-        <ShowAllButton onClick={() => handleFilterChange(null)}>
+        <ShowAllButton onClick={() => handleFilterSelection(null)}>
           Show all
         </ShowAllButton>
       </Label>
-      <FilterOption onClick={() => handleFilterChange("#797b78")}>
+      <FilterOption onClick={() => handleFilterSelection("#797b78")}>
         <ColorIndicator color="#797b78" />
         Without
       </FilterOption>
-      <FilterOption onClick={() => handleFilterChange("#8fa1d0")}>
+      <FilterOption onClick={() => handleFilterSelection("#8fa1d0")}>
         <ColorIndicator color="#8fa1d0" />
         Low
       </FilterOption>
-      <FilterOption onClick={() => handleFilterChange("#e09cb5")}>
+      <FilterOption onClick={() => handleFilterSelection("#e09cb5")}>
         <ColorIndicator color="#e09cb5" />
         Medium
       </FilterOption>
-      <FilterOption onClick={() => handleFilterChange("#bedbb0")}>
+      <FilterOption onClick={() => handleFilterSelection("#bedbb0")}>
         <ColorIndicator color="#bedbb0" />
         High
       </FilterOption>
@@ -95,3 +97,4 @@ FilterModal.propTypes = {
 };
 
 export default FilterModal;
+

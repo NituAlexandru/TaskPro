@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { createContext, useState } from "react";
+import { createContext, useState, useCallback } from "react";
 import Loader from "../utils/Loader/Loader";
 
 const LoaderContext = createContext();
@@ -7,14 +7,14 @@ const LoaderContext = createContext();
 export const LoaderProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
-  const showLoader = (timeout = 1000) => {
+  const showLoader = useCallback((timeout = 1000) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
     }, timeout);
-  };
+  }, []);
 
-  const hideLoader = () => setLoading(false);
+  const hideLoader = useCallback(() => setLoading(false), []);
 
   return (
     <LoaderContext.Provider value={{ showLoader, hideLoader }}>
@@ -29,3 +29,4 @@ LoaderProvider.propTypes = {
 };
 
 export { LoaderContext };
+

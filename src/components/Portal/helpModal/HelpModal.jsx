@@ -2,6 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import axios from "axios";
 import {
   FormWrapper,
   FieldWrapper,
@@ -11,21 +12,24 @@ import {
   SubmitButton,
   ErrorText,
 } from "./HelpModal.styles";
-import axios from "axios";
 
 const HelpForm = ({ onSubmit }) => {
+  // Initial form values
   const initialValues = {
     email: "",
     message: "",
   };
 
+  // Validation schema for the form
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
     message: Yup.string().required("Required"),
   });
 
+  // Base URL for the API
   const BASE_URL = "http://localhost:4500/api";
 
+  // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await axios.post(`${BASE_URL}/user/help-request`, values);

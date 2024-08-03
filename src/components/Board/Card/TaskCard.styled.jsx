@@ -137,24 +137,6 @@ export const Actions = styled.div`
   }
 `;
 
-export const ModalWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-`;
-
-export const ModalContent = styled.div`
-  background-color: ${({ theme }) => theme.modalBackgroundColor};
-  padding: 20px;
-  border-radius: 8px;
-`;
-
 export const AvatarsContainer = styled.div`
   position: absolute;
   top: 10px;
@@ -227,5 +209,5 @@ export const CollaboratorItem = styled.div`
   &:hover {
     background-color: ${({ theme }) => theme.dropdownTextColor};
     color: ${({ theme }) => theme.dropdownBackgroundColor};
-    border-radius: 4px;
-`;
+    border-radius: 4px;}
+`

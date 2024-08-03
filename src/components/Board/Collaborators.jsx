@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
+// Styled-components
 const CollaboratorsContainer = styled.div`
   display: flex;
   align-items: center;
@@ -59,8 +60,6 @@ const Tooltip = styled.div`
   width: auto;
   right: auto;
   left: auto;
-  right: 40px;
-  top: 0;
   transform: translateX(-50%) translateY(10px);
   transition: opacity 0.3s, transform 0.3s;
   z-index: 1;
@@ -80,14 +79,15 @@ const NoCollaborators = styled.p`
   }
 `;
 
+// Collaborators Component
 const Collaborators = ({ collaborators }) => {
   return (
     <CollaboratorsContainer>
       <CollaboratorTitle>Collaborators:</CollaboratorTitle>
       {collaborators.length > 0 ? (
         <AvatarsContainer>
-          {collaborators.map((collaborator, index) => (
-            <AvatarWrapper key={index}>
+          {collaborators.map((collaborator) => (
+            <AvatarWrapper key={collaborator._id}>
               <Avatar
                 src={collaborator.avatarURL}
                 alt={`Collaborator Avatar`}
@@ -103,13 +103,16 @@ const Collaborators = ({ collaborators }) => {
   );
 };
 
+// PropTypes validation
 Collaborators.propTypes = {
   collaborators: PropTypes.arrayOf(
     PropTypes.shape({
-      avatar: PropTypes.string,
-      name: PropTypes.string,
+      _id: PropTypes.string.isRequired,
+      avatarURL: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
     })
-  ),
+  ).isRequired,
 };
 
 export default Collaborators;
+

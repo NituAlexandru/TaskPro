@@ -14,6 +14,7 @@ import {
   IconImage,
   Paragraph,
 } from "./BoardList.styled";
+
 import loadingIcon from "../../../assets/icons/loading.svg";
 import colorsIcon from "../../../assets/icons/colors.svg";
 import containerIcon from "../../../assets/icons/container.svg";
@@ -23,6 +24,7 @@ import projectIcon from "../../../assets/icons/project.svg";
 import puzzlePieceIcon from "../../../assets/icons/puzzle-piece.svg";
 import starIcon from "../../../assets/icons/star.svg";
 
+// Mapping of icons
 const iconsMap = {
   loadingIcon,
   colorsIcon,
@@ -34,11 +36,11 @@ const iconsMap = {
   starIcon,
 };
 
-const BoardList = ({ setSelectedBoardId }) => {
+const BoardList = ({ setSelectedBoardId, navigateHome, onCollaboratorUpdate }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBoardId, setSelectedBoardIdState] = useState(null);
+  const [currentBoardId, setCurrentBoardId] = useState(null);
   const { boards, fetchBoards, deleteBoard, error } = useBoards();
-  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     fetchBoards();
@@ -58,6 +60,7 @@ const BoardList = ({ setSelectedBoardId }) => {
   const handleBoardClick = (boardId, titleBoard) => {
     console.log("Board Clicked, ID:", boardId); // Log the clicked board ID
     setSelectedBoardId(boardId, titleBoard);
+    setCurrentBoardId(boardId); // Set the current board ID
   };
 
   const handleDeleteBoard = async (boardId) => {
@@ -65,6 +68,10 @@ const BoardList = ({ setSelectedBoardId }) => {
       await deleteBoard(boardId);
       toast.success("Board deleted successfully!");
       fetchBoards(); // Refresh the board list after deletion
+      if (boardId === currentBoardId) {
+        setCurrentBoardId(null); // Reset the current board ID if the deleted board is the current board
+        navigateHome(); // Redirect to the home page
+      }
     } catch (error) {
       console.error(
         "Error deleting board:",
@@ -90,30 +97,32 @@ const BoardList = ({ setSelectedBoardId }) => {
               />
               <Paragraph>{board.titleBoard}</Paragraph>
             </BoardListItemContainer>
-            <BoardListItemContainer>
-              <IconButton
-                className="edit-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  openModal(board._id);
-                }}
-              >
-                <FiEdit />
-              </IconButton>
-              <IconButton
-                className="delete-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteBoard(board._id);
-                }}
-              >
-                <FiTrash2 />
-              </IconButton>
-            </BoardListItemContainer>
+            {currentBoardId === board._id && (
+              <BoardListItemContainer>
+                <IconButton
+                  className="edit-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openModal(board._id);
+                  }}
+                >
+                  <FiEdit />
+                </IconButton>
+                <IconButton
+                  className="delete-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteBoard(board._id);
+                  }}
+                >
+                  <FiTrash2 />
+                </IconButton>
+              </BoardListItemContainer>
+            )}
           </BoardListItem>
         ))}
       </BoardListWrapper>
-      {isModalOpen && (
+      {isModalOpen && selectedBoardId && (
         <Modal
           isOpen={isModalOpen}
           onClose={closeModal}
@@ -121,11 +130,8 @@ const BoardList = ({ setSelectedBoardId }) => {
           height="500px"
           border="1px solid rgba(190, 219, 176, 0.5)"
           borderRadius="8px"
-          modalBackgroundColor={theme.modalBackgroundColor}
         >
-          {selectedBoardId && (
-            <EditBoardModal closeModal={closeModal} boardId={selectedBoardId} />
-          )}
+          <EditBoardModal closeModal={closeModal} boardId={selectedBoardId} onCollaboratorUpdate={onCollaboratorUpdate}/>
         </Modal>
       )}
     </>
@@ -134,6 +140,9 @@ const BoardList = ({ setSelectedBoardId }) => {
 
 BoardList.propTypes = {
   setSelectedBoardId: PropTypes.func.isRequired,
+  navigateHome: PropTypes.func.isRequired,
+  onCollaboratorUpdate: PropTypes.func.isRequired,
 };
 
 export default BoardList;
+

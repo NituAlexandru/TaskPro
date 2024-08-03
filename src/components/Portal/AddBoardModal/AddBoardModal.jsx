@@ -3,7 +3,7 @@ import { Formik, FieldArray } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiTrash2 } from "react-icons/fi";
 import loadingIcon from "../../../assets/icons/loading.svg";
 import colorsIcon from "../../../assets/icons/colors.svg";
 import containerIcon from "../../../assets/icons/container.svg";
@@ -53,8 +53,10 @@ import {
   SearchButtonWrapper,
   SearchButton,
   StyledErrorMessage,
+  FormWrapper,
 } from "../AddBoardModal/AddBoardModal.styled";
 
+// Icons and Backgrounds arrays
 const icons = [
   { name: "loadingIcon", src: loadingIcon },
   { name: "colorsIcon", src: colorsIcon },
@@ -85,6 +87,7 @@ const backgrounds = [
   { name: "starryMountains", url: starryMountains },
 ];
 
+// Validation Schema
 const validationSchema = Yup.object({
   title: Yup.string().required("Title is required"),
   collaborators: Yup.array().of(
@@ -107,6 +110,7 @@ const NewBoardModal = ({ closeModal }) => {
   const { createBoard, fetchBoards } = useBoards();
   const { user } = useContext(AuthContext);
 
+  // Handle adding a collaborator by email
   const handleAddCollaborator = async (email, arrayHelpers) => {
     if (!email) return;
 
@@ -129,6 +133,7 @@ const NewBoardModal = ({ closeModal }) => {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     if (!selectedIcon || !selectedBackground) {
       toast.error("Please select an icon and a background");
@@ -166,7 +171,7 @@ const NewBoardModal = ({ closeModal }) => {
   };
 
   return (
-    <div>
+    <FormWrapper>
       <ModalHeader>
         <Title>New board</Title>
         <CloseButton onClick={closeModal}>&times;</CloseButton>
@@ -289,7 +294,7 @@ const NewBoardModal = ({ closeModal }) => {
           </StyledForm>
         )}
       </Formik>
-    </div>
+    </FormWrapper>
   );
 };
 

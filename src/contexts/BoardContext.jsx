@@ -12,6 +12,7 @@ export const BoardProvider = ({ children }) => {
   const { token } = useContext(AuthContext);
   const boardService = new BoardService(token);
 
+  // Fetch all boards for the user
   const fetchBoards = async () => {
     try {
       const data = await boardService.getBoardsForUser();
@@ -22,6 +23,7 @@ export const BoardProvider = ({ children }) => {
     }
   };
 
+  // Create a new board
   const createBoard = async (boardData) => {
     try {
       const newBoard = await boardService.createBoard(boardData);
@@ -35,6 +37,7 @@ export const BoardProvider = ({ children }) => {
     }
   };
 
+  // Get a specific board by ID
   const getBoard = async (boardId) => {
     try {
       return await boardService.getBoard(boardId);
@@ -44,13 +47,12 @@ export const BoardProvider = ({ children }) => {
     }
   };
 
+  // Update a specific board by ID
   const updateBoard = async (boardId, boardData) => {
     try {
       const updatedBoard = await boardService.updateBoard(boardId, boardData);
       setBoards((prevBoards) =>
-        prevBoards.map((board) =>
-          board._id === boardId ? updatedBoard : board
-        )
+        prevBoards.map((board) => (board._id === boardId ? updatedBoard : board))
       );
     } catch (error) {
       console.error('Error updating board:', error.response?.data || error.message);
@@ -58,6 +60,7 @@ export const BoardProvider = ({ children }) => {
     }
   };
 
+  // Delete a specific board by ID
   const deleteBoard = async (boardId) => {
     try {
       await boardService.deleteBoard(boardId);
@@ -68,6 +71,7 @@ export const BoardProvider = ({ children }) => {
     }
   };
 
+  // Fetch boards when the token changes
   useEffect(() => {
     if (token) {
       fetchBoards();
@@ -98,4 +102,5 @@ BoardProvider.propTypes = {
 };
 
 export const useBoards = () => useContext(BoardContext);
+
 
