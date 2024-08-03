@@ -18,9 +18,8 @@ import {
   BottomContainer
 } from "./Sidebar.styled";
 
-const Sidebar = ({ isOpen, toggleSidebar, onCollaboratorUpdate }) => {
+const Sidebar = ({ isOpen, toggleSidebar, setSelectedBoardId, onCollaboratorUpdate }) => {
   const { logout } = useContext(AuthContext);
-  const [selectedBoardId, setSelectedBoardId] = useState(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -33,7 +32,7 @@ const Sidebar = ({ isOpen, toggleSidebar, onCollaboratorUpdate }) => {
   };
 
   const handleBoardSelect = (boardId, titleBoard) => {
-    setSelectedBoardId(boardId);
+    setSelectedBoardId(boardId, titleBoard);
     navigate(`/home/${titleBoard}`);
   };
 
@@ -49,7 +48,11 @@ const Sidebar = ({ isOpen, toggleSidebar, onCollaboratorUpdate }) => {
         </LogoContainer>
         <SidebarHeading>My boards</SidebarHeading>
         <NewBoardContainer />
-        <BoardList setSelectedBoardId={handleBoardSelect} navigateHome={navigateHome} onCollaboratorUpdate={onCollaboratorUpdate}/>
+        <BoardList 
+          setSelectedBoardId={handleBoardSelect} 
+          navigateHome={navigateHome}
+          onCollaboratorUpdate={onCollaboratorUpdate}
+        />
         <BottomContainer>
           <HelpList />
           <LogOutBtn onClick={handleLogout}>
@@ -65,6 +68,7 @@ const Sidebar = ({ isOpen, toggleSidebar, onCollaboratorUpdate }) => {
 Sidebar.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
+  setSelectedBoardId: PropTypes.func.isRequired,
   onCollaboratorUpdate: PropTypes.func.isRequired,
 };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Sidebar from "../../components/Sidebar/SideBar/Sidebar";
@@ -35,7 +35,8 @@ const HomePage = () => {
     }
   }, [titleBoard, boards]);
 
-  const handleCollaboratorUpdate = () => {
+  const handleCollaboratorUpdate = async () => {
+    await fetchBoards();
     const updatedBoard = boards.find((b) => b.titleBoard === titleBoard);
     if (updatedBoard) {
       setSelectedBoardId(updatedBoard._id);
@@ -43,48 +44,43 @@ const HomePage = () => {
     }
   };
 
-
   return (
-
-      <ColumnProvider>
-        <CardProvider>
-          <HomePageContainer>
-            <Sidebar
-              isOpen={isOpen}
-              toggleSidebar={toggleSidebar}
-              setSelectedBoardId={(boardId, boardTitle) => {
-                setSelectedBoardId(boardId);
-                setSelectedBoardTitle(boardTitle);
-              }}
-              onCollaboratorUpdate={handleCollaboratorUpdate} 
-            />
-            <MainContent $isOpen={isOpen}>
-              <Header isOpen={isOpen} />
-              <Content>
-                {selectedBoardId ? (
-                  <Board
-                    boardId={selectedBoardId}
-                    titleBoard={selectedBoardTitle}
-                    onCollaboratorUpdate={handleCollaboratorUpdate}
-                  />
-                ) : (
-                  <HomeParagraph>
-                    Before starting your project, it is essential
-                    <b> to create a board </b> to visualize and track all the
-                    necessary tasks and milestones. This board serves as a
-                    powerful tool to organize the workflow and ensure effective
-                    collaboration among team members.
-                  </HomeParagraph>
-                )}
-              </Content>
-            </MainContent>
-          </HomePageContainer>
-        </CardProvider>
-      </ColumnProvider>
-
+    <ColumnProvider>
+      <CardProvider>
+        <HomePageContainer>
+          <Sidebar
+            isOpen={isOpen}
+            toggleSidebar={toggleSidebar}
+            setSelectedBoardId={(boardId, boardTitle) => {
+              setSelectedBoardId(boardId);
+              setSelectedBoardTitle(boardTitle);
+            }}
+            onCollaboratorUpdate={handleCollaboratorUpdate}
+          />
+          <MainContent $isOpen={isOpen}>
+            <Header isOpen={isOpen} />
+            <Content>
+              {selectedBoardId ? (
+                <Board
+                  boardId={selectedBoardId}
+                  titleBoard={selectedBoardTitle}
+                  onCollaboratorUpdate={handleCollaboratorUpdate}
+                />
+              ) : (
+                <HomeParagraph>
+                  Before starting your project, it is essential
+                  <b> to create a board </b> to visualize and track all the
+                  necessary tasks and milestones. This board serves as a
+                  powerful tool to organize the workflow and ensure effective
+                  collaboration among team members.
+                </HomeParagraph>
+              )}
+            </Content>
+          </MainContent>
+        </HomePageContainer>
+      </CardProvider>
+    </ColumnProvider>
   );
 };
 
 export default HomePage;
-
-

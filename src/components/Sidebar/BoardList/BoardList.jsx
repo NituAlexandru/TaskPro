@@ -4,7 +4,6 @@ import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import Modal from "../../Portal/Modal";
 import EditBoardModal from "../../Portal/EditBoardModal/EditBoardModal";
-import { ThemeContext } from "../../../utils/ThemeProvider";
 import { useBoards } from "../../../contexts/BoardContext";
 import {
   BoardListItem,
@@ -24,7 +23,6 @@ import projectIcon from "../../../assets/icons/project.svg";
 import puzzlePieceIcon from "../../../assets/icons/puzzle-piece.svg";
 import starIcon from "../../../assets/icons/star.svg";
 
-// Mapping of icons
 const iconsMap = {
   loadingIcon,
   colorsIcon,
@@ -44,7 +42,7 @@ const BoardList = ({ setSelectedBoardId, navigateHome, onCollaboratorUpdate }) =
 
   useEffect(() => {
     fetchBoards();
-  }, []); // Empty dependency array ensures this runs only once
+  }, []);
 
   const openModal = (boardId) => {
     setSelectedBoardIdState(boardId);
@@ -58,25 +56,21 @@ const BoardList = ({ setSelectedBoardId, navigateHome, onCollaboratorUpdate }) =
   };
 
   const handleBoardClick = (boardId, titleBoard) => {
-    console.log("Board Clicked, ID:", boardId); // Log the clicked board ID
     setSelectedBoardId(boardId, titleBoard);
-    setCurrentBoardId(boardId); // Set the current board ID
+    setCurrentBoardId(boardId);
   };
 
   const handleDeleteBoard = async (boardId) => {
     try {
       await deleteBoard(boardId);
       toast.success("Board deleted successfully!");
-      fetchBoards(); // Refresh the board list after deletion
+      fetchBoards();
       if (boardId === currentBoardId) {
-        setCurrentBoardId(null); // Reset the current board ID if the deleted board is the current board
-        navigateHome(); // Redirect to the home page
+        setCurrentBoardId(null);
+        navigateHome();
       }
     } catch (error) {
-      console.error(
-        "Error deleting board:",
-        error.response?.data || error.message
-      );
+      console.error("Error deleting board:", error.response?.data || error.message);
       toast.error("Failed to delete board. Please try again.");
     }
   };
@@ -131,7 +125,11 @@ const BoardList = ({ setSelectedBoardId, navigateHome, onCollaboratorUpdate }) =
           border="1px solid rgba(190, 219, 176, 0.5)"
           borderRadius="8px"
         >
-          <EditBoardModal closeModal={closeModal} boardId={selectedBoardId} onCollaboratorUpdate={onCollaboratorUpdate}/>
+          <EditBoardModal 
+            closeModal={closeModal} 
+            boardId={selectedBoardId} 
+            onCollaboratorUpdate={onCollaboratorUpdate}
+          />
         </Modal>
       )}
     </>
@@ -145,4 +143,3 @@ BoardList.propTypes = {
 };
 
 export default BoardList;
-

@@ -160,7 +160,7 @@ const backgrounds = {
   },
 };
 
-const Board = ({ boardId, titleBoard, onCollaboratorUpdate}) => {
+const Board = ({ boardId, titleBoard, onCollaboratorUpdate }) => {
   const [columns, setColumns] = useState([]);
   const [collaborators, setCollaborators] = useState([]);
   const [background, setBackground] = useState(null);
@@ -188,6 +188,12 @@ const Board = ({ boardId, titleBoard, onCollaboratorUpdate}) => {
       fetchBoardData();
     }
   }, [boardId, fetchBoardData]);
+
+  useEffect(() => {
+    if (boardId) {
+      fetchBoardData();
+    }
+  }, [boardId, fetchBoardData, onCollaboratorUpdate]);
 
   // Handle column addition
   const handleColumnAdded = (newColumn) => {
@@ -256,11 +262,11 @@ const Board = ({ boardId, titleBoard, onCollaboratorUpdate}) => {
             filter={filter}
             boardId={boardId}
             fetchColumns={fetchBoardData}
-            setColumns={setColumns} 
-            collaborators={collaborators} 
+            setColumns={setColumns}
+            collaborators={collaborators}
             index={index}
             onDrop={onDrop}
-            columns={columns} 
+            columns={columns}
           />
         ))}
         <AddColumnButton boardId={boardId} onColumnAdded={handleColumnAdded} />

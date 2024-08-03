@@ -86,7 +86,7 @@ const backgrounds = [
   { name: "turquoiseBay", url: turquoiseBay },
   { name: "starryMountains", url: starryMountains },
 ];
-// Validation Schema
+
 const validationSchema = Yup.object({
   title: Yup.string().required("Title is required"),
   collaborators: Yup.array().of(
@@ -110,226 +110,226 @@ const EditBoardModal = ({ closeModal, boardId, onCollaboratorUpdate }) => {
   const { token } = useContext(AuthContext);
   const { updateBoard, fetchBoards } = useBoards();
 
-useEffect(() => {
-  const fetchBoard = async () => {
-    const boardService = new BoardService(token);
-    setLoading(true);
+  useEffect(() => {
+    const fetchBoard = async () => {
+      const boardService = new BoardService(token);
+      setLoading(true);
+      try {
+        console.log(`Fetching board data for board ID: ${boardId}`);
+        const board = await boardService.getBoard(boardId);
+        setInitialValues({
+          title: board.titleBoard,
+          collaborators: board.collaborators.map((collab) => ({
+            _id: collab._id,
+            name: collab.name,
+            avatarURL: collab.avatarURL,
+          })),
+        });
+        setSelectedIcon(board.icon);
+        setSelectedBackground(board.background);
+        console.log("Board data fetched successfully:", board);
+      } catch (error) {
+        console.error("Error fetching board:", error);
+        setError("Failed to fetch board data");
+        toast.error("Failed to fetch board data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBoard();
+  }, [boardId, token]);
+
+  const handleAddCollaborator = async (email, arrayHelpers) => {
+    if (!email) return;
+
     try {
-      console.log(`Fetching board data for board ID: ${boardId}`);
-      const board = await boardService.getBoard(boardId);
-      setInitialValues({
-        title: board.titleBoard,
-        collaborators: board.collaborators.map((collab) => ({
-          _id: collab._id,
-          name: collab.name,
-          avatarURL: collab.avatarURL,
-        })),
-      });
-      setSelectedIcon(board.icon);
-      setSelectedBackground(board.background);
-      console.log("Board data fetched successfully:", board);
+      console.log(`Fetching user details for email: ${email}`);
+      const userDetails = await getUserDetailsByEmail(email);
+      if (userDetails) {
+        arrayHelpers.push({
+          _id: userDetails.userId,
+          name: userDetails.name,
+          avatarURL: userDetails.avatar,
+        });
+        document.querySelector('input[name="collaborators"]').value = "";
+        console.log("Collaborator added successfully:", userDetails);
+      } else {
+        toast.error(`User with email ${email} not found`);
+        console.warn(`User with email ${email} not found`);
+      }
     } catch (error) {
-      console.error("Error fetching board:", error);
-      setError("Failed to fetch board data");
-      toast.error("Failed to fetch board data.");
-    } finally {
-      setLoading(false);
+      console.error("Error fetching user details:", error);
+      toast.error("Error fetching user details. Please try again.");
     }
   };
 
-  fetchBoard();
-}, [boardId, token]);
-
-const handleAddCollaborator = async (email, arrayHelpers) => {
-  if (!email) return;
-
-  try {
-    console.log(`Fetching user details for email: ${email}`);
-    const userDetails = await getUserDetailsByEmail(email);
-    if (userDetails) {
-      arrayHelpers.push({
-        _id: userDetails.userId,
-        name: userDetails.name,
-        avatarURL: userDetails.avatar,
-      });
-      document.querySelector('input[name="collaborators"]').value = "";
-      console.log("Collaborator added successfully:", userDetails);
-    } else {
-      toast.error(`User with email ${email} not found`);
-      console.warn(`User with email ${email} not found`);
+  const handleSubmit = async (values, { setSubmitting }) => {
+    if (!selectedIcon || !selectedBackground) {
+      toast.error("Please select an icon and a background");
+      return;
     }
-  } catch (error) {
-    console.error("Error fetching user details:", error);
-    toast.error("Error fetching user details. Please try again.");
-  }
-};
 
-const handleSubmit = async (values, { setSubmitting }) => {
-  if (!selectedIcon || !selectedBackground) {
-    toast.error("Please select an icon and a background");
-    return;
-  }
+    setLoading(true);
+    setError("");
+    try {
+      const collaboratorIds = values.collaborators.map(
+        (collaborator) => collaborator._id
+      );
 
-  setLoading(true);
-  setError("");
-  try {
-    const collaboratorIds = values.collaborators.map(
-      (collaborator) => collaborator._id
-    );
+      const updatedBoard = {
+        titleBoard: values.title,
+        background: selectedBackground,
+        icon: selectedIcon,
+        collaborators: collaboratorIds,
+      };
 
-    const updatedBoard = {
-      titleBoard: values.title,
-      background: selectedBackground,
-      icon: selectedIcon,
-      collaborators: collaboratorIds,
-    };
+      await updateBoard(boardId, updatedBoard);
+      await fetchBoards();
+      toast.success("Board updated successfully!");
+      closeModal();
+      onCollaboratorUpdate();
+    } catch (error) {
+      console.error("Error updating board:", error);
+      setError("Failed to update board");
+      toast.error("Failed to update board. Please try again.");
+    } finally {
+      setLoading(false);
+      setSubmitting(false);
+    }
+  };
 
-    await updateBoard(boardId, updatedBoard);
-    await fetchBoards();
-    toast.success("Board updated successfully!");
-    closeModal();
-    onCollaboratorUpdate();
-  } catch (error) {
-    console.error("Error updating board:", error);
-    setError("Failed to update board");
-    toast.error("Failed to update board. Please try again.");
-  } finally {
-    setLoading(false);
-    setSubmitting(false);
-  }
-};
-
-return (
-  <FormWrapper>
-    <ModalHeader>
-      <Title>Edit board</Title>
-      <CloseButton onClick={closeModal}>&times;</CloseButton>
-    </ModalHeader>
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      enableReinitialize
-      onSubmit={handleSubmit}
-    >
-      {({ isSubmitting, values, setFieldValue }) => (
-        <StyledForm>
-          <ModalBody>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            <Input
-              placeholder="Title"
-              name="title"
-              autoComplete="off"
-              onChange={(e) => setFieldValue("title", e.target.value)}
-              value={values.title}
-            />
-            <StyledErrorMessage name="title" component="div" />
-            <CollaboratorsInputWrapper>
-              <FieldArray
-                name="collaborators"
-                render={(arrayHelpers) => (
-                  <>
-                    <div style={{ position: "relative" }}>
-                      <CollaboratorsInput
-                        autoComplete="off"
-                        type="email"
-                        placeholder="Enter collaborator email"
-                        name="collaborators"
-                        onKeyDown={async (e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            const email = e.target.value;
-                            handleAddCollaborator(email, arrayHelpers);
-                          }
-                        }}
-                      />
-                      <SearchButtonWrapper>
-                        <SearchButton
-                          type="button"
-                          onClick={() => {
-                            const email = document.querySelector(
-                              'input[name="collaborators"]'
-                            ).value;
-                            handleAddCollaborator(email, arrayHelpers);
-                          }}
-                        >
-                          <FiSearch />
-                        </SearchButton>
-                      </SearchButtonWrapper>
-                    </div>
-                    <StyledErrorMessage
-                      name="collaborators"
-                      component="div"
-                    />
-                    <CollaboratorsList>
-                      {values.collaborators.map((collaborator, index) => (
-                        <CollaboratorItem key={index}>
-                          <img
-                            src={collaborator.avatarURL}
-                            alt={collaborator.name}
-                            style={{
-                              width: "30px",
-                              height: "30px",
-                              borderRadius: "50%",
-                              marginRight: "10px",
-                            }}
-                          />
-                          <RemoveCollaboratorButton
-                            type="button"
-                            onClick={() => arrayHelpers.remove(index)}
-                          >
-                              &times;
-                          </RemoveCollaboratorButton>
-                        </CollaboratorItem>
-                      ))}
-                    </CollaboratorsList>
-                  </>
-                )}
+  return (
+    <FormWrapper>
+      <ModalHeader>
+        <Title>Edit board</Title>
+        <CloseButton onClick={closeModal}>&times;</CloseButton>
+      </ModalHeader>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting, values, setFieldValue }) => (
+          <StyledForm>
+            <ModalBody>
+              {error && <p style={{ color: "red" }}>{error}</p>}
+              <Input
+                placeholder="Title"
+                name="title"
+                autoComplete="off"
+                onChange={(e) => setFieldValue("title", e.target.value)}
+                value={values.title}
               />
-            </CollaboratorsInputWrapper>
-            <Section>
-              <Title as="h3">Icons</Title>
-              <Icons>
-                {icons.map((icon, index) => (
-                  <Icon
-                    key={index}
-                    selected={selectedIcon === icon.name}
-                    onClick={() => setSelectedIcon(icon.name)}
-                  >
-                    <img src={icon.src} alt={`icon-${index}`} />
-                  </Icon>
-                ))}
-              </Icons>
-            </Section>
-            <Section>
-              <Title as="h3">Background</Title>
-              <Backgrounds>
-                {backgrounds.map(({ name, url }, index) => (
-                  <Background
-                    key={index}
-                    src={url}
-                    selected={selectedBackground === name}
-                    onClick={() => setSelectedBackground(name)}
-                  />
-                ))}
-              </Backgrounds>
-            </Section>
-            <CreateButton type="submit" disabled={isSubmitting || loading}>
-              <>
-                <CreateButtonAdd>+</CreateButtonAdd> Edit
-              </>
-            </CreateButton>
-          </ModalBody>
-        </StyledForm>
-      )}
-    </Formik>
-  </FormWrapper>
-);
+              <StyledErrorMessage name="title" component="div" />
+              <CollaboratorsInputWrapper>
+                <FieldArray
+                  name="collaborators"
+                  render={(arrayHelpers) => (
+                    <>
+                      <div style={{ position: "relative" }}>
+                        <CollaboratorsInput
+                          autoComplete="off"
+                          type="email"
+                          placeholder="Enter collaborator email"
+                          name="collaborators"
+                          onKeyDown={async (e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              const email = e.target.value;
+                              handleAddCollaborator(email, arrayHelpers);
+                            }
+                          }}
+                        />
+                        <SearchButtonWrapper>
+                          <SearchButton
+                            type="button"
+                            onClick={() => {
+                              const email = document.querySelector(
+                                'input[name="collaborators"]'
+                              ).value;
+                              handleAddCollaborator(email, arrayHelpers);
+                            }}
+                          >
+                            <FiSearch />
+                          </SearchButton>
+                        </SearchButtonWrapper>
+                      </div>
+                      <StyledErrorMessage
+                        name="collaborators"
+                        component="div"
+                      />
+                      <CollaboratorsList>
+                        {values.collaborators.map((collaborator, index) => (
+                          <CollaboratorItem key={index}>
+                            <img
+                              src={collaborator.avatarURL}
+                              alt={collaborator.name}
+                              style={{
+                                width: "30px",
+                                height: "30px",
+                                borderRadius: "50%",
+                                marginRight: "10px",
+                              }}
+                            />
+                            <RemoveCollaboratorButton
+                              type="button"
+                              onClick={() => arrayHelpers.remove(index)}
+                            >
+                              &times;
+                            </RemoveCollaboratorButton>
+                          </CollaboratorItem>
+                        ))}
+                      </CollaboratorsList>
+                    </>
+                  )}
+                />
+              </CollaboratorsInputWrapper>
+              <Section>
+                <Title as="h3">Icons</Title>
+                <Icons>
+                  {icons.map((icon, index) => (
+                    <Icon
+                      key={index}
+                      selected={selectedIcon === icon.name}
+                      onClick={() => setSelectedIcon(icon.name)}
+                    >
+                      <img src={icon.src} alt={`icon-${index}`} />
+                    </Icon>
+                  ))}
+                </Icons>
+              </Section>
+              <Section>
+                <Title as="h3">Background</Title>
+                <Backgrounds>
+                  {backgrounds.map(({ name, url }, index) => (
+                    <Background
+                      key={index}
+                      src={url}
+                      selected={selectedBackground === name}
+                      onClick={() => setSelectedBackground(name)}
+                    />
+                  ))}
+                </Backgrounds>
+              </Section>
+              <CreateButton type="submit" disabled={isSubmitting || loading}>
+                <>
+                  <CreateButtonAdd>+</CreateButtonAdd> Edit
+                </>
+              </CreateButton>
+            </ModalBody>
+          </StyledForm>
+        )}
+      </Formik>
+    </FormWrapper>
+  );
 };
 
 EditBoardModal.propTypes = {
-closeModal: PropTypes.func.isRequired,
-boardId: PropTypes.string.isRequired,
-onCollaboratorUpdate: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  boardId: PropTypes.string.isRequired,
+  onCollaboratorUpdate: PropTypes.func.isRequired,
 };
 
 export default EditBoardModal;
