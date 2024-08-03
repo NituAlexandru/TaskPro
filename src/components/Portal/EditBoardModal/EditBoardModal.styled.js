@@ -135,3 +135,35 @@ export const CreateButtonAdd = styled.span`
   justify-content: center;
   align-items: center;
 `;
+
+export const SearchButtonWrapper = styled.div`
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-35%);
+`;
+
+export const SearchButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: ${({ theme }) => theme.modalTextColor};
+  padding: 0;
+  margin: 0;
+
+  &:hover {
+    color: ${({ theme }) => theme.modalTextColorHover};
+    background-color: transparent;
+  }
+
+  &:focus {
+    color: ${({ theme }) => theme.modalTextColorHover};
+    background-color: transparent;
+  }
+
+  &:active {
+    color: ${({ theme }) => theme.modalTextColorHover};
+    background-color: transparent;
+  }
+`;

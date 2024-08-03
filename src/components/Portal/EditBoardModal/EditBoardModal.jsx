@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import { FiSearch } from "react-icons/fi";
 import loadingIcon from "../../../assets/icons/loading.svg";
 import colorsIcon from "../../../assets/icons/colors.svg";
 import containerIcon from "../../../assets/icons/container.svg";
@@ -27,7 +28,7 @@ import turquoiseBay from "../../../assets/portal-img/TurquoiseBay.webp";
 import starryMountains from "../../../assets/portal-img/StarryMountains.webp";
 import { AuthContext } from "../../../contexts/AuthContext";
 import BoardService from "../../../service/boardService";
-import { getCollaboratorIdByName } from "../../../service/collaboratorService";
+import { getUserDetailsByEmail } from "../../../service/authService";
 import {
   ModalHeader,
   Title,
@@ -41,6 +42,8 @@ import {
   Background,
   CreateButton,
   CreateButtonAdd,
+  SearchButtonWrapper,
+  SearchButton,
 } from "./EditBoardModal.styled";
 
 const icons = [
@@ -80,6 +83,7 @@ const EditBoardModal = ({ closeModal, boardId }) => {
   const [selectedBackground, setSelectedBackground] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [collaborators, setCollaborators] = useState([]);
   const { token } = useContext(AuthContext);
 
   useEffect(() => {
@@ -91,6 +95,7 @@ const EditBoardModal = ({ closeModal, boardId }) => {
         setTitle(board.titleBoard);
         setSelectedIcon(board.icon);
         setSelectedBackground(board.background);
+        setCollaborators(board.collaborators);
       } catch (error) {
         console.error("Error fetching board:", error);
         setError("Failed to fetch board data");
@@ -103,6 +108,31 @@ const EditBoardModal = ({ closeModal, boardId }) => {
     fetchBoard();
   }, [boardId, token]);
 
+  const handleAddCollaborator = async () => {
+    if (!collaborator) return;
+
+    try {
+      const userDetails = await getUserDetailsByEmail(collaborator);
+      if (userDetails) {
+        setCollaborators((prev) => [
+          ...prev,
+          {
+            email: collaborator,
+            userId: userDetails.userId,
+            name: userDetails.name,
+            avatar: userDetails.avatar,
+          },
+        ]);
+        setCollaborator("");
+      } else {
+        toast.error(`User with email ${collaborator} not found`);
+      }
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+      toast.error("Error fetching user details. Please try again.");
+    }
+  };
+
   const handleSubmit = async () => {
     if (!title || selectedIcon === null || selectedBackground === null) {
       setError("Please fill all fields");
@@ -114,17 +144,13 @@ const EditBoardModal = ({ closeModal, boardId }) => {
     setError("");
     try {
       const boardService = new BoardService(token);
+      const collaboratorIds = collaborators.map((collab) => collab.userId);
       const updatedBoard = {
         titleBoard: title,
         background: selectedBackground,
         icon: selectedIcon,
+        collaborators: collaboratorIds,
       };
-
-      // If a collaborator is added, fetch the collaborator ID
-      if (collaborator) {
-        const id = await getCollaboratorIdByName(collaborator);
-        updatedBoard.collaborators = [id]; // Replace with logic to add to existing collaborators if needed
-      }
 
       const response = await boardService.updateBoard(boardId, updatedBoard);
       console.log("Board updated:", response);
@@ -152,11 +178,24 @@ const EditBoardModal = ({ closeModal, boardId }) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <Input
-          placeholder="Invite Collaborator"
-          value={collaborator}
-          onChange={(e) => setCollaborator(e.target.value)}
-        />
+        <div style={{ position: "relative" }}>
+          <Input
+            placeholder="Invite Collaborator"
+            value={collaborator}
+            onChange={(e) => setCollaborator(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleAddCollaborator();
+              }
+            }}
+          />
+          <SearchButtonWrapper>
+            <SearchButton type="button" onClick={handleAddCollaborator}>
+              <FiSearch />
+            </SearchButton>
+          </SearchButtonWrapper>
+        </div>
         <Section>
           <Title as="h3">Icons</Title>
           <Icons>

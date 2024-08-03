@@ -140,12 +140,10 @@ export const CreateButtonAdd = styled.span`
 
 export const StyledErrorMessage = styled(ErrorMessage)`
   position: absolute;
+  top: 117px;
+  left: 22px;
+  font-size: 13px;
   color: red;
-  font-size: 12px;
-  margin-top: -5px;
-  margin-left: 5px;
-  height: 0;
-  line-height: normal;
   pointer-events: none;
 `;
 
@@ -153,14 +151,10 @@ export const InputWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
 `;
 
-export const CollaboratorsInputWrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
+export const CollaboratorsInputWrapper = styled(InputWrapper)`
+  margin-bottom: 0; /* Elimină margin-ul deoarece există deja în InputWrapper */
 `;
 
 export const CollaboratorsInput = styled.input`
@@ -179,28 +173,82 @@ export const CollaboratorsList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-  margin-top: 10px;
+
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 `;
 
 export const CollaboratorItem = styled.li`
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative;
+  width: 40px;
+  height: 40px;
 `;
 
 export const RemoveCollaboratorButton = styled.button`
   border: none;
   background: none;
   color: red;
-  font-size: 18px;
+  font-size: 25px;
   cursor: pointer;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  right: -2px;
+  top: -5px;
+
+  &:hover {
+    background-color: transparent;
+    transform: scale(1.2);
+  }
+
+  &:focus {
+    background-color: transparent;
+    transform: scale(1.2);
+  }
+
+  &:active {
+    background-color: transparent;
+    transform: scale(1.2);
+  }
 `;
 
 export const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
   gap: 20px;
+`;
+
+export const SearchButtonWrapper = styled.div`
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-35%);
+`;
+
+export const SearchButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: ${({ theme }) => theme.modalTextColor};
+  padding: 0;
+  margin: 0;
+
+  &:hover {
+    color: ${({ theme }) => theme.modalTextColorHover};
+    background-color: transparent;
+  }
+
+  &:focus {
+    color: ${({ theme }) => theme.modalTextColorHover};
+    background-color: transparent;
+  }
+
+  &:active {
+    color: ${({ theme }) => theme.modalTextColorHover};
+    background-color: transparent;
+  }
 `;

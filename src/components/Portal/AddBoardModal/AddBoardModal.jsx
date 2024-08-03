@@ -1,8 +1,9 @@
 import { useState, useContext } from "react";
-import { Formik, FieldArray, ErrorMessage } from "formik";
+import { Formik, FieldArray } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import { FiSearch } from "react-icons/fi";
 import loadingIcon from "../../../assets/icons/loading.svg";
 import colorsIcon from "../../../assets/icons/colors.svg";
 import containerIcon from "../../../assets/icons/container.svg";
@@ -49,6 +50,9 @@ import {
   CollaboratorItem,
   RemoveCollaboratorButton,
   StyledForm,
+  SearchButtonWrapper,
+  SearchButton,
+  StyledErrorMessage,
 } from "../AddBoardModal/AddBoardModal.styled";
 
 const icons = [
@@ -85,7 +89,9 @@ const validationSchema = Yup.object({
   title: Yup.string().required("Title is required"),
   collaborators: Yup.array().of(
     Yup.object({
-      email: Yup.string().email("Invalid email address").required("Email is required"),
+      email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
       userId: Yup.string().required("User ID is required"),
       name: Yup.string().required("Name is required"),
       avatar: Yup.string().required("Avatar is required"),
@@ -101,6 +107,28 @@ const NewBoardModal = ({ closeModal }) => {
   const { createBoard, fetchBoards } = useBoards();
   const { user } = useContext(AuthContext);
 
+  const handleAddCollaborator = async (email, arrayHelpers) => {
+    if (!email) return;
+
+    try {
+      const userDetails = await getUserDetailsByEmail(email);
+      if (userDetails) {
+        arrayHelpers.push({
+          email,
+          userId: userDetails.userId,
+          name: userDetails.name,
+          avatar: userDetails.avatar,
+        });
+        document.querySelector('input[name="collaborators"]').value = "";
+      } else {
+        toast.error(`User with email ${email} not found`);
+      }
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+      toast.error("Error fetching user details. Please try again.");
+    }
+  };
+
   const handleSubmit = async (values, { setSubmitting }) => {
     if (!selectedIcon || !selectedBackground) {
       toast.error("Please select an icon and a background");
@@ -110,7 +138,9 @@ const NewBoardModal = ({ closeModal }) => {
     setLoading(true);
     setError("");
     try {
-      const collaboratorIds = values.collaborators.map(collaborator => collaborator.userId);
+      const collaboratorIds = values.collaborators.map(
+        (collaborator) => collaborator.userId
+      );
 
       const boardData = {
         owner: user._id,
@@ -159,47 +189,57 @@ const NewBoardModal = ({ closeModal }) => {
                 autoComplete="off"
                 onChange={(e) => setFieldValue("title", e.target.value)}
               />
-              <ErrorMessage name="title" component="div" className="error" />
+              <StyledErrorMessage name="title" component="div" />
               <CollaboratorsInputWrapper>
                 <FieldArray
                   name="collaborators"
                   render={(arrayHelpers) => (
                     <>
-                      <CollaboratorsInput
-                        autoComplete="off"
-                        type="email"
-                        placeholder="Enter collaborator email"
-                        onKeyDown={async (e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            if (e.target.value) {
+                      <div style={{ position: "relative" }}>
+                        <CollaboratorsInput
+                          autoComplete="off"
+                          type="email"
+                          placeholder="Enter collaborator email"
+                          name="collaborators"
+                          onKeyDown={async (e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
                               const email = e.target.value;
-                              try {
-                                const userDetails = await getUserDetailsByEmail(email);
-                                if (userDetails) {
-                                  arrayHelpers.push({
-                                    email,
-                                    userId: userDetails.userId,
-                                    name: userDetails.name,
-                                    avatar: userDetails.avatar,
-                                  });
-                                } else {
-                                  toast.error(`User with email ${email} not found`);
-                                }
-                              } catch (error) {
-                                console.error("Error fetching user details:", error);
-                                toast.error("Error fetching user details. Please try again.");
-                              }
-                              e.target.value = "";
+                              handleAddCollaborator(email, arrayHelpers);
                             }
-                          }
-                        }}
+                          }}
+                        />
+                        <SearchButtonWrapper>
+                          <SearchButton
+                            type="button"
+                            onClick={() => {
+                              const email = document.querySelector(
+                                'input[name="collaborators"]'
+                              ).value;
+                              handleAddCollaborator(email, arrayHelpers);
+                            }}
+                          >
+                            <FiSearch />
+                          </SearchButton>
+                        </SearchButtonWrapper>
+                      </div>
+                      <StyledErrorMessage
+                        name="collaborators"
+                        component="div"
                       />
-                      <ErrorMessage name="collaborators" component="div" className="error" />
                       <CollaboratorsList>
                         {values.collaborators.map((collaborator, index) => (
                           <CollaboratorItem key={index}>
-                            <img src={collaborator.avatar} alt={collaborator.name} style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "10px" }} />
+                            <img
+                              src={collaborator.avatar}
+                              alt={collaborator.name}
+                              style={{
+                                width: "30px",
+                                height: "30px",
+                                borderRadius: "50%",
+                                marginRight: "10px",
+                              }}
+                            />
                             <RemoveCollaboratorButton
                               type="button"
                               onClick={() => arrayHelpers.remove(index)}

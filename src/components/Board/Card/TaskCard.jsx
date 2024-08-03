@@ -125,7 +125,7 @@ const TaskCard = ({
           <CardTitle>{titleCard}</CardTitle>
           <AvatarsContainer>
             {assignedCollaborator ? (
-              <AvatarWrapper>
+              <AvatarWrapper onClick={() => setIsDropdownOpen((prev) => !prev)}>
                 <Avatar
                   src={assignedCollaborator.avatarURL}
                   alt={assignedCollaborator.name}
