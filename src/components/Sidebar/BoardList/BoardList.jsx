@@ -120,10 +120,6 @@ const BoardList = ({ setSelectedBoardId, navigateHome, onCollaboratorUpdate }) =
         <Modal
           isOpen={isModalOpen}
           onClose={closeModal}
-          width="350px"
-          height="500px"
-          border="1px solid rgba(190, 219, 176, 0.5)"
-          borderRadius="8px"
         >
           <EditBoardModal 
             closeModal={closeModal} 
