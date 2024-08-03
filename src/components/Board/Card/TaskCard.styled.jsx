@@ -204,3 +204,28 @@ export const Tooltip = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const CollaboratorDropdown = styled.div`
+  position: absolute;
+  background-color: ${({ theme }) => theme.dropdownBackgroundColor};
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  top: 10px;
+  right: 5px;
+  z-index: 50;
+  cursor: pointer;
+`;
+
+export const CollaboratorItem = styled.div`
+  padding: 5px;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.dropdownBackgroundColor};
+  color: ${({ theme }) => theme.dropdownTextColor};
+
+
+  &:hover {
+    background-color: ${({ theme }) => theme.dropdownTextColor};
+    color: ${({ theme }) => theme.dropdownBackgroundColor};
+    border-radius: 4px;
+`;

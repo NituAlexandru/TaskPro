@@ -1,7 +1,13 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
-import { FiEdit, FiTrash2, FiArrowRightCircle, FiBell } from "react-icons/fi";
+import {
+  FiEdit,
+  FiTrash2,
+  FiArrowRightCircle,
+  FiBell,
+  FiChevronDown,
+} from "react-icons/fi";
 import { toast } from "react-toastify";
 import EditCardForm from "../../Portal/editCard/EditCardModal";
 import StatusModal from "../../Portal/CardStatusModal/CardStatusModal";
@@ -28,6 +34,8 @@ import {
   AvatarWrapper,
   Avatar,
   Tooltip,
+  CollaboratorDropdown,
+  CollaboratorItem,
 } from "./TaskCard.styled";
 
 const ItemTypes = {
@@ -61,6 +69,8 @@ const TaskCard = ({
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState("In progress");
   const { fetchCardsForColumn, updateCard, deleteCard } = useCards();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [assignedCollaborator, setAssignedCollaborator] = useState(null);
 
   const toggleModal = (setModalState) => () => setModalState((prev) => !prev);
 
@@ -90,6 +100,11 @@ const TaskCard = ({
     }
   };
 
+  const handleAssignCollaborator = (collaborator) => {
+    setAssignedCollaborator(collaborator);
+    setIsDropdownOpen(false);
+  };
+
   const formattedDeadline = formatDate(deadline);
   const deadlineDate = new Date(deadline);
   const isDeadlineToday = isToday(deadlineDate);
@@ -109,12 +124,33 @@ const TaskCard = ({
         <CardContentContainer>
           <CardTitle>{titleCard}</CardTitle>
           <AvatarsContainer>
-            {collaborators.map((collaborator) => (
-              <AvatarWrapper key={collaborator._id}>
-                <Avatar src={collaborator.avatarURL} alt={collaborator.name} />
-                <Tooltip className="tooltip">{collaborator.name}</Tooltip>
+            {assignedCollaborator ? (
+              <AvatarWrapper>
+                <Avatar
+                  src={assignedCollaborator.avatarURL}
+                  alt={assignedCollaborator.name}
+                />
+                <Tooltip className="tooltip">
+                  {assignedCollaborator.name}
+                </Tooltip>
               </AvatarWrapper>
-            ))}
+            ) : (
+              <FiChevronDown
+                onClick={() => setIsDropdownOpen((prev) => !prev)}
+              />
+            )}
+            {isDropdownOpen && (
+              <CollaboratorDropdown>
+                {collaborators.map((collaborator) => (
+                  <CollaboratorItem
+                    key={collaborator._id}
+                    onClick={() => handleAssignCollaborator(collaborator)}
+                  >
+                    {collaborator.name}
+                  </CollaboratorItem>
+                ))}
+              </CollaboratorDropdown>
+            )}
           </AvatarsContainer>
           <CardDescription>{description}</CardDescription>
           <CardFooter>

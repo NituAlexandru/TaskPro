@@ -51,6 +51,8 @@ export const darkTheme = {
   spinnerBorder: "rgba(255, 255, 255, 0.2)",
   spinnerBorderLeftColor: "#bedbb0",
   columnSvgColor: "rgba(255, 255, 255, 0.5)",
+  dropdownBackgroundColor: "#fff",
+  dropdownTextColor: "#000",
 };
 
 export const lightTheme = {
@@ -106,6 +108,8 @@ export const lightTheme = {
   spinnerBorder: "rgba(0, 0, 0, 0.1)",
   spinnerBorderLeftColor: "#22a6b3",
   columnSvgColor: "rgba(0, 0, 0, 0.5)",
+  dropdownBackgroundColor: "#000",
+  dropdownTextColor: "#fff",
 };
 
 export const violetTheme = {
@@ -161,4 +165,6 @@ export const violetTheme = {
   spinnerBorder: "rgba(255, 255, 255, 0.2)",
   spinnerBorderLeftColor: "#7b7ede",
   columnSvgColor: "rgba(0, 0, 0, 0.5)",
+  dropdownBackgroundColor: "#000",
+  dropdownTextColor: "#fff",
 };

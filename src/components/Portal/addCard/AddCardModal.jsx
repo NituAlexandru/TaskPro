@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Formik, FieldArray, ErrorMessage } from "formik";
+import { Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import CustomCalendar from "../../CustomCalendar/CustomCalendar";
@@ -26,9 +26,6 @@ import {
   CalendarToggle,
   CalendarPopup,
   SubmitButton,
-  CollaboratorsInputWrapper,
-  CollaboratorSelectList,
-  CollaboratorSelectItem,
 } from "./AddCardModal.styled";
 
 const validationSchema = Yup.object({
@@ -43,7 +40,7 @@ const validationSchema = Yup.object({
   ),
 });
 
-const AddCardForm = ({ closeModal, boardId, columnId, collaborators }) => {
+const AddCardForm = ({ closeModal, boardId, columnId }) => {
   const [priority, setPriority] = useState("#797b78");
   const [deadline, setDeadline] = useState(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -92,54 +89,35 @@ const AddCardForm = ({ closeModal, boardId, columnId, collaborators }) => {
           }
         }}
       >
-        {({ isSubmitting, values, setFieldValue }) => (
+        {({ isSubmitting }) => (
           <StyledForm>
             <InputWrapper>
-              <Input type="text" name="titleCard" placeholder="Title" autoComplete="off" />
+              <Input
+                type="text"
+                name="titleCard"
+                placeholder="Title"
+                autoComplete="off"
+              />
               <ErrorMessage name="titleCard" component={ErrorMessageStyled} />
             </InputWrapper>
-            <CollaboratorsInputWrapper>
-              <FieldArray
-                name="collaborators"
-                render={(arrayHelpers) => (
-                  <>
-                    <CollaboratorSelectList>
-                      {collaborators.map((collab) => (
-                        <CollaboratorSelectItem
-                          key={collab._id}
-                          selected={values.collaborators.some((c) => c.userId === collab._id)}
-                          onClick={() => {
-                            const selectedCollaboratorIndex = values.collaborators.findIndex(
-                              (c) => c.userId === collab._id
-                            );
-                            if (selectedCollaboratorIndex > -1) {
-                              arrayHelpers.remove(selectedCollaboratorIndex);
-                            } else {
-                              arrayHelpers.push({
-                                userId: collab._id,
-                                name: collab.name,
-                                avatar: collab.avatarURL,
-                              });
-                            }
-                          }}
-                        >
-                          <img src={collab.avatarURL} alt={collab.name} />
-                        </CollaboratorSelectItem>
-                      ))}
-                    </CollaboratorSelectList>
-                    <ErrorMessage name="collaborators" component={ErrorMessageStyled} />
-                  </>
-                )}
-              />
-            </CollaboratorsInputWrapper>
+
             <TextareaWrapper>
-              <Textarea name="description" component="textarea" placeholder="Description" />
+              <Textarea
+                name="description"
+                component="textarea"
+                placeholder="Description"
+              />
               <ErrorMessage name="description" component={ErrorMessageStyled} />
             </TextareaWrapper>
             <Label>Priority</Label>
             <LabelColorContainer>
               {labelColors.map((color) => (
-                <ColorOption key={color} color={color} selected={priority === color} onClick={() => setPriority(color)} />
+                <ColorOption
+                  key={color}
+                  color={color}
+                  selected={priority === color}
+                  onClick={() => setPriority(color)}
+                />
               ))}
             </LabelColorContainer>
             <Label>Deadline</Label>
