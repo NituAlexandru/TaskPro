@@ -18,9 +18,44 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import Collaborators from "../Collaborators";
 import CardService from "../../../service/cardService";
 
+import abstractSpheres from "../../../assets/backgrounds/abstract-spheres.png";
+import balloonFestival from "../../../assets/backgrounds/BalloonFestival.png";
+import cherryBlossomTree from "../../../assets/backgrounds/CherryBlossomTree.png";
+import cloudySky from "../../../assets/backgrounds/CloudySky.png";
+import crescentMoon from "../../../assets/backgrounds/CrescentMoon.png";
+import desertArch from "../../../assets/backgrounds/DesertArch.png";
+import hotAirBalloon from "../../../assets/backgrounds/HotAirBalloon.png";
+import milkyWayCamp from "../../../assets/backgrounds/MilkyWayCamp.png";
+import moonEclipse from "../../../assets/backgrounds/moon-eclipse.png";
+import palmLeaves from "../../../assets/backgrounds/PalmLeaves.png";
+import pinkFlowers from "../../../assets/backgrounds/PinkFlowers.png";
+import rockyCoast from "../../../assets/backgrounds/RockyCoast.png";
+import sailboat from "../../../assets/backgrounds/Sailboat.png";
+import turquoiseBay from "../../../assets/backgrounds/TurquoiseBay.png";
+import starryMountains from "../../../assets/backgrounds/StarryMountains.png";
+
+const backgrounds = {
+  abstractSpheres,
+  balloonFestival,
+  cherryBlossomTree,
+  cloudySky,
+  crescentMoon,
+  desertArch,
+  hotAirBalloon,
+  milkyWayCamp,
+  moonEclipse,
+  palmLeaves,
+  pinkFlowers,
+  rockyCoast,
+  sailboat,
+  turquoiseBay,
+  starryMountains,
+};
+
 const Board = ({ boardId, titleBoard }) => {
   const [columns, setColumns] = useState([]);
   const [collaborators, setCollaborators] = useState([]);
+  const [background, setBackground] = useState(null);
   const { token } = useContext(AuthContext);
   const columnService = useMemo(() => new ColumnService(token), [token]);
   const cardService = useMemo(() => new CardService(token), [token]);
@@ -35,6 +70,7 @@ const Board = ({ boardId, titleBoard }) => {
       console.log(boardData);
       setColumns(boardData.columns);
       setCollaborators(boardData.collaborators);
+      setBackground(boardData.background);
     } catch (error) {
       console.error("Failed to fetch board data:", error);
     }
@@ -72,7 +108,7 @@ const Board = ({ boardId, titleBoard }) => {
   };
 
   return (
-    <BoardContainer>
+    <BoardContainer $backgroundImage={backgrounds[background]}>
       <BoardHeader>
         <AddTitleFilterContainer>
           <h2>{titleBoard}</h2>

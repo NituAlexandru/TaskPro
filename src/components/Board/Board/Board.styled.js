@@ -3,7 +3,9 @@ import styled from "styled-components";
 export const BoardContainer = styled.div`
   flex-grow: 1;
   padding: 20px;
-  background-color: ${({ theme }) => theme.body};
+  background-image: url(${(props) => props.$backgroundImage});
+  background-size: cover;
+  background-position: center;
   color: ${({ theme }) => theme.text};
   display: flex;
   flex-direction: column;
