@@ -14,7 +14,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000;
+  z-index: 1000;
 `;
 
 const ModalContent = styled.div`
@@ -24,12 +24,17 @@ const ModalContent = styled.div`
   transform: ${({ $transform }) => $transform || "translate(-50%, -50%)"};
   background-color: ${({ theme }) => theme.modalBackgroundColor};
   color: ${({ theme }) => theme.modalTextColor};
-  padding: 20px;
+  padding: ${({ $padding }) => $padding || "20px"};
   border-radius: ${({ $borderRadius }) => $borderRadius || "8px"};
-  width: ${({ $width }) => $width || "100%"};
+  width: ${({ $width }) => $width || "auto"};
   height: ${({ $height }) => $height || "auto"};
   border: ${({ $border }) => $border || "none"};
-  z-index: 10000;
+  z-index: 1000;
+
+  @media (max-width: 400px) {
+    width: 95%;
+    margin: 0 auto;
+  }
 `;
 
 // Modal component
@@ -85,4 +90,3 @@ Modal.propTypes = {
 };
 
 export default Modal;
-

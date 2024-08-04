@@ -4,7 +4,13 @@ import PropTypes from "prop-types";
 // Styled-components
 const CollaboratorsContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 3px;
+
+  h3 {
+    margin: 0;
+  }
 
   @media (max-width: 500px) {
     flex-direction: column;
@@ -115,4 +121,3 @@ Collaborators.propTypes = {
 };
 
 export default Collaborators;
-

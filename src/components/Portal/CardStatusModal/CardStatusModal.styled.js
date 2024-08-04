@@ -1,21 +1,18 @@
 import styled from "styled-components";
 
 export const ModalWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: transparent;
   z-index: 100;
 `;
 
 export const ModalContent = styled.div`
   background-color: ${({ theme }) => theme.modalBackgroundColor};
-  padding: 20px;
+  padding: 10px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -30,7 +27,7 @@ export const StatusOption = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
   background-color: ${({ $active, theme }) =>
     $active ? theme.activeBackgroundColor : theme.inactiveBackgroundColor};
   border-radius: 8px;

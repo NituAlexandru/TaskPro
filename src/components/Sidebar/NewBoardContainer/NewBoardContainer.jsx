@@ -1,7 +1,6 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Modal from "../../Portal/Modal";
 import NewBoardModal from "../../Portal/AddBoardModal/AddBoardModal";
-import { ThemeContext } from "../../../utils/ThemeProvider";
 import { useBoards } from "../../../contexts/BoardContext";
 import {
   NewBoardContainerWrapper,
@@ -25,14 +24,8 @@ const NewBoardContainer = () => {
         <AddBoardBtn onClick={openModal}>+</AddBoardBtn>
       </NewBoardContainerWrapper>
       {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-        >
-          <NewBoardModal
-            closeModal={closeModal}
-            createBoard={createBoard}
-          />
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <NewBoardModal closeModal={closeModal} createBoard={createBoard} />
         </Modal>
       )}
     </>

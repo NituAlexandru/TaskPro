@@ -4,6 +4,12 @@ export const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 350px;
+
+  @media (max-width: 400px) {
+    width: 100%;
+    margin: 0 auto;
+  }
 `;
 
 export const ModalHeader = styled.div`
@@ -47,6 +53,11 @@ export const Input = styled.input`
   margin: 10px 0;
   padding: 10px;
   color: ${({ theme }) => theme.modalTextColor};
+
+  @media (max-width: 400px) {
+    width: 100%;
+    margin: 0 auto;
+  }
 `;
 
 export const SubmitButton = styled.button`
@@ -67,6 +78,11 @@ export const SubmitButton = styled.button`
 
   &:hover {
     background-color: ${({ theme }) => theme.buttonBackgroundHover};
+  }
+
+  @media (max-width: 400px) {
+    width: 100%;
+    margin: 0 auto;
   }
 `;
 

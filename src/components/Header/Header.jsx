@@ -17,12 +17,11 @@ const Header = () => {
   const { theme, handleChangeTheme } = useContext(ThemeContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-// Handlers
-const handleProfileUpdate = (updatedUser) => {
-  updateUser(updatedUser);
-  setIsModalOpen(false);
-};
-
+  // Handlers
+  const handleProfileUpdate = (updatedUser) => {
+    updateUser(updatedUser);
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -34,14 +33,12 @@ const handleProfileUpdate = (updatedUser) => {
         </UserInfo>
       </HeaderContainer>
       {isModalOpen && (
-        <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}>
-        <ProfileEditForm
-          user={user}
-          onSubmit={handleProfileUpdate}
-          closeModal={() => setIsModalOpen(false)}
-        />
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <ProfileEditForm
+            user={user}
+            onSubmit={handleProfileUpdate}
+            closeModal={() => setIsModalOpen(false)}
+          />
         </Modal>
       )}
     </>

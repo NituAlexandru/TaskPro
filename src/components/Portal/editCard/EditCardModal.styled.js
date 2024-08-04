@@ -41,6 +41,11 @@ export const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+  @media (max-width: 400px) {
+    width: 100%;
+    margin: 0 auto;
+  }
 `;
 
 export const InputWrapper = styled.div`
@@ -65,6 +70,11 @@ export const Input = styled(Field)`
   background-color: ${({ theme }) => theme.modalBackgroundColor};
   color: ${({ theme }) => theme.modalTextColor};
   padding: 10px;
+
+  @media (max-width: 400px) {
+    width: 100%;
+    margin: 0 auto;
+  }
 `;
 
 export const ErrorMessageStyled = styled.div`
@@ -92,6 +102,11 @@ export const Textarea = styled(Field)`
   background-color: ${({ theme }) => theme.modalBackgroundColor};
   color: ${({ theme }) => theme.modalTextColor};
   padding: 10px;
+
+  @media (max-width: 400px) {
+    width: 100%;
+    margin: 0 auto;
+  }
 `;
 
 export const Label = styled.label`

@@ -64,7 +64,11 @@ const HelpForm = ({ onSubmit }) => {
             </FieldWrapper>
 
             <FieldWrapper>
-              <Field as={Textarea} name="message" placeholder="Message" />
+              <Field
+                as={Textarea}
+                name="message"
+                placeholder="Please enter a message (at least 10 characters)"
+              />
               <ErrorMessage name="message" component={ErrorText} />
             </FieldWrapper>
 

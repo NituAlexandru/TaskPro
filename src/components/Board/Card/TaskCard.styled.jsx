@@ -128,7 +128,10 @@ export const Actions = styled.div`
     stroke-width: 1.3px;
     stroke: ${({ theme }) => theme.cardTextSecondaryColor};
     transition: transform 0.3s ease, stroke 0.3s ease;
-    margin-top: 5px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &:hover {
       transform: scale(1.3);
@@ -205,9 +208,9 @@ export const CollaboratorItem = styled.div`
   background-color: ${({ theme }) => theme.dropdownBackgroundColor};
   color: ${({ theme }) => theme.dropdownTextColor};
 
-
   &:hover {
     background-color: ${({ theme }) => theme.dropdownTextColor};
     color: ${({ theme }) => theme.dropdownBackgroundColor};
-    border-radius: 4px;}
-`
+    border-radius: 4px;
+  }
+`;

@@ -41,7 +41,9 @@ const ProfileEditForm = ({ closeModal, onSubmit, user }) => {
     email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
-    password: Yup.string().min(8, "Password must be at least 8 characters"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
   });
 
   const handleAvatarChange = (event) => {
@@ -128,7 +130,9 @@ const ProfileEditForm = ({ closeModal, onSubmit, user }) => {
           accept="image/*"
           onChange={handleAvatarChange}
         />
-        <ChangeAvatarButton onClick={() => document.getElementById("avatar").click()}>
+        <ChangeAvatarButton
+          onClick={() => document.getElementById("avatar").click()}
+        >
           +
         </ChangeAvatarButton>
       </AvatarWrapper>
@@ -180,5 +184,3 @@ ProfileEditForm.propTypes = {
 };
 
 export default ProfileEditForm;
-
-

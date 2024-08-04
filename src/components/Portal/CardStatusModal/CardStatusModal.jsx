@@ -1,4 +1,3 @@
-import React, { forwardRef } from "react";
 import PropTypes from "prop-types";
 import { FiArrowRightCircle } from "react-icons/fi";
 import {
@@ -28,7 +27,7 @@ const StatusModal = ({
             onClick={() => onStatusChange(column._id)}
           >
             {column.titleColumn}
-            <FiArrowRightCircle style={{ marginLeft: '8px' }} />
+            <FiArrowRightCircle style={{ marginLeft: "8px" }} />
           </StatusOption>
         ))}
       </ModalContent>

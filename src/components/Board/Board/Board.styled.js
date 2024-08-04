@@ -35,7 +35,15 @@ export const AddTitleFilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 30px;
-  align-items: center;
+  align-items: flex-start;
+  background-color: ${({ theme }) => theme.cardBackgroundColor};
+  padding: 5px 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+
+  h2 {
+    margin: 0;
+  }
 `;
 
 export const ColumnsContainer = styled.div`
@@ -57,6 +65,7 @@ export const FilterButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   margin-bottom: 10px;
+  margin-top: 0;
   height: 40px;
   border-radius: 4px;
 

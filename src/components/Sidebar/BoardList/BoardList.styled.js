@@ -4,13 +4,14 @@ export const BoardListWrapper = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 20px;
   list-style: none;
-  padding: 0;
+  padding: 10px 0;
   margin: 0;
   width: 100%;
-  max-height: 200px;
+  max-height: 220px;
+  min-height: 220px;
   overflow-y: auto;
 `;
 
@@ -18,6 +19,7 @@ export const BoardListItem = styled.li`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  cursor: pointer;
 `;
 
 export const BoardListItemContainer = styled.div`

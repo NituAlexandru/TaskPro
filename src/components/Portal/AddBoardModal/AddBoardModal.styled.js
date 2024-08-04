@@ -5,6 +5,11 @@ export const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 25px;
+  width: 350px;
+
+  @media (max-width: 400px) {
+    width: 100%;
+  }
 `;
 
 export const ModalHeader = styled.div`
@@ -98,6 +103,10 @@ export const Backgrounds = styled.div`
   gap: 5px;
   margin-top: 10px;
   width: 270px;
+
+  @media (max-width: 400px) {
+    width: 100%;
+  }
 `;
 
 export const Background = styled.div`
@@ -146,7 +155,7 @@ export const CreateButtonAdd = styled.span`
 
 export const StyledErrorMessage = styled(ErrorMessage)`
   position: absolute;
-  top: 117px;
+  top: 142px;
   left: 22px;
   font-size: 13px;
   color: red;

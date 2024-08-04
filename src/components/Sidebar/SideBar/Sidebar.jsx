@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import NewBoardContainer from "../NewBoardContainer/NewBoardContainer";
@@ -15,10 +15,15 @@ import {
   ToggleButton,
   SidebarContainer,
   HiOutlineLogoutStyled,
-  BottomContainer
+  BottomContainer,
 } from "./Sidebar.styled";
 
-const Sidebar = ({ isOpen, toggleSidebar, setSelectedBoardId, onCollaboratorUpdate }) => {
+const Sidebar = ({
+  isOpen,
+  toggleSidebar,
+  setSelectedBoardId,
+  onCollaboratorUpdate,
+}) => {
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -48,8 +53,8 @@ const Sidebar = ({ isOpen, toggleSidebar, setSelectedBoardId, onCollaboratorUpda
         </LogoContainer>
         <SidebarHeading>My boards</SidebarHeading>
         <NewBoardContainer />
-        <BoardList 
-          setSelectedBoardId={handleBoardSelect} 
+        <BoardList
+          setSelectedBoardId={handleBoardSelect}
           navigateHome={navigateHome}
           onCollaboratorUpdate={onCollaboratorUpdate}
         />

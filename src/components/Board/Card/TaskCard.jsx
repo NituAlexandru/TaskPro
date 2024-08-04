@@ -1,13 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { useDrag } from 'react-dnd';
-import { FiEdit, FiTrash2, FiArrowRightCircle, FiBell, FiChevronDown } from 'react-icons/fi';
-import { toast } from 'react-toastify';
-import EditCardForm from '../../Portal/editCard/EditCardModal';
-import StatusModal from '../../Portal/CardStatusModal/CardStatusModal';
-import { useCards } from '../../../contexts/CardContext';
-import { useColumns } from '../../../contexts/ColumnContext';
-import Modal from '../../Portal/Modal';
+import { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import { useDrag } from "react-dnd";
+import {
+  FiEdit,
+  FiTrash2,
+  FiArrowRightCircle,
+  FiBell,
+  FiChevronDown,
+} from "react-icons/fi";
+import { toast } from "react-toastify";
+import EditCardForm from "../../Portal/editCard/EditCardModal";
+import StatusModal from "../../Portal/CardStatusModal/CardStatusModal";
+import { useCards } from "../../../contexts/CardContext";
+import { useColumns } from "../../../contexts/ColumnContext";
+import Modal from "../../Portal/Modal";
 import {
   CardMainContainer,
   CardContainer,
@@ -30,10 +36,10 @@ import {
   Tooltip,
   CollaboratorDropdown,
   CollaboratorItem,
-} from './TaskCard.styled';
+} from "./TaskCard.styled";
 
 const ItemTypes = {
-  CARD: 'card',
+  CARD: "card",
 };
 
 const formatDate = (dateString) => new Date(dateString).toLocaleDateString();
@@ -67,7 +73,13 @@ const TaskCard = ({
   const [assignedCollaborator, setAssignedCollaborator] = useState(null);
   const statusButtonRef = useRef(null);
 
-  const { fetchCardsForColumn, fetchCardData, updateCard, deleteCard, moveCardToColumn } = useCards();
+  const {
+    fetchCardsForColumn,
+    fetchCardData,
+    updateCard,
+    deleteCard,
+    moveCardToColumn,
+  } = useCards();
   const { fetchColumnsForBoard } = useColumns();
 
   useEffect(() => {
@@ -89,9 +101,9 @@ const TaskCard = ({
       setCurrentStatus(newColumnId);
       setIsModalOpen(false);
       fetchColumnsForBoard(boardId);
-      toast.success('Card moved successfully!');
+      toast.success("Card moved successfully!");
     } catch (error) {
-      toast.error('Failed to move card. Please try again.');
+      toast.error("Failed to move card. Please try again.");
     }
   };
 
@@ -99,10 +111,10 @@ const TaskCard = ({
     try {
       await updateCard(boardId, columnId, cardId, values);
       fetchCardData(boardId, columnId, cardId);
-      toast.success('Card updated successfully!');
+      toast.success("Card updated successfully!");
       setIsEditModalOpen(false);
     } catch (error) {
-      toast.error('Failed to update card. Please try again.');
+      toast.error("Failed to update card. Please try again.");
     }
   };
 
@@ -110,9 +122,9 @@ const TaskCard = ({
     try {
       await deleteCard(boardId, columnId, cardId);
       fetchCardsForColumn(boardId, columnId);
-      toast.success('Card deleted successfully!');
+      toast.success("Card deleted successfully!");
     } catch (error) {
-      toast.error('Failed to delete card. Please try again.');
+      toast.error("Failed to delete card. Please try again.");
     }
   };
 
@@ -139,9 +151,9 @@ const TaskCard = ({
 
       await updateCard(boardId, columnId, cardId, updatedCardData);
       fetchCardsForColumn(boardId, columnId);
-      toast.success('Collaborator assigned successfully!');
+      toast.success("Collaborator assigned successfully!");
     } catch (error) {
-      toast.error('Failed to assign collaborator. Please try again.');
+      toast.error("Failed to assign collaborator. Please try again.");
     }
   };
 
@@ -166,11 +178,18 @@ const TaskCard = ({
           <AvatarsContainer>
             {assignedCollaborator ? (
               <AvatarWrapper onClick={() => setIsDropdownOpen((prev) => !prev)}>
-                <Avatar src={assignedCollaborator.avatarURL} alt={assignedCollaborator.name} />
-                <Tooltip className="tooltip">{assignedCollaborator.name}</Tooltip>
+                <Avatar
+                  src={assignedCollaborator.avatarURL}
+                  alt={assignedCollaborator.name}
+                />
+                <Tooltip className="tooltip">
+                  {assignedCollaborator.name}
+                </Tooltip>
               </AvatarWrapper>
             ) : (
-              <FiChevronDown onClick={() => setIsDropdownOpen((prev) => !prev)} />
+              <FiChevronDown
+                onClick={() => setIsDropdownOpen((prev) => !prev)}
+              />
             )}
             {isDropdownOpen && (
               <CollaboratorDropdown>
@@ -202,7 +221,7 @@ const TaskCard = ({
             </Priority>
             <Actions>
               {isDeadlineToday && (
-                <FiBell style={{ marginLeft: '8px', stroke: '#BEDBB0' }} />
+                <FiBell style={{ marginLeft: "8px", stroke: "#BEDBB0" }} />
               )}
               <div ref={statusButtonRef} onClick={toggleModal(setIsModalOpen)}>
                 <FiArrowRightCircle />
@@ -213,7 +232,10 @@ const TaskCard = ({
           </CardFooter>
         </CardContentContainer>
         {isEditModalOpen && (
-          <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+          <Modal
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+          >
             <EditCardForm
               closeModal={toggleModal(setIsEditModalOpen)}
               initialValues={{
@@ -229,17 +251,19 @@ const TaskCard = ({
           </Modal>
         )}
         {isModalOpen && (
-          <Modal 
-          isOpen={isModalOpen}
+          <Modal
+            isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
+            padding="0"
           >
-          <StatusModal
-            closeModal={() => setIsModalOpen(false)}
-            onStatusChange={handleStatusChange}
-            currentStatus={currentStatus}
-            buttonRef={statusButtonRef}
-            columns={columns}
-          />
+            <StatusModal
+              closeModal={() => setIsModalOpen(false)}
+              onStatusChange={handleStatusChange}
+              currentStatus={currentStatus}
+              buttonRef={statusButtonRef}
+              columns={columns}
+              padding="0"
+            />
           </Modal>
         )}
       </CardContainer>

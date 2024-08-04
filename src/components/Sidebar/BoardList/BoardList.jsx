@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { toast } from "react-toastify";
@@ -34,7 +34,11 @@ const iconsMap = {
   starIcon,
 };
 
-const BoardList = ({ setSelectedBoardId, navigateHome, onCollaboratorUpdate }) => {
+const BoardList = ({
+  setSelectedBoardId,
+  navigateHome,
+  onCollaboratorUpdate,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBoardId, setSelectedBoardIdState] = useState(null);
   const [currentBoardId, setCurrentBoardId] = useState(null);
@@ -70,7 +74,10 @@ const BoardList = ({ setSelectedBoardId, navigateHome, onCollaboratorUpdate }) =
         navigateHome();
       }
     } catch (error) {
-      console.error("Error deleting board:", error.response?.data || error.message);
+      console.error(
+        "Error deleting board:",
+        error.response?.data || error.message
+      );
       toast.error("Failed to delete board. Please try again.");
     }
   };
@@ -117,13 +124,10 @@ const BoardList = ({ setSelectedBoardId, navigateHome, onCollaboratorUpdate }) =
         ))}
       </BoardListWrapper>
       {isModalOpen && selectedBoardId && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-        >
-          <EditBoardModal 
-            closeModal={closeModal} 
-            boardId={selectedBoardId} 
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <EditBoardModal
+            closeModal={closeModal}
+            boardId={selectedBoardId}
             onCollaboratorUpdate={onCollaboratorUpdate}
           />
         </Modal>

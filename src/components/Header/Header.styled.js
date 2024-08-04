@@ -23,6 +23,9 @@ export const UserAvatar = styled.img`
   border-radius: 8px;
   width: 32px;
   height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  object-fit: cover;
 `;
 
 export const UserName = styled.span`

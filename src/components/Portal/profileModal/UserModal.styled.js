@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Field } from "formik";
 
-
 export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -12,8 +11,13 @@ export const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 25px;
-`;
+  width: 350px;
 
+  @media (max-width: 400px) {
+    width: 100%;
+    margin: 0 auto;
+  }
+`;
 
 export const Title = styled.h2`
   font-family: "Poppins", sans-serif;

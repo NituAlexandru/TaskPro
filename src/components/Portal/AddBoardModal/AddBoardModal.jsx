@@ -3,7 +3,7 @@ import { Formik, FieldArray } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import { FiSearch, FiTrash2 } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
 import loadingIcon from "../../../assets/icons/loading.svg";
 import colorsIcon from "../../../assets/icons/colors.svg";
 import containerIcon from "../../../assets/icons/container.svg";
