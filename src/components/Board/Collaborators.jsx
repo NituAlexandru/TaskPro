@@ -12,6 +12,10 @@ const CollaboratorsContainer = styled.div`
     margin: 0;
   }
 
+  p {
+    margin: 0;
+    margin-top: 4px;
+  }
   @media (max-width: 500px) {
     flex-direction: column;
   }
@@ -103,7 +107,7 @@ const Collaborators = ({ collaborators }) => {
           ))}
         </AvatarsContainer>
       ) : (
-        <NoCollaborators>No collaborators</NoCollaborators>
+        <NoCollaborators>None</NoCollaborators>
       )}
     </CollaboratorsContainer>
   );
