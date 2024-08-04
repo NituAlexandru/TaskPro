@@ -1,10 +1,5 @@
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import {
-  HashRouter as Router,
-  Routes,
-  Route,
-  HashRouter,
-} from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import StartPage from "./pages/StartPage";
@@ -28,7 +23,7 @@ function App() {
           <GlobalStyles />
           <LoaderProvider>
             <BoardProvider>
-              <HashRouter>
+              <Router>
                 <Routes>
                   <Route path="/" element={<StartPage />} />
                   <Route path="/login" element={<LoginPage />} />
@@ -37,7 +32,7 @@ function App() {
                   <Route path="/home" element={<HomePage />} />
                   <Route path="/home/:titleBoard" element={<HomePage />} />
                 </Routes>
-              </HashRouter>
+              </Router>
             </BoardProvider>
           </LoaderProvider>
           <ToastContainer />
