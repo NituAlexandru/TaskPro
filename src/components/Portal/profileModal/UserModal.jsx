@@ -21,6 +21,7 @@ import {
   CloseButton,
   IconButton,
 } from "./UserModal.styled";
+import API_BASE_URL from "../../../utils/apiConfig";
 
 const ProfileEditForm = ({ closeModal, onSubmit, user }) => {
   const { token, updateUser } = useContext(AuthContext);
@@ -58,7 +59,7 @@ const ProfileEditForm = ({ closeModal, onSubmit, user }) => {
     }
   };
 
-  const BASE_URL = "http://localhost:4500/api";
+  const BASE_URL = `${API_BASE_URL}/api`;
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {

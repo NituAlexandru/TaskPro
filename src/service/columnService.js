@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
+import API_BASE_URL from "../utils/apiConfig";
 
-const BASE_URL = 'http://localhost:4500/api/boards';
+const BASE_URL = `${API_BASE_URL}/api/boards`;
 
 class ColumnService {
   constructor(token) {
@@ -11,23 +12,34 @@ class ColumnService {
   }
 
   addColumn = async (boardId, columnData) => {
-    const response = await axios.post(`${BASE_URL}/${boardId}/columns`, columnData, {
-      headers: this.headers,
-    });
+    const response = await axios.post(
+      `${BASE_URL}/${boardId}/columns`,
+      columnData,
+      {
+        headers: this.headers,
+      }
+    );
     return response.data;
   };
 
   updateColumn = async (boardId, columnId, columnData) => {
-    const response = await axios.put(`${BASE_URL}/${boardId}/columns/${columnId}`, columnData, {
-      headers: this.headers,
-    });
+    const response = await axios.put(
+      `${BASE_URL}/${boardId}/columns/${columnId}`,
+      columnData,
+      {
+        headers: this.headers,
+      }
+    );
     return response.data;
   };
 
   deleteColumn = async (boardId, columnId) => {
-    const response = await axios.delete(`${BASE_URL}/${boardId}/columns/${columnId}`, {
-      headers: this.headers,
-    });
+    const response = await axios.delete(
+      `${BASE_URL}/${boardId}/columns/${columnId}`,
+      {
+        headers: this.headers,
+      }
+    );
     return response.data;
   };
 
@@ -40,4 +52,3 @@ class ColumnService {
 }
 
 export default ColumnService;
-

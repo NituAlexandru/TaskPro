@@ -29,6 +29,7 @@ import {
   GoogleButton,
 } from "./RegisterForm.styles";
 import { toast } from "react-toastify";
+import API_BASE_URL from "../../../utils/apiConfig";
 
 // Validation schema for the form
 const validationSchema = Yup.object({
@@ -102,7 +103,7 @@ const RegisterForm = ({ onSuccess }) => {
             <SubmitButton type="submit" disabled={isSubmitting}>
               Register Now
             </SubmitButton>
-            <GoogleButton href={`http://localhost:4500/api/auth/google`}>
+            <GoogleButton href={`${API_BASE_URL}/api/auth/google`}>
               <FaGoogle /> Register with Google
             </GoogleButton>
           </StyledForm>

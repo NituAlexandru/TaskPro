@@ -1,6 +1,7 @@
 import axios from "axios";
+import API_BASE_URL from "../utils/apiConfig";
 
-const BASE_URL = "http://localhost:4500/api";
+const BASE_URL = `${API_BASE_URL}/api`;
 
 // Register a new user
 export const register = async (userData) => {
@@ -42,7 +43,9 @@ export const fetchCurrentUser = async (token) => {
 // Get user details by email
 export const getUserDetailsByEmail = async (email) => {
   try {
-    const response = await axios.get(`${BASE_URL}/user/details-by-email/${email}`);
+    const response = await axios.get(
+      `${BASE_URL}/user/details-by-email/${email}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching user details by email:", error);
@@ -53,7 +56,9 @@ export const getUserDetailsByEmail = async (email) => {
 // Get users by their IDs
 export const getUsersByIds = async (ids) => {
   try {
-    const response = await axios.post(`${BASE_URL}/user/get-users-by-ids`, { ids });
+    const response = await axios.post(`${BASE_URL}/user/get-users-by-ids`, {
+      ids,
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching users by IDs:", error);

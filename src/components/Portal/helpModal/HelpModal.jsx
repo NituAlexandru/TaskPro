@@ -12,6 +12,7 @@ import {
   SubmitButton,
   ErrorText,
 } from "./HelpModal.styles";
+import API_BASE_URL from "../../../utils/apiConfig";
 
 const HelpForm = ({ onSubmit }) => {
   // Initial form values
@@ -27,7 +28,7 @@ const HelpForm = ({ onSubmit }) => {
   });
 
   // Base URL for the API
-  const BASE_URL = "http://localhost:4500/api";
+  const BASE_URL = `${API_BASE_URL}/api`;
 
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {

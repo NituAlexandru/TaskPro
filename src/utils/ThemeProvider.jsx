@@ -5,6 +5,7 @@ import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { lightTheme, darkTheme, violetTheme } from "./themes";
 import GlobalStyles from "./GlobalStyles";
 import { AuthContext } from "../contexts/AuthContext";
+import API_BASE_URL from "./apiConfig";
 
 const themes = {
   light: lightTheme,
@@ -34,7 +35,7 @@ const ThemeProvider = ({ children }) => {
     setTheme(newTheme);
     try {
       await axios.post(
-        "http://localhost:4500/api/user/theme",
+        `${API_BASE_URL}/api/user/theme`,
         { theme: newTheme },
         {
           headers: {
