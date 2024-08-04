@@ -6,7 +6,6 @@ const LoginPage = () => {
 
   const handleSuccess = () => {
     hideLoader();
-    window.location.href = "/home";
   };
 
   return (
