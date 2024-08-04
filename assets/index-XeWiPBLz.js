@@ -562,18 +562,20 @@ attempted value: ${o}
   min-width: 160px;
   right: 0;
 
-  & a {
+  & button {
     color: ${({theme:e})=>e.text};
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    margin: 0;
+    padding: 0;
   }
 
-  & a:hover {
+  & button:hover {
     background-color: ${({theme:e})=>e.text};
     color: ${({theme:e})=>e.body};
   }
-`,H0=({handleChangeTheme:e})=>{const[a,r]=w.useState(!1),n=()=>r(!a),t=i=>{e(i),r(!1)};return h.jsxs(JE,{children:[h.jsx(ZE,{onClick:n,children:"Theme ▼"}),h.jsxs(XE,{$show:a,children:[h.jsx("a",{href:"#",onClick:()=>t("light"),children:"Light"}),h.jsx("a",{href:"#",onClick:()=>t("dark"),children:"Dark"}),h.jsx("a",{href:"#",onClick:()=>t("violet"),children:"Violet"})]})]})};H0.propTypes={handleChangeTheme:O.func.isRequired};const eT=j.div`
+`,H0=({handleChangeTheme:e})=>{const[a,r]=w.useState(!1),n=()=>r(!a),t=i=>{e(i),r(!1)};return h.jsxs(JE,{children:[h.jsx(ZE,{onClick:n,children:"Theme ▼"}),h.jsxs(XE,{$show:a,children:[h.jsx("button",{href:"#",onClick:()=>t("light"),children:"Light"}),h.jsx("button",{href:"#",onClick:()=>t("dark"),children:"Dark"}),h.jsx("button",{href:"#",onClick:()=>t("violet"),children:"Violet"})]})]})};H0.propTypes={handleChangeTheme:O.func.isRequired};const eT=j.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
