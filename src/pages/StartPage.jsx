@@ -80,7 +80,10 @@ const StartPage = () => {
     <Container>
       <img src="/src/assets/registerimg.webp" alt="User using MacBook" />
       <LogoContainer>
-        <img src="/src/assets/logo-black.png" alt="Task Pro Logo" />
+        <img
+          src="https://i.ibb.co/ypQBpPN/registerimg.webp"
+          alt="Task Pro Logo"
+        />
         <h1>Task Pro</h1>
       </LogoContainer>
       <Paragraph>
@@ -94,4 +97,3 @@ const StartPage = () => {
 };
 
 export default StartPage;
-

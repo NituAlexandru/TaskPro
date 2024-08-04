@@ -48,7 +48,10 @@ const Sidebar = ({
       </ToggleButton>
       <SidebarContent $isOpen={isOpen}>
         <LogoContainer>
-          <img src="/src/assets/logo-white.png" alt="Task Pro Logo" />
+          <img
+            src="https://i.ibb.co/DQBSXKR/logo-white.png"
+            alt="Task Pro Logo"
+          />
           <MainTitle>Task Pro</MainTitle>
         </LogoContainer>
         <SidebarHeading>My boards</SidebarHeading>
