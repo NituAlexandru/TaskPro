@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import StartPage from "./pages/StartPage";
@@ -17,26 +17,26 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 function App() {
   return (
     <DndProvider backend={HTML5Backend}>
-    <AuthProvider>
-      <ThemeProvider>
-        <GlobalStyles />
-        <LoaderProvider>
-          <BoardProvider>
-            <Router>
-              <Routes>
-                <Route path="/" element={<StartPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/auth/callback" element={<AuthCallback />} />
-                <Route path="/home" element={<HomePage />} />
-                <Route path="/home/:titleBoard" element={<HomePage />} />
-              </Routes>
-            </Router>
-          </BoardProvider>
-        </LoaderProvider>
-        <ToastContainer />
-      </ThemeProvider>
-    </AuthProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <GlobalStyles />
+          <LoaderProvider>
+            <BoardProvider>
+              <Router>
+                <Routes>
+                  <Route path="/" element={<StartPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/auth/callback" element={<AuthCallback />} />
+                  <Route path="/home" element={<HomePage />} />
+                  <Route path="/home/:titleBoard" element={<HomePage />} />
+                </Routes>
+              </Router>
+            </BoardProvider>
+          </LoaderProvider>
+          <ToastContainer />
+        </ThemeProvider>
+      </AuthProvider>
     </DndProvider>
   );
 }
