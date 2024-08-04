@@ -71,7 +71,7 @@ export const lightTheme = {
   headerBackground: "#fcfcfc",
   headerText: "#161616",
   sidebarBtn: "#161616",
-  logo: "../assets/logo-black.png",
+  logo: "https://i.ibb.co/qn7xB02/logo-black.png",
   sidebarBackgroundColor: "#fcfcfc",
   sidebarTextColor: "#161616",
   toggleBtn: "#161616",

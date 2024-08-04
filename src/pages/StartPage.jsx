@@ -78,10 +78,13 @@ const Paragraph = styled.p`
 const StartPage = () => {
   return (
     <Container>
-      <img src="/src/assets/registerimg.webp" alt="User using MacBook" />
+      <img
+        src="https://i.ibb.co/ypQBpPN/registerimg.webp"
+        alt="User using MacBook"
+      />
       <LogoContainer>
         <img
-          src="https://i.ibb.co/ypQBpPN/registerimg.webp"
+          src="https://i.ibb.co/qn7xB02/logo-black.png"
           alt="Task Pro Logo"
         />
         <h1>Task Pro</h1>

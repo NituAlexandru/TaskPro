@@ -31,7 +31,10 @@ const HelpList = () => {
     <>
       <HelpListWrapper>
         <HelpListItem>
-          <FlowerImage src="/src/assets/utils/flower.png" alt="happy flower" />
+          <FlowerImage
+            src="https://i.ibb.co/2s4mJnP/flower.png"
+            alt="happy flower"
+          />
         </HelpListItem>
         <HelpListItem>
           <HelpParagraph>
@@ -40,14 +43,11 @@ const HelpList = () => {
           </HelpParagraph>
         </HelpListItem>
         <HelpListItem onClick={handleOpenModal}>
-          <Image src="/src/assets/utils/help-circle.png" alt="help" />
+          <Image src="https://i.ibb.co/SRYmjrQ/help-circle.png" alt="help" />
           <span>Need help?</span>
         </HelpListItem>
       </HelpListWrapper>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      >
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <CloseButton onClick={handleCloseModal}>&times;</CloseButton>
         <HelpForm onSubmit={handleSubmit} />
       </Modal>
