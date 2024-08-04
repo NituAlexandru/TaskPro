@@ -54,7 +54,7 @@ const LoginForm = ({ onSuccess }) => {
       await loginUser(values);
       toast.success("Logged in successfully!");
       onSuccess();
-      navigate("/#/home");
+      navigate("/TaskPro/#/home");
     } catch (error) {
       toast.error("Login failed. Please check your email and password.");
       console.error("Login failed", error);
