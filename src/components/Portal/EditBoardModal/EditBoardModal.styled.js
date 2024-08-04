@@ -47,7 +47,7 @@ export const Input = styled.input`
   opacity: 0.4;
   margin: 0;
   padding: 10px;
-  color: ${({ theme }) => theme.modalTextColor};
+  color: #797676;
 `;
 
 export const Section = styled.div``;
