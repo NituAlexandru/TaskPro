@@ -905,7 +905,7 @@ attempted value: ${o}
   display: flex;
   flex-direction: column;
 `,z2=j(jT)`
-  margin-bottom: 0; /* Elimină margin-ul deoarece există deja în InputWrapper */
+  margin-bottom: 0;
 `,q2=j.input`
   border: 1px solid #bedbb0;
   border-radius: 8px;
@@ -916,6 +916,7 @@ attempted value: ${o}
   opacity: 0.4;
   margin: 0;
   padding: 10px;
+  color: #797676;
 `,S2=j.ul`
   list-style: none;
   padding: 0;
