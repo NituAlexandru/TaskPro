@@ -575,7 +575,7 @@ attempted value: ${o}
     background-color: ${({theme:e})=>e.text};
     color: ${({theme:e})=>e.body};
   }
-`,H0=({handleChangeTheme:e})=>{const[a,r]=w.useState(!1),n=()=>r(!a),t=i=>{e(i),r(!1)};return h.jsxs(JE,{children:[h.jsx(ZE,{onClick:n,children:"Theme ▼"}),h.jsxs(XE,{$show:a,children:[h.jsx("button",{href:"#",onClick:()=>t("light"),children:"Light"}),h.jsx("button",{href:"#",onClick:()=>t("dark"),children:"Dark"}),h.jsx("button",{href:"#",onClick:()=>t("violet"),children:"Violet"})]})]})};H0.propTypes={handleChangeTheme:O.func.isRequired};const eT=j.div`
+`,H0=({handleChangeTheme:e})=>{const[a,r]=w.useState(!1),n=()=>r(!a),t=i=>{e(i),r(!1)};return h.jsxs(JE,{children:[h.jsx(ZE,{onClick:n,children:"Theme ▼"}),h.jsxs(XE,{$show:a,children:[h.jsx("button",{onClick:()=>t("light"),children:"Light"}),h.jsx("button",{onClick:()=>t("dark"),children:"Dark"}),h.jsx("button",{onClick:()=>t("violet"),children:"Violet"})]})]})};H0.propTypes={handleChangeTheme:O.func.isRequired};const eT=j.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
