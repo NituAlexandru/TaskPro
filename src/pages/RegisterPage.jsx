@@ -6,7 +6,6 @@ const RegisterPage = () => {
 
   const handleSuccess = () => {
     hideLoader();
-    window.location.href = "/home";
   };
 
   return (
