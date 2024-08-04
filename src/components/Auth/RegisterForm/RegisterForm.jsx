@@ -39,7 +39,7 @@ const validationSchema = Yup.object({
 });
 
 const RegisterForm = ({ onSuccess }) => {
-  const { registerUser } = useContext(AuthContext);
+  const { registerUser, login } = useContext(AuthContext);
   const { showLoader, hideLoader } = useLoader();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -51,12 +51,14 @@ const RegisterForm = ({ onSuccess }) => {
   const handleSubmit = async (values, { setSubmitting }) => {
     showLoader();
     try {
-      await registerUser(values);
+      const data = await registerUser(values);
       toast.success("Registration successful!");
+      login(data.user, data.token, data.refreshToken, data.sid); // Loghează utilizatorul
       onSuccess();
+      navigate("/home");
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        toast.error("User already registered. Redirecting to login.");
+        toast.error("User already registered. Please sign in.");
         setTimeout(() => {
           navigate("/login");
         }, 2000); // Redirect to login after 2 seconds
@@ -118,5 +120,3 @@ RegisterForm.propTypes = {
 };
 
 export default RegisterForm;
-
-
