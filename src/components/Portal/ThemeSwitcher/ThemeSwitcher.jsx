@@ -22,15 +22,15 @@ const ThemeSwitcher = ({ handleChangeTheme }) => {
     <Dropdown>
       <DropdownButton onClick={toggleDropdown}>Theme &#x25BC;</DropdownButton>
       <DropdownContent $show={showDropdown}>
-        <a href="#" onClick={() => changeTheme("light")}>
+        <button href="#" onClick={() => changeTheme("light")}>
           Light
-        </a>
-        <a href="#" onClick={() => changeTheme("dark")}>
+        </button>
+        <button href="#" onClick={() => changeTheme("dark")}>
           Dark
-        </a>
-        <a href="#" onClick={() => changeTheme("violet")}>
+        </button>
+        <button href="#" onClick={() => changeTheme("violet")}>
           Violet
-        </a>
+        </button>
       </DropdownContent>
     </Dropdown>
   );

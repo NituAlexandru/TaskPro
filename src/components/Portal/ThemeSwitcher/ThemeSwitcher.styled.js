@@ -33,14 +33,16 @@ export const DropdownContent = styled.div`
   min-width: 160px;
   right: 0;
 
-  & a {
+  & button {
     color: ${({ theme }) => theme.text};
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    margin: 0;
+    padding: 0;
   }
 
-  & a:hover {
+  & button:hover {
     background-color: ${({ theme }) => theme.text};
     color: ${({ theme }) => theme.body};
   }
