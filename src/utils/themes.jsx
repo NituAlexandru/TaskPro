@@ -123,7 +123,7 @@ export const violetTheme = {
   buttonBackgroundActive: "#7b7ede",
   buttonBackgroundFocus: "#7b7ede",
   inputBackground: "#4527a0",
-  inputText: "#FFF",
+  inputText: "rgb(121, 118, 118)",
   inputBoxShadow: "0 4px 16px 0 rgba(22, 22, 22, 0.08)",
   headerBackground: "#fff",
   headerText: "#161616",
