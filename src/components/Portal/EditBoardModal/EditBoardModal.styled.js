@@ -44,7 +44,7 @@ export const Input = styled.input`
   height: 49px;
   box-shadow: 0 4px 16px 0 rgba(22, 22, 22, 0.08);
   background-color: ${({ theme }) => theme.modalBackgroundColor};
-  opacity: 0.4;
+
   margin: 0;
   padding: 10px;
   color: #797676;
