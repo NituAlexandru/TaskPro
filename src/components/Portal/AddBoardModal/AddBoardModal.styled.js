@@ -169,7 +169,7 @@ export const InputWrapper = styled.div`
 `;
 
 export const CollaboratorsInputWrapper = styled(InputWrapper)`
-  margin-bottom: 0; /* Elimină margin-ul deoarece există deja în InputWrapper */
+  margin-bottom: 0;
 `;
 
 export const CollaboratorsInput = styled.input`
@@ -182,6 +182,7 @@ export const CollaboratorsInput = styled.input`
   opacity: 0.4;
   margin: 0;
   padding: 10px;
+  color: #797676;
 `;
 
 export const CollaboratorsList = styled.ul`
