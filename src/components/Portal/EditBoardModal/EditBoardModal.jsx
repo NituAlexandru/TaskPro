@@ -57,6 +57,7 @@ import {
   FormWrapper,
 } from "../AddBoardModal/AddBoardModal.styled";
 import axios from "axios";
+import API_BASE_URL from "../../../utils/apiConfig";
 
 const icons = [
   { name: "loadingIcon", src: loadingIcon },
@@ -159,7 +160,7 @@ const EditBoardModal = ({ closeModal, boardId, onCollaboratorUpdate }) => {
 
         // Send request to API to create an invitation
         await axios.post(
-          "/api/invitations",
+          `${API_BASE_URL}/api/invitations`,
           {
             boardId,
             userId: userDetails.userId,

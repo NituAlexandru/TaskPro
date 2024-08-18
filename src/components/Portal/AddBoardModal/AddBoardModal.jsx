@@ -56,6 +56,7 @@ import {
   FormWrapper,
 } from "../AddBoardModal/AddBoardModal.styled";
 import axios from "axios";
+import API_BASE_URL from "../../../utils/apiConfig";
 
 // Icons and Backgrounds arrays
 const icons = [
@@ -167,7 +168,7 @@ const NewBoardModal = ({ closeModal }) => {
       await Promise.all(
         collaboratorIds.map((collaboratorId) =>
           axios.post(
-            "/api/invitations",
+            `${API_BASE_URL}/api/invitations`,
             {
               boardId: newBoard._id, // Folosește ID-ul boardului creat
               userId: collaboratorId,
