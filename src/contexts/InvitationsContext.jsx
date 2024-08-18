@@ -4,6 +4,7 @@ import axios from "axios";
 import InvitationsModal from "../components/Portal/InvitationsModal/InvitationsModal.jsx";
 import { AuthContext } from "./AuthContext.jsx";
 import { useBoards } from "../contexts/BoardContext.jsx";
+import API_BASE_URL from "../utils/apiConfig.js";
 
 // Creăm contextul
 const InvitationsContext = createContext();
@@ -18,7 +19,7 @@ export const InvitationsProvider = ({ children }) => {
   useEffect(() => {
     const fetchInvitations = async () => {
       try {
-        const response = await axios.get("/api/invitations", {
+        const response = await axios.get(`${API_BASE_URL}/api/invitations`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -43,11 +44,15 @@ export const InvitationsProvider = ({ children }) => {
 
   const handleAccept = async (invitationId) => {
     try {
-      await axios.post(`/api/invitations/accept/${invitationId}`, null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post(
+        `${API_BASE_URL}/api/invitations/accept/${invitationId}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       console.log("Invitation accepted, fetching boards...");
       await fetchBoards(); // Așteptăm actualizarea boardurilor
@@ -64,11 +69,15 @@ export const InvitationsProvider = ({ children }) => {
 
   const handleDecline = async (invitationId) => {
     try {
-      await axios.post(`/api/invitations/decline/${invitationId}`, null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post(
+        `${API_BASE_URL}/api/invitations/decline/${invitationId}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setInvitations((prev) => prev.filter((inv) => inv._id !== invitationId));
       if (invitations.length === 1) {
         setIsInvitationModalOpen(false); // Închide modalul dacă nu mai sunt invitații
