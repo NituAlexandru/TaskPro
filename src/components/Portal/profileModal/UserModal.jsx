@@ -23,20 +23,23 @@ import {
 } from "./UserModal.styled";
 import API_BASE_URL from "../../../utils/apiConfig";
 
+// Component for editing the user's profile
 const ProfileEditForm = ({ closeModal, onSubmit, user }) => {
-  const { token, updateUser } = useContext(AuthContext);
-  const [avatar, setAvatar] = useState(null);
+  const { token, updateUser } = useContext(AuthContext); // Get token and updateUser function from context
+  const [avatar, setAvatar] = useState(null); // State to hold the new avatar file
   const [avatarPreview, setAvatarPreview] = useState(
     user?.avatarURL || "/default-avatar.png"
-  );
-  const [showPassword, setShowPassword] = useState(false);
+  ); // State to hold the avatar preview
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
+  // Initial form values
   const initialValues = {
     name: user?.name || "",
     email: user?.email || "",
     password: "",
   };
 
+  // Validation schema for the form using Yup
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     email: Yup.string()
@@ -59,6 +62,7 @@ const ProfileEditForm = ({ closeModal, onSubmit, user }) => {
     }
   };
 
+  // Base URL for API endpoints
   const BASE_URL = `${API_BASE_URL}/api`;
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -69,6 +73,7 @@ const ProfileEditForm = ({ closeModal, onSubmit, user }) => {
         password: values.password,
       };
 
+      // Update user profile data
       const response = await axios.patch(
         `${BASE_URL}/user/profile`,
         profileData,
@@ -79,6 +84,7 @@ const ProfileEditForm = ({ closeModal, onSubmit, user }) => {
         }
       );
 
+      // If avatar is changed, upload it
       if (avatar) {
         const formData = new FormData();
         formData.append("avatar", avatar);

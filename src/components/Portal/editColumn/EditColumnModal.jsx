@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { FaPlus } from "react-icons/fa";
 import {
@@ -44,7 +44,7 @@ EditColumnModal.propTypes = {
   closeModal: PropTypes.func.isRequired,
   updateColumn: PropTypes.func.isRequired,
   initialTitle: PropTypes.string.isRequired,
-  columnId: PropTypes.string.isRequired, 
+  columnId: PropTypes.string.isRequired,
 };
 
 export default EditColumnModal;

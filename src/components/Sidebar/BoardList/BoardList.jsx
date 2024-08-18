@@ -48,6 +48,10 @@ const BoardList = ({
     fetchBoards();
   }, []);
 
+  useEffect(() => {
+    console.log("Boards updated:", boards);
+  }, [boards]);
+
   const openModal = (boardId) => {
     setSelectedBoardIdState(boardId);
     setIsModalOpen(true);

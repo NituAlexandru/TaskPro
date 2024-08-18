@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -41,7 +41,9 @@ const priorityMapping = {
 };
 
 const EditCardForm = ({ closeModal, initialValues, onSubmit }) => {
-  const [labelColor, setLabelColor] = useState(initialValues.priorityColor || "#e09cb5");
+  const [labelColor, setLabelColor] = useState(
+    initialValues.priorityColor || "#e09cb5"
+  );
   const [deadline, setDeadline] = useState(new Date(initialValues.deadline));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
@@ -144,7 +146,10 @@ EditCardForm.propTypes = {
     titleCard: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     priority: PropTypes.string,
-    deadline: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]).isRequired,
+    deadline: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+    ]).isRequired,
     priorityColor: PropTypes.string,
     columnId: PropTypes.string.isRequired,
   }).isRequired,

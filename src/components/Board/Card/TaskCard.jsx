@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import { useDrag } from "react-dnd";
+import { useDrag } from "react-dnd"; // React DnD import for drag-and-drop functionality
 import {
   FiEdit,
   FiTrash2,
@@ -38,12 +38,15 @@ import {
   CollaboratorItem,
 } from "./TaskCard.styled";
 
+// Define the item type for drag-and-drop
 const ItemTypes = {
   CARD: "card",
 };
 
+// Function to format dates into a readable string
 const formatDate = (dateString) => new Date(dateString).toLocaleDateString();
 
+// Function to check if a given date is today
 const isToday = (someDate) => {
   const today = new Date();
   return (
@@ -53,6 +56,7 @@ const isToday = (someDate) => {
   );
 };
 
+// Main TaskCard component
 const TaskCard = ({
   titleCard,
   description,
@@ -66,6 +70,7 @@ const TaskCard = ({
   collaborators,
   columns,
 }) => {
+  // State variables for modal visibility and card status
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(columnId);
@@ -82,6 +87,7 @@ const TaskCard = ({
   } = useCards();
   const { fetchColumnsForBoard } = useColumns();
 
+  // Fetch the card data when the component mounts or when certain props change
   useEffect(() => {
     const fetchCard = async () => {
       const card = await fetchCardData(boardId, columnId, cardId);
@@ -95,6 +101,7 @@ const TaskCard = ({
 
   const toggleModal = (setModalState) => () => setModalState((prev) => !prev);
 
+  // Handle changing the status (column) of the card
   const handleStatusChange = async (newColumnId) => {
     try {
       await moveCardToColumn(boardId, columnId, cardId, newColumnId);
@@ -107,6 +114,7 @@ const TaskCard = ({
     }
   };
 
+  // Handle editing the card
   const handleEditCard = async (values) => {
     try {
       await updateCard(boardId, columnId, cardId, values);
@@ -118,6 +126,7 @@ const TaskCard = ({
     }
   };
 
+  // Handle deleting the card
   const handleDeleteCard = async () => {
     try {
       await deleteCard(boardId, columnId, cardId);
@@ -128,6 +137,7 @@ const TaskCard = ({
     }
   };
 
+  // Handle assigning a collaborator to the card
   const handleAssignCollaborator = async (collaborator) => {
     setAssignedCollaborator(collaborator);
     setIsDropdownOpen(false);
@@ -193,14 +203,18 @@ const TaskCard = ({
             )}
             {isDropdownOpen && (
               <CollaboratorDropdown>
-                {collaborators.map((collaborator) => (
-                  <CollaboratorItem
-                    key={collaborator._id}
-                    onClick={() => handleAssignCollaborator(collaborator)}
-                  >
-                    {collaborator.name}
-                  </CollaboratorItem>
-                ))}
+                {collaborators.length > 0 ? (
+                  collaborators.map((collaborator) => (
+                    <CollaboratorItem
+                      key={collaborator._id}
+                      onClick={() => handleAssignCollaborator(collaborator)}
+                    >
+                      {collaborator.name}
+                    </CollaboratorItem>
+                  ))
+                ) : (
+                  <CollaboratorItem>No Collaborators</CollaboratorItem>
+                )}
               </CollaboratorDropdown>
             )}
           </AvatarsContainer>

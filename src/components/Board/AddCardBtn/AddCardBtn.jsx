@@ -66,7 +66,7 @@ AddCardButton.propTypes = {
   columnId: PropTypes.string.isRequired,
   collaborators: PropTypes.arrayOf(
     PropTypes.shape({
-      _id: PropTypes.string.isRequired,
+      _id: PropTypes.string,
       name: PropTypes.string.isRequired,
       avatarURL: PropTypes.string.isRequired,
     })

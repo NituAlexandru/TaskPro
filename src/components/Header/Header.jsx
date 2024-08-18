@@ -1,4 +1,3 @@
-// src/components/Header/Header.jsx
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { ThemeContext } from "../../utils/ThemeProvider";
@@ -17,7 +16,6 @@ const Header = () => {
   const { theme, handleChangeTheme } = useContext(ThemeContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Handlers
   const handleProfileUpdate = (updatedUser) => {
     updateUser(updatedUser);
     setIsModalOpen(false);

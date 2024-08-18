@@ -3,15 +3,12 @@ import PropTypes from "prop-types";
 import { useDrop } from "react-dnd";
 import { toast } from "react-toastify";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-
 import Card from "../Card/TaskCard";
 import AddCardButton from "../AddCardBtn/AddCardBtn";
 import EditColumnModal from "../../Portal/editColumn/EditColumnModal";
 import Modal from "../../Portal/Modal";
-
 import { useCards } from "../../../contexts/CardContext";
 import { useColumns } from "../../../contexts/ColumnContext";
-
 import {
   ColumnContainer,
   ColumnSmallContainer,
@@ -21,6 +18,7 @@ import {
   CardsList,
 } from "./Column.styled";
 
+// Define the type of item for drag-and-drop
 const ItemTypes = {
   CARD: "card",
 };
@@ -35,17 +33,24 @@ const Column = ({
   collaborators,
   columns,
 }) => {
-  const { fetchCardsForColumn, cards, deleteCard, moveCardToColumn } = useCards();
+  const { fetchCardsForColumn, cards, deleteCard, moveCardToColumn } =
+    useCards();
   const { deleteColumn, updateColumn } = useColumns();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [columnTitle, setColumnTitle] = useState(title);
-
   const dropRef = useRef(null);
 
+  // Fetch cards for the column on mount and every 15 seconds
   useEffect(() => {
     if (boardId && columnId) {
       fetchCardsForColumn(boardId, columnId);
     }
+
+    const intervalId = setInterval(() => {
+      fetchCardsForColumn(boardId, columnId);
+    }, 15000); // Update every 15 seconds
+
+    return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, [fetchCardsForColumn, boardId, columnId]);
 
   const filteredCards = filter
@@ -94,24 +99,36 @@ const Column = ({
     }
   };
 
-  const moveCardWithinColumn = useCallback((columnCards, fromIndex, toIndex) => {
-    const updatedCards = Array.from(columnCards);
-    const [movedCard] = updatedCards.splice(fromIndex, 1);
-    updatedCards.splice(toIndex, 0, movedCard);
-    return updatedCards;
-  }, []);
+  const moveCardWithinColumn = useCallback(
+    (columnCards, fromIndex, toIndex) => {
+      const updatedCards = Array.from(columnCards);
+      const [movedCard] = updatedCards.splice(fromIndex, 1);
+      updatedCards.splice(toIndex, 0, movedCard);
+      return updatedCards;
+    },
+    []
+  );
 
-  const moveCardToAnotherColumn = useCallback(async (item, newColumnId) => {
-    try {
-      await moveCardToColumn(boardId, item.columnId, item.cardId, newColumnId);
-      fetchCardsForColumn(boardId, item.columnId);
-      fetchCardsForColumn(boardId, newColumnId);
-    } catch (error) {
-      console.error("Error moving card:", error);
-      toast.error("Failed to move card. Please try again.");
-    }
-  }, [boardId, fetchCardsForColumn, moveCardToColumn]);
+  const moveCardToAnotherColumn = useCallback(
+    async (item, newColumnId) => {
+      try {
+        await moveCardToColumn(
+          boardId,
+          item.columnId,
+          item.cardId,
+          newColumnId
+        );
+        fetchCardsForColumn(boardId, item.columnId);
+        fetchCardsForColumn(boardId, newColumnId);
+      } catch (error) {
+        console.error("Error moving card:", error);
+        toast.error("Failed to move card. Please try again.");
+      }
+    },
+    [boardId, fetchCardsForColumn, moveCardToColumn]
+  );
 
+  // Handle drop event for drag-and-drop
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.CARD,
     drop: async (item, monitor) => {
@@ -187,7 +204,11 @@ const Column = ({
             ))}
           </CardsList>
         </ColumnSmallContainer>
-        <AddCardButton boardId={boardId} columnId={columnId} collaborators={collaborators} />
+        <AddCardButton
+          boardId={boardId}
+          columnId={columnId}
+          collaborators={collaborators}
+        />
         {isEditModalOpen && (
           <Modal
             isOpen={isEditModalOpen}

@@ -83,6 +83,7 @@ import starryMountainsT from "../../../assets/board-img/StarryMountains-t.webp";
 import starryMountainsM from "../../../assets/board-img/StarryMountains-m.webp";
 
 const backgrounds = {
+  // Mapping background names to their respective images
   abstractSpheres: {
     desktop: abstractSpheresD,
     tablet: abstractSpheresT,
@@ -159,41 +160,60 @@ const backgrounds = {
     mobile: starryMountainsM,
   },
 };
-
+// Board component - Main component for displaying the board with columns and cards
 const Board = ({ boardId, titleBoard, onCollaboratorUpdate }) => {
-  const [columns, setColumns] = useState([]);
-  const [collaborators, setCollaborators] = useState([]);
-  const [background, setBackground] = useState(null);
-  const { token } = useContext(AuthContext);
-  const cardService = useMemo(() => new CardService(token), [token]);
-  const boardService = useMemo(() => new BoardService(token), [token]);
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [filter, setFilter] = useState(null);
-  const filterButtonRef = useRef(null);
+  // State variables
+  const [columns, setColumns] = useState([]); // Storing columns of the board
+  const [collaborators, setCollaborators] = useState([]); // Storing collaborators of the board
+  const [background, setBackground] = useState(null); // Storing the selected background
+  const { token } = useContext(AuthContext); // Extracting authentication token from context
+  const cardService = useMemo(() => new CardService(token), [token]); // Memoizing card service
+  const boardService = useMemo(() => new BoardService(token), [token]); // Memoizing board service
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false); // Controlling the filter modal visibility
+  const [filter, setFilter] = useState(null); // Storing the current filter
+  const filterButtonRef = useRef(null); // Reference to the filter button
 
-  // Fetch board data
+  // Fetch board data - Fetching columns, collaborators, and background data for the board
   const fetchBoardData = useCallback(async () => {
+    console.log("Fetching board data...");
     try {
-      const boardData = await boardService.getBoard(boardId);
-      setColumns(boardData.columns);
-      setCollaborators(boardData.collaborators);
-      setBackground(boardData.background);
+      const boardData = await boardService.getBoard(boardId); // Fetch board data from the server
+      setColumns(boardData.columns); // Update columns state
+      setCollaborators(boardData.collaborators); // Update collaborators state
+      setBackground(boardData.background); // Update background state
     } catch (error) {
-      console.error("Failed to fetch board data:", error);
+      console.error("Failed to fetch board data:", error); // Log error if fetching fails
     }
   }, [boardId, boardService]);
 
+  // useEffect to fetch board data on component mount or when boardId changes
   useEffect(() => {
     if (boardId) {
       fetchBoardData();
     }
   }, [boardId, fetchBoardData]);
 
+  // useEffect to refetch board data when collaborators are updated
   useEffect(() => {
     if (boardId) {
       fetchBoardData();
     }
   }, [boardId, fetchBoardData, onCollaboratorUpdate]);
+
+  // useEffect for setting up a polling interval to periodically fetch board data
+  useEffect(() => {
+    if (boardId) {
+      console.log("Setting up polling interval for board:", boardId);
+      const intervalId = setInterval(() => {
+        fetchBoardData();
+      }, 10000); // 10 secunde
+
+      return () => {
+        console.log("Clearing interval for board:", boardId);
+        clearInterval(intervalId);
+      };
+    }
+  }, [boardId, fetchBoardData]);
 
   // Handle column addition
   const handleColumnAdded = (newColumn) => {
@@ -206,7 +226,7 @@ const Board = ({ boardId, titleBoard, onCollaboratorUpdate }) => {
     setIsFilterModalOpen(false);
   };
 
-  // Handle card drop
+  // Handle card drop - Handling drag and drop operations for cards
   const onDrop = async (item, monitor) => {
     const { sourceColumnId, cardId } = item;
     const destinationColumnId = monitor.getDropResult()?.columnId;
@@ -222,12 +242,12 @@ const Board = ({ boardId, titleBoard, onCollaboratorUpdate }) => {
         cardId,
         destinationColumnId
       );
-      fetchBoardData();
+      fetchBoardData(); // Refetch board data after moving the card
     } catch (error) {
       console.error("Error moving card:", error);
     }
   };
-
+  // Determine the appropriate background image set based on the current background
   const backgroundImageSet = backgrounds[background] || {};
 
   return (
@@ -282,4 +302,3 @@ Board.propTypes = {
 };
 
 export default Board;
-

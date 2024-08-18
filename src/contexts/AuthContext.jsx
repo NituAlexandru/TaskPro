@@ -8,17 +8,20 @@ import {
 
 export const AuthContext = createContext();
 
+// AuthProvider component to manage authentication state and actions
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
+  // Effect to initialize user data from local storage on component mount
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser && token) {
-      setUser(storedUser);
+      setUser(storedUser); // Set user state if valid data is found in local storage
     }
   }, [token]);
 
+  // Function to register a new user
   const registerUser = async (userData) => {
     try {
       const data = await register(userData);
@@ -36,16 +39,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const loginUser = async (userData) => {
-    try{
-    const data = await apiLogin(userData);
-    login(data.user, data.token, data.refreshToken, data.sid);
-    return data;
-  }catch (error) {
-    console.error("Error logging in user:", error);
-    throw error;
-  }
-};
+    try {
+      const data = await apiLogin(userData);
+      login(data.user, data.token, data.refreshToken, data.sid);
+      return data;
+    } catch (error) {
+      console.error("Error logging in user:", error);
+      throw error;
+    }
+  };
 
+  // Function to set user and token data in state and local storage
   const login = (userData, token, refreshToken, sessionId) => {
     setUser(userData);
     setToken(token);
@@ -80,11 +84,13 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token, logout]);
 
+  // Function to update the user state and local storage
   const updateUser = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData); // Update user state
+    localStorage.setItem("user", JSON.stringify(userData)); // Update local storage with new user data
   };
 
+  // Provide the context values to child components
   return (
     <AuthContext.Provider
       value={{
@@ -95,7 +101,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         getCurrentUser,
-        updateUser
+        updateUser,
       }}
     >
       {children}

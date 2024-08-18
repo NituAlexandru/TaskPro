@@ -55,6 +55,7 @@ import {
   StyledErrorMessage,
   FormWrapper,
 } from "../AddBoardModal/AddBoardModal.styled";
+import axios from "axios";
 
 // Icons and Backgrounds arrays
 const icons = [
@@ -108,13 +109,14 @@ const NewBoardModal = ({ closeModal }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { createBoard, fetchBoards } = useBoards();
-  const { user } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
 
   // Handle adding a collaborator by email
   const handleAddCollaborator = async (email, arrayHelpers) => {
     if (!email) return;
 
     try {
+      // Caută detalii despre utilizator după email
       const userDetails = await getUserDetailsByEmail(email);
       if (userDetails) {
         arrayHelpers.push({
@@ -123,6 +125,8 @@ const NewBoardModal = ({ closeModal }) => {
           name: userDetails.name,
           avatar: userDetails.avatar,
         });
+
+        // Adaugă colaboratorul local în starea componentului fără a trimite imediat invitația
         document.querySelector('input[name="collaborators"]').value = "";
       } else {
         toast.error(`User with email ${email} not found`);
@@ -147,16 +151,36 @@ const NewBoardModal = ({ closeModal }) => {
         (collaborator) => collaborator.userId
       );
 
+      // Creează board-ul
       const boardData = {
         owner: user._id,
         titleBoard: values.title,
         background: selectedBackground,
         icon: selectedIcon,
-        collaborators: collaboratorIds,
+        collaborators: collaboratorIds, // Adaugă colaboratorii la board
       };
 
       const newBoard = await createBoard(boardData);
       console.log("New Board Created:", newBoard);
+
+      // Trimite invitațiile pentru colaboratori folosind ID-ul noului board
+      await Promise.all(
+        collaboratorIds.map((collaboratorId) =>
+          axios.post(
+            "/api/invitations",
+            {
+              boardId: newBoard._id, // Folosește ID-ul boardului creat
+              userId: collaboratorId,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // Trimite token-ul de autentificare
+              },
+            }
+          )
+        )
+      );
+
       await fetchBoards();
       toast.success("New board created successfully!");
       closeModal();

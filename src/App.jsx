@@ -14,6 +14,7 @@ import AuthCallback from "./components/Auth/AuthCallback.jsx";
 import { LoaderProvider } from "./contexts/LoaderContext.jsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { InvitationsProvider } from "./contexts/InvitationsContext.jsx";
 
 function App() {
   return (
@@ -23,16 +24,18 @@ function App() {
           <GlobalStyles />
           <LoaderProvider>
             <BoardProvider>
-              <Router>
-                <Routes>
-                  <Route path="/" element={<StartPage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegisterPage />} />
-                  <Route path="/auth/callback" element={<AuthCallback />} />
-                  <Route path="/home" element={<HomePage />} />
-                  <Route path="/home/:titleBoard" element={<HomePage />} />
-                </Routes>
-              </Router>
+              <InvitationsProvider>
+                <Router>
+                  <Routes>
+                    <Route path="/" element={<StartPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/auth/callback" element={<AuthCallback />} />
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/home/:titleBoard" element={<HomePage />} />
+                  </Routes>
+                </Router>
+              </InvitationsProvider>
             </BoardProvider>
           </LoaderProvider>
           <ToastContainer />

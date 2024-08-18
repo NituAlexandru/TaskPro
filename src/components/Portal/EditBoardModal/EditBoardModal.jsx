@@ -56,6 +56,7 @@ import {
   StyledErrorMessage,
   FormWrapper,
 } from "../AddBoardModal/AddBoardModal.styled";
+import axios from "axios";
 
 const icons = [
   { name: "loadingIcon", src: loadingIcon },
@@ -87,6 +88,7 @@ const backgrounds = [
   { name: "starryMountains", url: starryMountains },
 ];
 
+// Validation schema for the form
 const validationSchema = Yup.object({
   title: Yup.string().required("Title is required"),
   collaborators: Yup.array().of(
@@ -98,18 +100,20 @@ const validationSchema = Yup.object({
   ),
 });
 
+// Main component for editing a board
 const EditBoardModal = ({ closeModal, boardId, onCollaboratorUpdate }) => {
-  const [selectedIcon, setSelectedIcon] = useState(null);
-  const [selectedBackground, setSelectedBackground] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState(null); // State for selected icon
+  const [selectedBackground, setSelectedBackground] = useState(null); // State for selected background
+  const [loading, setLoading] = useState(false); // State for loading
+  const [error, setError] = useState(""); // State for errors
   const [initialValues, setInitialValues] = useState({
     title: "",
     collaborators: [],
   });
-  const { token } = useContext(AuthContext);
-  const { updateBoard, fetchBoards } = useBoards();
+  const { token } = useContext(AuthContext); // Get token from AuthContext
+  const { updateBoard, fetchBoards } = useBoards(); // Use boards context
 
+  // Fetch board data when component mounts
   useEffect(() => {
     const fetchBoard = async () => {
       const boardService = new BoardService(token);
@@ -152,6 +156,21 @@ const EditBoardModal = ({ closeModal, boardId, onCollaboratorUpdate }) => {
           name: userDetails.name,
           avatarURL: userDetails.avatar,
         });
+
+        // Send request to API to create an invitation
+        await axios.post(
+          "/api/invitations",
+          {
+            boardId,
+            userId: userDetails.userId,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include token in header
+            },
+          }
+        );
+
         document.querySelector('input[name="collaborators"]').value = "";
         console.log("Collaborator added successfully:", userDetails);
       } else {

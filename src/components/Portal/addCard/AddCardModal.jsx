@@ -167,9 +167,9 @@ AddCardForm.propTypes = {
   columnId: PropTypes.string.isRequired,
   collaborators: PropTypes.arrayOf(
     PropTypes.shape({
-      userId: PropTypes.string.isRequired,
+      userId: PropTypes.string,
       name: PropTypes.string.isRequired,
-      avatar: PropTypes.string.isRequired,
+      avatar: PropTypes.string,
     })
   ),
 };
