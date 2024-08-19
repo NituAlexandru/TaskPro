@@ -48,7 +48,7 @@ const Column = ({
 
     const intervalId = setInterval(() => {
       fetchCardsForColumn(boardId, columnId);
-    }, 15000); // Update every 15 seconds
+    }, 30000); // Update every 15 seconds
 
     return () => clearInterval(intervalId); // Cleanup interval on unmount
   }, [fetchCardsForColumn, boardId, columnId]);

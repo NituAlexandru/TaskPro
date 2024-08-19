@@ -206,7 +206,7 @@ const Board = ({ boardId, titleBoard, onCollaboratorUpdate }) => {
       console.log("Setting up polling interval for board:", boardId);
       const intervalId = setInterval(() => {
         fetchBoardData();
-      }, 10000); // 10 secunde
+      }, 30000); // 30 secunde
 
       return () => {
         console.log("Clearing interval for board:", boardId);
