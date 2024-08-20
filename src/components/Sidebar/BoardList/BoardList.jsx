@@ -49,7 +49,7 @@ const BoardList = ({
   }, []);
 
   useEffect(() => {
-    console.log("Boards updated:", boards);
+    // console.log("Boards updated:", boards);
   }, [boards]);
 
   const openModal = (boardId) => {

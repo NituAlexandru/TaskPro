@@ -175,7 +175,7 @@ const Board = ({ boardId, titleBoard, onCollaboratorUpdate }) => {
 
   // Fetch board data - Fetching columns, collaborators, and background data for the board
   const fetchBoardData = useCallback(async () => {
-    console.log("Fetching board data...");
+    // console.log("Fetching board data...");
     try {
       const boardData = await boardService.getBoard(boardId); // Fetch board data from the server
       setColumns(boardData.columns); // Update columns state
@@ -203,13 +203,13 @@ const Board = ({ boardId, titleBoard, onCollaboratorUpdate }) => {
   // useEffect for setting up a polling interval to periodically fetch board data
   useEffect(() => {
     if (boardId) {
-      console.log("Setting up polling interval for board:", boardId);
+      // console.log("Setting up polling interval for board:", boardId);
       const intervalId = setInterval(() => {
         fetchBoardData();
-      }, 30000); // 30 secunde
+      }, 120000); 
 
       return () => {
-        console.log("Clearing interval for board:", boardId);
+        // console.log("Clearing interval for board:", boardId);
         clearInterval(intervalId);
       };
     }

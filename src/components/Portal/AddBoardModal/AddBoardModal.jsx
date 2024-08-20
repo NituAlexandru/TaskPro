@@ -162,7 +162,7 @@ const NewBoardModal = ({ closeModal }) => {
       };
 
       const newBoard = await createBoard(boardData);
-      console.log("New Board Created:", newBoard);
+      // console.log("New Board Created:", newBoard);
 
       // Trimite invitațiile pentru colaboratori folosind ID-ul noului board
       await Promise.all(

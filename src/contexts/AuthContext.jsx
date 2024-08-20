@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
 
   const getCurrentUser = useCallback(async () => {
     if (!token) {
-      console.log("No token available in getCurrentUser");
+      // console.log("No token available in getCurrentUser");
       return;
     }
     try {

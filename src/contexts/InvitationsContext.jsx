@@ -38,7 +38,7 @@ export const InvitationsProvider = ({ children }) => {
     };
 
     fetchInvitations();
-    const interval = setInterval(fetchInvitations, 30000);
+    const interval = setInterval(fetchInvitations, 120000);
     return () => clearInterval(interval);
   }, [token]);
 
@@ -54,7 +54,7 @@ export const InvitationsProvider = ({ children }) => {
         }
       );
 
-      console.log("Invitation accepted, fetching boards...");
+      // console.log("Invitation accepted, fetching boards...");
       await fetchBoards(); // Așteptăm actualizarea boardurilor
       console.log("Boards after fetch:", boards);
 

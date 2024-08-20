@@ -120,7 +120,7 @@ const EditBoardModal = ({ closeModal, boardId, onCollaboratorUpdate }) => {
       const boardService = new BoardService(token);
       setLoading(true);
       try {
-        console.log(`Fetching board data for board ID: ${boardId}`);
+        // console.log(`Fetching board data for board ID: ${boardId}`);
         const board = await boardService.getBoard(boardId);
         setInitialValues({
           title: board.titleBoard,
@@ -132,7 +132,7 @@ const EditBoardModal = ({ closeModal, boardId, onCollaboratorUpdate }) => {
         });
         setSelectedIcon(board.icon);
         setSelectedBackground(board.background);
-        console.log("Board data fetched successfully:", board);
+        // console.log("Board data fetched successfully:", board);
       } catch (error) {
         console.error("Error fetching board:", error);
         setError("Failed to fetch board data");
@@ -149,7 +149,7 @@ const EditBoardModal = ({ closeModal, boardId, onCollaboratorUpdate }) => {
     if (!email) return;
 
     try {
-      console.log(`Fetching user details for email: ${email}`);
+      // console.log(`Fetching user details for email: ${email}`);
       const userDetails = await getUserDetailsByEmail(email);
       if (userDetails) {
         arrayHelpers.push({
